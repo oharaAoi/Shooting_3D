@@ -115,9 +115,9 @@
     <ClCompile Include="Game\Math\MyMath.cpp" />
     <ClCompile Include="Game\Math\MyMatrix4x4.cpp" />
     <ClCompile Include="Game\WorldObject\Skydome.cpp" />
+    <ClCompile Include="Game\WorldObject\Trajectory.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
-    <ClCompile Include="Trajectory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\ImGuiManager.h" />
@@ -147,13 +147,13 @@
     <ClInclude Include="Game\Math\MyMath.h" />
     <ClInclude Include="Game\Math\MyMatrix4x4.h" />
     <ClInclude Include="Game\WorldObject\Skydome.h" />
+    <ClInclude Include="Game\WorldObject\Trajectory.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="math\Vector4.h" />
     <ClInclude Include="scene\GameScene.h" />
-    <ClInclude Include="Trajectory.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\TerrainPS.hlsl">
