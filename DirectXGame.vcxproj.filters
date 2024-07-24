@@ -64,6 +64,9 @@
     <Filter Include="Game\Loder">
       <UniqueIdentifier>{a7098e2f-b3ee-4ac4-82b1-c9bb62eba627}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Adjustment">
+      <UniqueIdentifier>{09a213d5-3c57-4b4e-bc23-2fcf45b9f41b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -98,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="3d\WorldTransform.cpp">
       <Filter>ヘッダー ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="AdjustmentItem.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="Game\WorldObject\Trajectory.h">
       <Filter>Game\WorldObject</Filter>
+    </ClInclude>
+    <ClInclude Include="AdjustmentItem.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

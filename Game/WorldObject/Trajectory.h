@@ -1,17 +1,14 @@
 #pragma once
 // STL
 #include <vector>
-#include <map>
+#include <unordered_map>
+#include <string>
 // math
 #include "Math/MyMath.h"
-// json
-#include <json.hpp>
 
 #ifdef _DEBUG
 #include <ImGuiManager.h>
 #endif // _DEBUG
-
-using json = nlohmann::json;
 
 /// <summary>
 /// 軌道の種類

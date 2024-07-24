@@ -1,5 +1,6 @@
 #pragma once
 #include "Matrix4x4.h"
+#include <json.hpp>
 /// <summary>
 /// 3次元ベクトル
 /// </summary>
@@ -86,6 +87,11 @@ struct Vector3 final {
 		result.z = mat.m[2][0] * x + mat.m[2][1] * y + mat.m[2][2] * z + mat.m[2][3];
 
 		return result;
+	}
+
+	// Vector3をJSON互換フォーマットに変換する関数
+	nlohmann::json to_json() const {
+		return { {"x", x}, {"y", y}, {"z", z} };
 	}
 
 };
