@@ -14,6 +14,9 @@
 #include "Loder/modelLoader.h"
 // WorldObject
 #include "WorldObject/Skydome.h"
+#include "WorldObject/Trajectory.h"
+// Adjustment
+#include "Adjustment/AdjustmentItem.h"
 
 /// <summary>
 /// ゲームシーン
@@ -63,9 +66,10 @@ private: // メンバ変数
 	bool isDebugCamera = false;
 
 	// ------------ Loader ------------ // 
-	std::unique_ptr<ModelLoader> modelLoader_;
+	std::unique_ptr<ModelLoader> modelLoader_ = nullptr;
 
 	// ------------ WorldEnvironment ------------ // 
-	std::unique_ptr<Skydome> skydome_;
+	std::unique_ptr<Skydome> skydome_ = nullptr;
+	std::unique_ptr<Trajectory> trajectory_ = nullptr;
 
 };

@@ -85,6 +85,8 @@ public:
 private:
 	// 全データ
 	std::map<std::string, Group> data_;
+
+	std::string elementIndex_ = "0";
 };
 
 template<typename T>

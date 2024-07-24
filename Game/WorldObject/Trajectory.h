@@ -5,6 +5,8 @@
 #include <string>
 // math
 #include "Math/MyMath.h"
+// adjustment
+#include "Adjustment/AdjustmentItem.h"
 
 #ifdef _DEBUG
 #include <ImGuiManager.h>

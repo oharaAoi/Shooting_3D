@@ -29,9 +29,10 @@ void GameScene::Initialize() {
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
 
 	// ---------------------------------------------
-	// ↓ GameObjectの初期化
+	// ↓ WorldObjectの初期化
 	// ---------------------------------------------
 	skydome_ = std::make_unique<Skydome>(modelLoader_->GetModel("skydome"));
+	trajectory_ = std::make_unique<Trajectory>();
 }
 
 //=============================================
@@ -56,6 +57,8 @@ void GameScene::Update() {
 	}
 
 	viewProjection_.TransferMatrix();
+
+	AdjustmentItem::GetInstance()->Update();
 }
 
 //=============================================

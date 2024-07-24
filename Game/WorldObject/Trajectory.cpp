@@ -1,6 +1,6 @@
 #include "Trajectory.h"
 
-Trajectory::Trajectory() {}
+Trajectory::Trajectory() { Init(); }
 Trajectory::~Trajectory() {}
 
 //=============================================
@@ -8,8 +8,15 @@ Trajectory::~Trajectory() {}
 //=============================================
 
 void Trajectory::Init() {
-	trajectoryType_.emplace(TrajectoryType::Player_Trajectory, "player");
+	trajectoryType_.emplace(TrajectoryType::Player_Trajectory, "playerTrajectory");
 	nowMoveTrajectoryType_ = TrajectoryType::Player_Trajectory;
+
+	std::vector<Vector3> testArray;
+	testArray.push_back({ 1.0f, 1.0f , 20.0f });
+	testArray.push_back({ 10.0f, 300.0f , 20.0f });
+
+	AdjustmentItem::GetInstance()->CreateGroup(trajectoryType_[nowMoveTrajectoryType_]);
+	AdjustmentItem::GetInstance()->SetValue(trajectoryType_[nowMoveTrajectoryType_], "Point", testArray);
 }
 
 //=============================================

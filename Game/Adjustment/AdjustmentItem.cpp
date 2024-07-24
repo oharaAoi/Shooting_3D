@@ -16,17 +16,53 @@ void AdjustmentItem::Update() {
 
 	if (!ImGui::BeginMenuBar()) { return; }
 
-	// 改行
-	ImGui::Text("\n");
+	// ------------------------------------------
+	// 各グループを処理を行う
+	// ------------------------------------------
 	for (std::map<std::string, Group>::iterator itGroup = data_.begin(); itGroup != data_.end(); ++itGroup) {
 		// グループ名を取得
 		const std::string& groupName = itGroup->first;
-		// グループの参照を取得
-		//Group& group = itGroup->second;
-
 		if (!ImGui::BeginMenu(groupName.c_str())) {
 			continue;
 		}
+		// グループの参照を取得
+		Group& group = itGroup->second;
+
+		// 各項目について
+		for (std::map<std::string, Item>::iterator itItem = group.items.begin(); itItem != group.items.end(); ++itItem) {
+			// 項目名を取得
+			const std::string& itemName = itItem->first;
+			// 項目の参照を取得
+			Item& item = itItem->second;
+
+			if (std::holds_alternative<std::vector<Vector3>>(item.value)) {
+				// `std::vector<Vector3>` を取り出す
+				std::vector<Vector3> vec = std::get<std::vector<Vector3>>(item.value);
+				// 要素がなかったら飛ばす
+				if (vec.size() <= 0) {
+					continue;
+				}
+
+				char buffer[256] = "";        // 文字列バッファを用意
+
+				// elementIndexからバッファにコピー
+				strncpy_s(buffer, sizeof(buffer), elementIndex_.c_str(), _TRUNCATE);
+				// 要素を入力
+				if (ImGui::InputText("point", buffer, sizeof(buffer))) {
+					elementIndex_ = buffer;
+				}
+				// 空白でなければ入力されている要素を変更
+				if (elementIndex_ != "") {
+					if (std::stoi(elementIndex_) < vec.size()) {
+						ImGui::SliderFloat3(itemName.c_str(), &vec[std::stoi(elementIndex_)].x, -10.0f, 10.0f);
+					}
+				}
+			}
+		}
+
+		// 改行
+		ImGui::Text("\n");
+
 		// ボタン
 		if (ImGui::Button("Save")) {
 			SaveFile(groupName);
@@ -36,6 +72,9 @@ void AdjustmentItem::Update() {
 
 		ImGui::EndMenu();
 	}
+
+	ImGui::EndMenuBar();
+	ImGui::End();
 }
 
 void AdjustmentItem::CreateGroup(const std::string& groupName) {

@@ -102,8 +102,8 @@
     <ClCompile Include="3d\WorldTransform.cpp">
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClCompile>
-    <ClCompile Include="AdjustmentItem.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Game\Adjustment\AdjustmentItem.cpp">
+      <Filter>Game\Adjustment</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -209,8 +209,8 @@
     <ClInclude Include="Game\WorldObject\Trajectory.h">
       <Filter>Game\WorldObject</Filter>
     </ClInclude>
-    <ClInclude Include="AdjustmentItem.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Game\Adjustment\AdjustmentItem.h">
+      <Filter>Game\Adjustment</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
