@@ -96,6 +96,9 @@
     <ClCompile Include="3d\WorldTransform.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Trajectory.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -196,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="Game\Loder\ModelLoader.h">
       <Filter>Game\Loder</Filter>
+    </ClInclude>
+    <ClInclude Include="Trajectory.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
