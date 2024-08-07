@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Audio.h"
 #include "DirectXCommon.h"
 #include "Input.h"
@@ -17,6 +16,8 @@
 #include "WorldObject/Trajectory.h"
 // Adjustment
 #include "Adjustment/AdjustmentItem.h"
+// GameObject
+#include "GameObject/Player.h"
 
 /// <summary>
 /// ゲームシーン
@@ -67,6 +68,11 @@ private: // メンバ変数
 
 	// ------------ Loader ------------ // 
 	std::unique_ptr<ModelLoader> modelLoader_ = nullptr;
+
+	// ------------ GameObject ------------ // 
+	// player
+	std::vector<Model*> playerPartsModels_;
+	std::unique_ptr<Player> player_ = nullptr;
 
 	// ------------ WorldEnvironment ------------ // 
 	std::unique_ptr<Skydome> skydome_ = nullptr;

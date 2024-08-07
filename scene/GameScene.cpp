@@ -1,6 +1,9 @@
 #include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
+#include "AxisIndicator.h"
+#include "ImGuiManager.h"
+#include "PrimitiveDrawer.h"
 
 GameScene::GameScene() {}
 
@@ -30,6 +33,23 @@ void GameScene::Initialize() {
 	// ---------------------------------------------
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
 
+	AxisIndicator::GetInstance()->SetVisible(true);
+	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
+
+	// ---------------------------------------------
+	// ↓ GameObjectの初期化
+	// ---------------------------------------------
+
+	// player ---------------------------------------------------------
+	// 使用するモデルを配列に格納
+	playerPartsModels_.emplace_back(modelLoader_->GetModel("player_body"));
+	playerPartsModels_.emplace_back(modelLoader_->GetModel("player_face"));
+	playerPartsModels_.emplace_back(modelLoader_->GetModel("player_leftArm"));
+	playerPartsModels_.emplace_back(modelLoader_->GetModel("player_rightArm"));
+
+	// インスタンス生成と初期化
+	player_ = std::make_unique<Player>(playerPartsModels_);
+
 	// ---------------------------------------------
 	// ↓ WorldObjectの初期化
 	// ---------------------------------------------
@@ -43,6 +63,14 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
+	// ---------------------------------------------
+	// ↓ GameObjectの処理
+	// ---------------------------------------------
+	player_->Update();
+
+	// ---------------------------------------------
+	// ↓ WorldObjectの処理
+	// ---------------------------------------------
 	skydome_->Update();
 	trajectory_->Update();
 
@@ -57,11 +85,19 @@ void GameScene::Update() {
 		debugCamera_->Update();
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		AxisIndicator::GetInstance()->SetVisible(true);
+	} else {
+		AxisIndicator::GetInstance()->SetVisible(false);
 	}
 
 	viewProjection_.TransferMatrix();
 
+	// ---------------------------------------------
+	// ↓ ImGuiの処理
+	// ---------------------------------------------
+#ifdef _DEBUG
 	AdjustmentItem::GetInstance()->Update();
+#endif // _DEBUG
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +131,15 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	
+	// ---------------------------------------------
+	// ↓ WorldObjectの描画
+	// ---------------------------------------------
 	skydome_->Draw(viewProjection_);
+
+	// ---------------------------------------------
+	// ↓ GameObjectの描画
+	// ---------------------------------------------
+	player_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

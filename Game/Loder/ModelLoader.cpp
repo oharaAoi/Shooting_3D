@@ -9,6 +9,11 @@ ModelLoader::~ModelLoader() {}
 
 void ModelLoader::Init() {
 	Load("skydome", true);
+	Load("player_body", true);
+	Load("player_face", true);
+	Load("player_leftArm", true);
+	Load("player_rightArm", true);
+	
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -67,6 +67,9 @@
     <Filter Include="Game\Adjustment">
       <UniqueIdentifier>{09a213d5-3c57-4b4e-bc23-2fcf45b9f41b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameObject">
+      <UniqueIdentifier>{758704fc-cd69-41ec-be8f-366ee0eebe4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -104,6 +107,12 @@
     </ClCompile>
     <ClCompile Include="Game\Adjustment\AdjustmentItem.cpp">
       <Filter>Game\Adjustment</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\BaseCharacter.cpp">
+      <Filter>Game\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\Player.cpp">
+      <Filter>Game\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -211,6 +220,12 @@
     </ClInclude>
     <ClInclude Include="Game\Adjustment\AdjustmentItem.h">
       <Filter>Game\Adjustment</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\BaseCharacter.h">
+      <Filter>Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\Player.h">
+      <Filter>Game\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

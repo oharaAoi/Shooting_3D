@@ -39,17 +39,17 @@ void AdjustmentItem::Update() {
 			// int32_t型の値を保持していれば
 			if (std::holds_alternative<uint32_t>(item.value)) {
 				int32_t* ptr = reinterpret_cast<int32_t*>(std::get_if<uint32_t>(&item.value));
-				ImGui::SliderInt(itemName.c_str(), ptr, 0, 100);
+				ImGui::DragInt(itemName.c_str(), ptr, 0, 100);
 
 				// float型の値を保持していれば
 			} else if (std::holds_alternative<float>(item.value)) {
 				float* ptr = std::get_if<float>(&item.value);
-				ImGui::SliderFloat(itemName.c_str(), ptr, 0, 100);
+				ImGui::DragFloat(itemName.c_str(), ptr, 0, 100);
 
 				// Vector3の値を保持していれば
 			} else if (std::holds_alternative<Vector3>(item.value)) {
 				Vector3* ptr = std::get_if<Vector3>(&item.value);
-				ImGui::SliderFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), -10.0f, 10.0f);
+				ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), -10.0f, 10.0f);
 
 				// bool型の値を保持していれば
 			} else if (std::holds_alternative<bool>(item.value)) {
