@@ -112,6 +112,7 @@
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="Game\Adjustment\AdjustmentItem.cpp" />
+    <ClCompile Include="Game\Camera\FollowCamera.cpp" />
     <ClCompile Include="Game\GameObject\BaseCharacter.cpp" />
     <ClCompile Include="Game\GameObject\Player.cpp" />
     <ClCompile Include="Game\Loder\ModelLoader.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="base\TextureManager.h" />
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="Game\Adjustment\AdjustmentItem.h" />
+    <ClInclude Include="Game\Camera\FollowCamera.h" />
     <ClInclude Include="Game\GameObject\BaseCharacter.h" />
     <ClInclude Include="Game\GameObject\Player.h" />
     <ClInclude Include="Game\Loder\ModelLoader.h" />
