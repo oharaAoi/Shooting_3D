@@ -1,6 +1,9 @@
 #pragma once
 #include "Matrix4x4.h"
 #include <json.hpp>
+
+using json = nlohmann::json;
+
 /// <summary>
 /// 3次元ベクトル
 /// </summary>
@@ -89,9 +92,16 @@ struct Vector3 final {
 		return result;
 	}
 
-	// Vector3をJSON互換フォーマットに変換する関数
-	nlohmann::json to_json() const {
-		return { {"x", x}, {"y", y}, {"z", z} };
-	}
-
+	//NLOHMANN_DEFINE_TYPE_INTRUSIVE(Vector3, x, y, z);
 };
+
+// `Vector3`のJSON変換関数を定義
+inline void from_json(const json& j, Vector3& v) {
+	v.x = j.at("x").get<float>();
+	v.y = j.at("y").get<float>();
+	v.z = j.at("z").get<float>();
+}
+
+inline void to_json(json& j, const Vector3& v) {
+	j = json{ {"x", v.x}, {"y", v.y}, {"z", v.z} };
+}

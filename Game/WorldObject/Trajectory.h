@@ -41,7 +41,12 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void Draw() const;
+
+	/// <summary>
+	/// ImGuiの描画
+	/// </summary>
+	void ImGuiDraw();
 
 private:
 
@@ -52,5 +57,10 @@ private:
 	std::unordered_map<TrajectoryType, std::string> trajectoryType_;
 	TrajectoryType nowMoveTrajectoryType_;
 	
+
+	// --------- ImGuiで使用する変数　--------- //
+	Vector3 addPoint_;
+	// 要素名
+	std::string elementIndex_ = "0";
 };
 

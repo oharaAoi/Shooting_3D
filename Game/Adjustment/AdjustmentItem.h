@@ -29,7 +29,7 @@ public: // 構造体
 
 	// 軌道の点
 	struct Item {
-		std::variant<std::vector<Vector3>> value;
+		std::variant<uint32_t, float, Vector3, bool, std::vector<Vector3>> value;
 	};
 
 	struct Group {
@@ -73,12 +73,44 @@ public:
 	/// <param name="groupName"></param>
 	void SaveFile(const std::string& groupName);
 
+	/// <summary>
+	/// ファイル全体の読み込みを行う
+	/// </summary>
+	void LoadFiles();
+
+	/// <summary>
+	/// ファイルの読み込みを行う(個別)
+	/// </summary>
+	/// <param name="groupName"></param>
+	void LoadFile(const std::string& groupName);
+
+	/// <summary>
+	/// keyで指定した値をgroupに保存する
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="groupName">: グループの名前</param>
+	/// <param name="key">: 項目</param>
+	/// <param name="value">: 値</param>
 	template<typename T>
 	void SetValue(const std::string& groupName, const std::string& key, const T& value);
 
+	/// <summary>
+	/// groupにkeyと値を追加する
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="groupName">: グループの名前</param>
+	/// <param name="key">: 項目</param>
+	/// <param name="value">: 値</param>
 	template<typename T>
-	void AddItem(const std::string& groupName, const std::string& key, const T& t);
+	void AddItem(const std::string& groupName, const std::string& key, const T& value);
 
+	/// <summary>
+	/// grounpからkeyで指定した値を取得する
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="groupName">: グループの名前</param>
+	/// <param name="key">: 項目</param>
+	/// <returns>: uint32_t, float, Vector3, bool, vector.Vector3 </returns>
 	template<typename T>
 	T GetValue(const std::string& groupName, const std::string& key) const;
 
@@ -101,10 +133,10 @@ inline void AdjustmentItem::SetValue(const std::string& groupName, const std::st
 }
 
 template<typename T>
-inline void AdjustmentItem::AddItem(const std::string& groupName, const std::string& key, const T& t) {
+inline void AdjustmentItem::AddItem(const std::string& groupName, const std::string& key, const T& value) {
 	Group& group = data_[groupName];
 	if (group.items.find(key) == group.items.end()) {
-		SetValue(groupName, key, t);
+		SetValue(groupName, key, value);
 	}
 }
 
