@@ -70,6 +70,9 @@
     <Filter Include="Game\GameObject">
       <UniqueIdentifier>{758704fc-cd69-41ec-be8f-366ee0eebe4b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\State">
+      <UniqueIdentifier>{1788338e-11d9-4a21-8330-20d330b03484}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -113,6 +116,12 @@
     </ClCompile>
     <ClCompile Include="Game\GameObject\Player.cpp">
       <Filter>Game\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\State\BaseCharacterState.cpp">
+      <Filter>Game\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\State\PlayerRootState.cpp">
+      <Filter>Game\State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +235,12 @@
     </ClInclude>
     <ClInclude Include="Game\GameObject\Player.h">
       <Filter>Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\State\BaseCharacterState.h">
+      <Filter>Game\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\State\PlayerRootState.h">
+      <Filter>Game\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

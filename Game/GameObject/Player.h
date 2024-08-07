@@ -3,6 +3,9 @@
 #include "GameObject/BaseCharacter.h"
 #include "Adjustment/AdjustmentItem.h"
 
+/// <summary>
+/// Playerの部品
+/// </summary>
 enum PlayerParts {
 	Parts_Body = 0,
 	Parts_Face,
@@ -10,6 +13,9 @@ enum PlayerParts {
 	Parts_RightArm
 };
 
+/// <summary>
+/// Playerクラス
+/// </summary>
 class Player
 	: public BaseCharacter {
 public:
@@ -37,6 +43,11 @@ public:
 ///////////////////////////////////////////////////////////
 
 	/// <summary>
+	/// Playerを動かす
+	/// </summary>
+	void Move();
+
+	/// <summary>
 	/// ImGui
 	/// </summary>
 	void EditImGui();
@@ -46,7 +57,26 @@ public:
 	/// </summary>
 	void ApplyAdjustItems();
 
+///////////////////////////////////////////////////////////
+// accessor
+///////////////////////////////////////////////////////////
+
+	/// <summary>
+	/// ViewProjectionのポインタを設定する
+	/// </summary>
+	/// <param name="viewProjection"></param>
+	void SetViewProjection(const ViewProjection* viewProjection) {
+		viewProjection_ = viewProjection;
+	}
+
 private:
 
+	const ViewProjection* viewProjection_ = nullptr;
+
+	// ------------ 移動に関する変数 ------------ // 
+	// 方向
+	Vector3 direction_;
+	// 速度
+	Vector3 velocity_;
 };
 

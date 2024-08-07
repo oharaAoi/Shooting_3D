@@ -36,6 +36,8 @@ void Player::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Update() {
+	//Move();
+
 	// 計算転送
 	BaseCharacter::Update();
 	// ImGuiの編集
@@ -48,6 +50,57 @@ void Player::Update() {
 
 void Player::Draw(const ViewProjection& viewProjection) {
 	BaseCharacter::Draw(viewProjection);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　Playerの行動関連
+//////////////////////////////////////////////////////////////////////////////////////////////////
+void Player::Move() {
+	XINPUT_STATE joyState;
+	bool isMoving = false;
+
+	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+		const float threshold = 0.7f;
+		const float speed = 0.3f;
+		float targetAngle = 0;
+
+		velocity_ = {
+			static_cast<float>(joyState.Gamepad.sThumbLX) / SHRT_MAX,
+			0.0f,
+			static_cast<float>(joyState.Gamepad.sThumbLY) / SHRT_MAX,
+		};
+
+		// スティックの押し込みが閾値を超えていたら移動可能にする
+		if (Length(velocity_) > threshold) {
+			isMoving = true;
+		}
+
+		velocity_ = Normalize(velocity_) * speed;
+
+		// 移動ベクトルをカメラの角度だけ回転する
+		Matrix4x4 cameraRotate = MakeRotateXYZMatrix(viewProjection_->rotation_);
+		velocity_ = TransformNormal(velocity_, cameraRotate);
+
+		// 移動処理
+		if (isMoving) {
+			worldTransform_.translation_ += velocity_;
+			// 方向を取得しておく
+			direction_ = velocity_;
+			// 目標角度の算出
+			targetAngle = std::atan2f(velocity_.x, velocity_.z);
+		} 
+
+		// --------------------------------------
+		// プレイヤーの向きを移動方向に合わせる
+		// --------------------------------------
+		// 回転させる
+		// y軸まわり(z軸方向とy軸方向のベクトルで求まる)
+		if (isMoving) {
+			worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngle, 0.1f);
+		} else {
+			//worldTransform_.rotation_.y = std::atan2f(direction_.x, direction_.z);
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

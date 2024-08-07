@@ -117,6 +117,8 @@
     <ClCompile Include="Game\Loder\ModelLoader.cpp" />
     <ClCompile Include="Game\Math\MyMath.cpp" />
     <ClCompile Include="Game\Math\MyMatrix4x4.cpp" />
+    <ClCompile Include="Game\State\BaseCharacterState.cpp" />
+    <ClCompile Include="Game\State\PlayerRootState.cpp" />
     <ClCompile Include="Game\WorldObject\Skydome.cpp" />
     <ClCompile Include="Game\WorldObject\Trajectory.cpp" />
     <ClCompile Include="main.cpp" />
@@ -152,6 +154,8 @@
     <ClInclude Include="Game\Loder\ModelLoader.h" />
     <ClInclude Include="Game\Math\MyMath.h" />
     <ClInclude Include="Game\Math\MyMatrix4x4.h" />
+    <ClInclude Include="Game\State\BaseCharacterState.h" />
+    <ClInclude Include="Game\State\PlayerRootState.h" />
     <ClInclude Include="Game\WorldObject\Skydome.h" />
     <ClInclude Include="Game\WorldObject\Trajectory.h" />
     <ClInclude Include="input\Input.h" />
