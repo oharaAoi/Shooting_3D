@@ -1,7 +1,13 @@
 #pragma once
 #include <optional>
+// GameObject
 #include "GameObject/BaseCharacter.h"
+#include "GameObject/PlayerBullet.h"
 #include "Adjustment/AdjustmentItem.h"
+// State
+#include "State/BaseCharacterState.h"
+#include "State/PlayerRootState.h"
+#include "State/PlayerDashState.h"
 
 /// <summary>
 /// Playerの部品
@@ -11,6 +17,12 @@ enum PlayerParts {
 	Parts_Face,
 	Parts_LeftArm,
 	Parts_RightArm
+};
+
+enum class PlayerBehavior {
+	kRoot,		// 通常攻撃
+	kAttack,	// 攻撃中,
+	kDash,		// ダッシュ中
 };
 
 /// <summary>
@@ -45,7 +57,18 @@ public:
 	/// <summary>
 	/// Playerを動かす
 	/// </summary>
-	void Move();
+	void Move() override;
+
+	/// <summary>
+	///	状態を変更する
+	/// </summary>
+	/// <param name="behavior"></param>
+	void ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior);
+	
+	/// <summary>
+	/// Playerの状態を変化させるリクエストがあるかを確認する
+	/// </summary>
+	void CheckBehaviorRequest();
 
 	/// <summary>
 	/// ImGui
@@ -69,6 +92,21 @@ public:
 		viewProjection_ = viewProjection;
 	}
 
+	/// <summary>
+	/// Playerの状態を変えるためのリクエストを送る
+	/// </summary>
+	/// <param name="request">変更したい状態</param>
+	/// <param name="・">kRoot、kAttack、kDash</param>
+	void SetBehaviorRequest(const PlayerBehavior& request) {
+		behaviorRequest_ = request;
+	}
+
+	// ------------ Translation ------------ // 
+	const Vector3 GetTranslation() const { return worldTransform_.translation_; }
+	void SetTranslation(const Vector3& traslation) { worldTransform_.translation_ = traslation; }
+
+	// ------------  ------------ // 
+
 private:
 
 	const ViewProjection* viewProjection_ = nullptr;
@@ -78,5 +116,14 @@ private:
 	Vector3 direction_;
 	// 速度
 	Vector3 velocity_;
-};
 
+	// ------------ Playerの状態に関する変数 ------------ // 
+	PlayerBehavior behavior_ = PlayerBehavior::kRoot;
+	std::unique_ptr<BaseCharacterState> behaviorState_ = nullptr;
+	std::optional<PlayerBehavior> behaviorRequest_ = std::nullopt;
+
+	// ------------ Bulletに関する変数 ------------ // 
+	// 通常弾のリスト
+	std::list<PlayerBullet> playerBulletList_;
+
+};

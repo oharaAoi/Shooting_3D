@@ -50,6 +50,15 @@ void GameScene::Initialize() {
 	// インスタンス生成と初期化
 	player_ = std::make_unique<Player>(playerPartsModels_);
 
+	player_->SetViewProjection(&viewProjection_);
+
+	// enemy ---------------------------------------------------------
+	mobEnemyPartsModels_.emplace_back(modelLoader_->GetModel("mobEnemy"));
+
+	// インスタンス生成と初期化
+	std::unique_ptr<MobEnemy> mobEnemy = std::make_unique<MobEnemy>(mobEnemyPartsModels_);
+	mobEnemyList_.emplace_back(std::move(mobEnemy));
+
 	// ---------------------------------------------
 	// ↓ WorldObjectの初期化
 	// ---------------------------------------------
@@ -67,6 +76,11 @@ void GameScene::Update() {
 	// ↓ GameObjectの処理
 	// ---------------------------------------------
 	player_->Update();
+
+	// enmey
+	for (const std::unique_ptr<MobEnemy>& mobEnemy : mobEnemyList_) {
+		mobEnemy->Update();
+	}
 
 	// ---------------------------------------------
 	// ↓ WorldObjectの処理
@@ -140,6 +154,11 @@ void GameScene::Draw() {
 	// ↓ GameObjectの描画
 	// ---------------------------------------------
 	player_->Draw(viewProjection_);
+
+	// enemy
+	for (const std::unique_ptr<MobEnemy>& mobEnemy : mobEnemyList_) {
+		mobEnemy->Draw(viewProjection_);
+	}
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

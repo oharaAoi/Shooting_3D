@@ -17,6 +17,12 @@ void Player::Init(std::vector<Model*> models) {
 	worldTransforms_[PlayerParts::Parts_RightArm].parent_ = &worldTransforms_[PlayerParts::Parts_Body];
 
 	// ---------------------------------------------
+	// ↓ 基本となる変数の初期化
+	// ---------------------------------------------
+	behaviorRequest_ = PlayerBehavior::kRoot;
+	ChangeBehavior(std::make_unique<PlayerRootState>(this));
+
+	// ---------------------------------------------
 	// ↓ 調整項目
 	// ---------------------------------------------
 	AdjustmentItem* adjustItem = AdjustmentItem::GetInstance();
@@ -36,8 +42,20 @@ void Player::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Update() {
-	//Move();
+	// ---------------------------------------------
+	// ↓ Playerの状態に関する処理を行う
+	// ---------------------------------------------
+	
+	// 状態のリクエストをチェックする
+	CheckBehaviorRequest();
 
+	// 現在の状態を更新する
+	behaviorState_->Update();
+
+	// ---------------------------------------------
+	// ↓ 基本となる処理を行う
+	// ---------------------------------------------
+	
 	// 計算転送
 	BaseCharacter::Update();
 	// ImGuiの編集
@@ -55,6 +73,7 @@ void Player::Draw(const ViewProjection& viewProjection) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　Playerの行動関連
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
 void Player::Move() {
 	XINPUT_STATE joyState;
 	bool isMoving = false;
@@ -104,6 +123,40 @@ void Player::Move() {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　状態変化関連
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+// ------------------- Playerの状態を変化させる ------------------- //
+
+void Player::ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior) {
+	behaviorState_ = std::move(behavior);
+}
+
+// ------------------- Playerの状態を変化させるリクエストがあるかを確認する ------------------- //
+
+void Player::CheckBehaviorRequest() {
+	// リクエストがあったら
+	if (behaviorRequest_) {
+		// 振る舞いを変更する
+		behavior_ = behaviorRequest_.value();
+
+		switch (behavior_) {
+		case PlayerBehavior::kRoot:
+			ChangeBehavior(std::make_unique<PlayerRootState>(this));
+			break;
+		case PlayerBehavior::kAttack:
+
+			break;
+		case PlayerBehavior::kDash:
+			ChangeBehavior(std::make_unique<PlayerDashState>(this));
+			break;
+		}
+		// ふるまいリクエストをリセット
+		behaviorRequest_ = std::nullopt;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　調整項目関連
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -122,6 +175,7 @@ void Player::EditImGui() {
 }
 
 // ------------------- 調整項目の適応 ------------------- //
+
 void Player::ApplyAdjustItems() {
 	AdjustmentItem* adjustItem = AdjustmentItem::GetInstance();
 	const char* groupName = "Player";

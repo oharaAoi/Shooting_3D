@@ -10,7 +10,7 @@ class BaseCharacter;
 class BaseCharacterState {
 public:
 
-	BaseCharacterState(const std::string& name, BaseCharacter* baseCharacter) : name_(name), baseCharacter_(baseCharacter) {};
+	BaseCharacterState() {};
 	virtual	~BaseCharacterState() = default;
 
 	/// <summary>

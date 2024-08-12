@@ -38,3 +38,9 @@ void BaseCharacter::Draw(const ViewProjection& viewProjection) {
 		models_[oi]->Draw(worldTransforms_[oi], viewProjection);
 	}
 }
+
+/// <summary>
+/// 移動の関数
+/// </summary>
+void BaseCharacter::Move() {
+}

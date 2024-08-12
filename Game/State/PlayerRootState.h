@@ -1,5 +1,5 @@
 #pragma once
-#include "State/BaseCharacterState.h"
+#include "State/BasePlayerState.h"
 
 class Player;
 
@@ -7,7 +7,7 @@ class Player;
 /// Playerの通常の振る舞い
 /// </summary>
 class PlayerRootState :
-	public BaseCharacterState {
+	public BasePlayerState {
 public:
 
 	PlayerRootState(Player* player);
@@ -23,8 +23,19 @@ public:
 	/// </summary>
 	void Update() override;
 
+	/// <summary>
+	/// 走る
+	/// </summary>
+	void Dash();
+
+	/// <summary>
+	/// 攻撃を行う
+	/// </summary>
+	void Attack();
+
 private:
 
+	uint32_t dashCoolTime_ = 0;
 
 };
 
