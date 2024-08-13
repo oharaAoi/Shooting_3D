@@ -1,4 +1,6 @@
 #pragma once
+#include "Enviroment.h"
+#include "PrimitiveDrawer.h"
 // STL
 #include <vector>
 #include <unordered_map>
@@ -51,12 +53,11 @@ public:
 private:
 
 	// --------- プレイヤーの軌道　--------- //
-	std::vector<Vector3> playerTrajectory;
+	std::vector<Vector3> playerTrajectoryVector_;
 
 	// --------- 軌道の種類　--------- //
 	std::unordered_map<TrajectoryType, std::string> trajectoryType_;
 	TrajectoryType nowMoveTrajectoryType_;
-	
 
 	// --------- ImGuiで使用する変数　--------- //
 	Vector3 addPoint_;

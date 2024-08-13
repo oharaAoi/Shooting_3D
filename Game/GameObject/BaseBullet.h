@@ -13,6 +13,8 @@
 #include "ImGuiManager.h"
 #endif
 
+static const int32_t kLifeTime = 60 * 5;
+
 class BaseBullet {
 public:
 
@@ -22,7 +24,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	virtual void Init(Model* model);
+	virtual void Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation);
 
 	/// <summary>
 	/// 更新処理
@@ -34,6 +36,16 @@ public:
 	/// </summary>
 	virtual void Draw(const ViewProjection& viewProjection);
 
+///////////////////////////////////////////////////////////
+// accessor
+///////////////////////////////////////////////////////////
+
+	/// <summary>
+	/// 生存しているかを判断するフラグ
+	/// </summary>
+	/// <returns></returns>
+	const bool GetIsDead() const { return isDead_; }
+
 protected:
 
 	// 3Dモデルのポインタ
@@ -41,6 +53,16 @@ protected:
 
 	// worldTrasform
 	WorldTransform worldTransform_;
+
+	// デスタイマー
+	int32_t deathTimer_ = kLifeTime;
+	bool isDead_ = false;
+
+	// ------------ 移動に関する変数 ------------ // 
+	// 方向
+	Vector3 direction_;
+	// 速度
+	Vector3 velocity_;
 
 };
 

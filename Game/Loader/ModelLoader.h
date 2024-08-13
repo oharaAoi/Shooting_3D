@@ -8,8 +8,16 @@
 class ModelLoader {
 public:
 
-	ModelLoader();
+	ModelLoader() = default;
 	~ModelLoader();
+	ModelLoader(const ModelLoader&) = delete;
+	const ModelLoader& operator=(const ModelLoader&) = delete;
+
+	/// <summary>
+	/// シングルトンインスタンスの取得
+	/// </summary>
+	/// <returns></returns>
+	static ModelLoader* GetInstacne();
 
 	void Init();
 

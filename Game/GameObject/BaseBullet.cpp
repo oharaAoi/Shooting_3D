@@ -4,10 +4,25 @@
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void BaseBullet::Init(Model* model) {
+void BaseBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation) {
 	model_ = model;
 
 	worldTransform_.Initialize();
+	worldTransform_.Initialize();
+	worldTransform_.translation_ = pos;
+	worldTransform_.rotation_ = rotation;
+
+	// 速度
+	velocity_ = velocity;
+
+	// -------------------------------------------------
+	// ↓ 生存しているかを判断するフラグを設定する
+	// -------------------------------------------------
+	deathTimer_ = kLifeTime;
+	isDead_ = false;
+
+	deathTimer_ = kLifeTime;
+	isDead_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,6 +30,14 @@ void BaseBullet::Init(Model* model) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void BaseBullet::Update() {
+	// 時間経過でデス
+	if (--deathTimer_ <= 0) {
+		isDead_ = true;
+	}
+
+	// 移動させる
+	worldTransform_.translation_ += velocity_;
+	// 行列を更新させる
 	worldTransform_.UpdateMatrix();
 }
 

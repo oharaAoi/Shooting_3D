@@ -33,8 +33,6 @@ void PlayerDashState::Update() {
 
 	// 既定時間で通常に戻る
 	if (++workDash_.dashParameter_ > behaviorDashTime) {
-		/*behaviorRequest_ = Behavior::kRoot;
-		dashCoolTime_ = 15;*/
 		player_->SetBehaviorRequest(PlayerBehavior::kRoot);
 	}
 

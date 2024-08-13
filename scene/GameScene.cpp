@@ -19,12 +19,15 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
+	PrimitiveDrawer::GetInstance()->Initialize();
+
 	viewProjection_.Initialize();
 
 	// ---------------------------------------------
 	// ↓ Loaderの初期化
 	// ---------------------------------------------
-	modelLoader_ = std::make_unique<ModelLoader>();
+	ModelLoader* modelLoader = ModelLoader::GetInstacne();
+	modelLoader->Init();
 
 	AdjustmentItem::GetInstance()->Init();
 
@@ -32,6 +35,8 @@ void GameScene::Initialize() {
 	// ↓ Cameraの初期化
 	// ---------------------------------------------
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
+
+	followCamera_ = std::make_unique<FollowCamera>();
 
 	AxisIndicator::GetInstance()->SetVisible(true);
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
@@ -42,18 +47,19 @@ void GameScene::Initialize() {
 
 	// player ---------------------------------------------------------
 	// 使用するモデルを配列に格納
-	playerPartsModels_.emplace_back(modelLoader_->GetModel("player_body"));
-	playerPartsModels_.emplace_back(modelLoader_->GetModel("player_face"));
-	playerPartsModels_.emplace_back(modelLoader_->GetModel("player_leftArm"));
-	playerPartsModels_.emplace_back(modelLoader_->GetModel("player_rightArm"));
+	playerPartsModels_.emplace_back(modelLoader->GetModel("player_body"));
+	playerPartsModels_.emplace_back(modelLoader->GetModel("player_face"));
+	playerPartsModels_.emplace_back(modelLoader->GetModel("player_leftArm"));
+	playerPartsModels_.emplace_back(modelLoader->GetModel("player_rightArm"));
 
 	// インスタンス生成と初期化
 	player_ = std::make_unique<Player>(playerPartsModels_);
 
 	player_->SetViewProjection(&viewProjection_);
+	followCamera_->SetTarget(&player_->GetWorldTransform());
 
 	// enemy ---------------------------------------------------------
-	mobEnemyPartsModels_.emplace_back(modelLoader_->GetModel("mobEnemy"));
+	mobEnemyPartsModels_.emplace_back(modelLoader->GetModel("mobEnemy"));
 
 	// インスタンス生成と初期化
 	std::unique_ptr<MobEnemy> mobEnemy = std::make_unique<MobEnemy>(mobEnemyPartsModels_);
@@ -62,7 +68,7 @@ void GameScene::Initialize() {
 	// ---------------------------------------------
 	// ↓ WorldObjectの初期化
 	// ---------------------------------------------
-	skydome_ = std::make_unique<Skydome>(modelLoader_->GetModel("skydome"));
+	skydome_ = std::make_unique<Skydome>(modelLoader->GetModel("skydome"));
 	trajectory_ = std::make_unique<Trajectory>();
 }
 
@@ -101,10 +107,15 @@ void GameScene::Update() {
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
 		AxisIndicator::GetInstance()->SetVisible(true);
 	} else {
+		followCamera_->Update();
+		viewProjection_.matView = followCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
 		AxisIndicator::GetInstance()->SetVisible(false);
 	}
 
 	viewProjection_.TransferMatrix();
+
+	PrimitiveDrawer::GetInstance()->SetViewProjection(&viewProjection_);
 
 	// ---------------------------------------------
 	// ↓ ImGuiの処理
@@ -159,6 +170,11 @@ void GameScene::Draw() {
 	for (const std::unique_ptr<MobEnemy>& mobEnemy : mobEnemyList_) {
 		mobEnemy->Draw(viewProjection_);
 	}
+
+	// ---------------------------------------------
+	// ↓ 線の描画
+	// ---------------------------------------------
+	trajectory_->Draw();
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

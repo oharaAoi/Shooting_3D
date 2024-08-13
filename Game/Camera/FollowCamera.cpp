@@ -16,6 +16,16 @@ void FollowCamera::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void FollowCamera::Update() {
+	Rotate();
+
+	Vector3 offset = CalculationOffset();
+	viewProjection_.translation_ = interTarget_ + offset;
+
+	if (target_) {
+		interTarget_ = Lerp(interTarget_, target_->translation_, 0.3f);
+	}
+
+	viewProjection_.UpdateMatrix();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +85,7 @@ void FollowCamera::ResetTarget() {
 // ------------------- ImGuiの編集 ------------------- //
 
 Vector3 FollowCamera::CalculationOffset() {
-	Vector3 offset = { 0.0f, 2.0f, -10.0f };
+	Vector3 offset = { 0.0f, 0.0f, -30.0f };
 	// 回転行列の合成
 	Matrix4x4 matRotate = MakeRotateXYZMatrix(viewProjection_.rotation_);
 	offset = TransformNormal(offset, matRotate);

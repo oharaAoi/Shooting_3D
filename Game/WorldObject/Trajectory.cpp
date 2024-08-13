@@ -12,13 +12,29 @@ void Trajectory::Init() {
 	nowMoveTrajectoryType_ = TrajectoryType::Player_Trajectory;
 
 	std::vector<Vector3> testArray;
-	testArray.push_back({ 1.0f, 1.0f , 20.0f });
-	testArray.push_back({ 10.0f, 300.0f , 20.0f });
+	
+	// --------------------------------------
+	// 円を描く点を設定する
+	// --------------------------------------
+	float angle = 0.0f;
+	Vector3 pos{};
+	for (uint32_t oi = 0; oi < 121; ++oi) {
+		pos.x = pos.x + std::cos(angle) * 3.0f;
+		pos.y = 0.0f;
+		pos.z = pos.z + std::sin(angle) * 3.0f;
+
+		angle += std::numbers::pi_v<float> * kDeltaTime_;
+
+		testArray.push_back(pos);
+	}
+
+	// 最初と最後をつなぐ
+	testArray.push_back(testArray[0]);
 
 	AdjustmentItem::GetInstance()->CreateGroup(trajectoryType_[nowMoveTrajectoryType_]);
-	/*AdjustmentItem::GetInstance()->SetValue(trajectoryType_[nowMoveTrajectoryType_], "Point", testArray);*/
+	AdjustmentItem::GetInstance()->SetValue(trajectoryType_[nowMoveTrajectoryType_], "Point", testArray);
 
-	playerTrajectory = AdjustmentItem::GetInstance()->GetValue<std::vector<Vector3>>("playerTrajectory", "Point");
+	playerTrajectoryVector_ = AdjustmentItem::GetInstance()->GetValue<std::vector<Vector3>>("playerTrajectory", "Point");
 
 	addPoint_ = { 0,0,0 };
 }
@@ -37,6 +53,22 @@ void Trajectory::Update() {
 
 void Trajectory::Draw() const {
 
+	// --------------------------------------
+	// Playerの軌道を描画する
+	// --------------------------------------
+	std::vector<Vector3> pointDrawing;
+	// 点からSpline曲線を引く
+	for (uint32_t oi = 0; oi < playerTrajectoryVector_.size(); ++oi) {
+		float t = (1.0f / static_cast<float>(playerTrajectoryVector_.size())) * oi;
+		Vector3 pos = CatmullRomPosition(playerTrajectoryVector_, t);
+		pointDrawing.push_back(pos);
+	}
+
+	// 線を描画する
+	for (size_t oi = 0; oi < pointDrawing.size() - 1; ++oi) {
+		PrimitiveDrawer::GetInstance()->DrawLine3d(pointDrawing[oi], pointDrawing[oi + 1], { 1.0f, 0.0f, 0.0f, 1.0f });
+	}
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,8 +84,8 @@ void Trajectory::ImGuiDraw() {
 	if (ImGui::BeginMenu("AddPoint")) {
 		ImGui::SliderFloat3("addPoint", &addPoint_.x, -10.f, 10.0f);
 		if (ImGui::Button("Add")) {
-			playerTrajectory.push_back(addPoint_);
-			AdjustmentItem::GetInstance()->SetValue(trajectoryType_[nowMoveTrajectoryType_], "Point", playerTrajectory);
+			playerTrajectoryVector_.push_back(addPoint_);
+			AdjustmentItem::GetInstance()->SetValue(trajectoryType_[nowMoveTrajectoryType_], "Point", playerTrajectoryVector_);
 		}
 		ImGui::EndMenu();
 	}
@@ -71,8 +103,8 @@ void Trajectory::ImGuiDraw() {
 		}
 		// 空白でなければ入力されている要素を変更
 		if (elementIndex_ != "") {
-			if (std::stoi(elementIndex_) < playerTrajectory.size()) {
-				ImGui::SliderFloat3("point", &playerTrajectory[std::stoi(elementIndex_)].x, -10.0f, 10.0f);
+			if (std::stoi(elementIndex_) < playerTrajectoryVector_.size()) {
+				ImGui::SliderFloat3("point", &playerTrajectoryVector_[std::stoi(elementIndex_)].x, -10.0f, 10.0f);
 			}
 		}
 		ImGui::EndMenu();

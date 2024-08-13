@@ -1,5 +1,6 @@
 #pragma once
 #include <optional>
+#include "Enviroment.h"
 // GameObject
 #include "GameObject/BaseCharacter.h"
 #include "GameObject/PlayerBullet.h"
@@ -8,6 +9,9 @@
 #include "State/BaseCharacterState.h"
 #include "State/PlayerRootState.h"
 #include "State/PlayerDashState.h"
+#include "State/PlayerAttackState.h"
+// modelLoader
+#include "Loader/modelLoader.h"
 
 /// <summary>
 /// Playerの部品
@@ -60,6 +64,12 @@ public:
 	void Move() override;
 
 	/// <summary>
+	///	弾をリストに追加する
+	/// </summary>
+	/// <param name="velocity"></param>
+	void AddBulletList(const Vector3& velocity);
+
+	/// <summary>
 	///	状態を変更する
 	/// </summary>
 	/// <param name="behavior"></param>
@@ -105,7 +115,8 @@ public:
 	const Vector3 GetTranslation() const { return worldTransform_.translation_; }
 	void SetTranslation(const Vector3& traslation) { worldTransform_.translation_ = traslation; }
 
-	// ------------  ------------ // 
+	// ------------ PlayerのMatrix ------------ // 
+	const Matrix4x4 GetMatWorld() const { return worldTransform_.matWorld_; }
 
 private:
 
@@ -123,7 +134,11 @@ private:
 	std::optional<PlayerBehavior> behaviorRequest_ = std::nullopt;
 
 	// ------------ Bulletに関する変数 ------------ // 
+	
+	// model
+	Model* bullerModel_;
+
 	// 通常弾のリスト
-	std::list<PlayerBullet> playerBulletList_;
+	std::list<std::unique_ptr<PlayerBullet>> playerBulletList_;
 
 };

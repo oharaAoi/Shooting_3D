@@ -1,5 +1,10 @@
 #pragma once
 #include "GameObject/BaseEnemy.h"
+
+enum EnmeyParts {
+	Enmey_Body = 0,
+};
+
 class MobEnemy :
     public BaseEnemy {
 public:

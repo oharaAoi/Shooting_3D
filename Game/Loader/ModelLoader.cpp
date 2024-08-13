@@ -1,6 +1,10 @@
 #include "ModelLoader.h"
 
-ModelLoader::ModelLoader() { Init(); }
+ModelLoader* ModelLoader::GetInstacne() {
+	static ModelLoader instance;
+	return &instance;
+}
+
 ModelLoader::~ModelLoader() {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -14,9 +18,10 @@ void ModelLoader::Init() {
 	Load("player_face", true);
 	Load("player_leftArm", true);
 	Load("player_rightArm", true);
-	
 	// enemy
 	Load("mobEnemy", true);
+	// bullet
+	Load("cube", true);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

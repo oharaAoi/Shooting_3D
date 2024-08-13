@@ -6,11 +6,13 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+// Camera
 #include "DebugCamera.h"
+#include "Camera/FollowCamera.h"
 // GameObject
 #include "WorldObject/Skydome.h"
 // Loader
-#include "Loder/modelLoader.h"
+#include "Loader/modelLoader.h"
 // WorldObject
 #include "WorldObject/Skydome.h"
 #include "WorldObject/Trajectory.h"
@@ -66,6 +68,8 @@ private: // メンバ変数
 	// ------------ Camera ------------ // 
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
 	bool isDebugCamera = false;
+
+	std::unique_ptr<FollowCamera> followCamera_ = nullptr;
 
 	// ------------ Loader ------------ // 
 	std::unique_ptr<ModelLoader> modelLoader_ = nullptr;

@@ -119,11 +119,12 @@
     <ClCompile Include="Game\GameObject\MobEnemy.cpp" />
     <ClCompile Include="Game\GameObject\Player.cpp" />
     <ClCompile Include="Game\GameObject\PlayerBullet.cpp" />
-    <ClCompile Include="Game\Loder\ModelLoader.cpp" />
+    <ClCompile Include="Game\Loader\ModelLoader.cpp" />
     <ClCompile Include="Game\Math\MyMath.cpp" />
     <ClCompile Include="Game\Math\MyMatrix4x4.cpp" />
     <ClCompile Include="Game\State\BaseCharacterState.cpp" />
     <ClCompile Include="Game\State\BasePlayerState.cpp" />
+    <ClCompile Include="Game\State\PlayerAttackState.cpp" />
     <ClCompile Include="Game\State\PlayerDashState.cpp" />
     <ClCompile Include="Game\State\PlayerRootState.cpp" />
     <ClCompile Include="Game\WorldObject\Skydome.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="base\StringUtility.h" />
     <ClInclude Include="base\TextureManager.h" />
     <ClInclude Include="base\WinApp.h" />
+    <ClInclude Include="Enviroment.h" />
     <ClInclude Include="Game\Adjustment\AdjustmentItem.h" />
     <ClInclude Include="Game\Camera\FollowCamera.h" />
     <ClInclude Include="Game\GameObject\BaseBullet.h" />
@@ -163,11 +165,12 @@
     <ClInclude Include="Game\GameObject\MobEnemy.h" />
     <ClInclude Include="Game\GameObject\Player.h" />
     <ClInclude Include="Game\GameObject\PlayerBullet.h" />
-    <ClInclude Include="Game\Loder\ModelLoader.h" />
+    <ClInclude Include="Game\Loader\ModelLoader.h" />
     <ClInclude Include="Game\Math\MyMath.h" />
     <ClInclude Include="Game\Math\MyMatrix4x4.h" />
     <ClInclude Include="Game\State\BaseCharacterState.h" />
     <ClInclude Include="Game\State\BasePlayerState.h" />
+    <ClInclude Include="Game\State\PlayerAttackState.h" />
     <ClInclude Include="Game\State\PlayerDashState.h" />
     <ClInclude Include="Game\State\PlayerRootState.h" />
     <ClInclude Include="Game\WorldObject\Skydome.h" />

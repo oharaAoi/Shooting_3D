@@ -10,6 +10,8 @@ Player::~Player() {}
 void Player::Init(std::vector<Model*> models) {
 	BaseCharacter::Init(models);
 
+	bullerModel_ = ModelLoader::GetInstacne()->GetModel("cube");
+
 	// partsの親の設定
 	worldTransforms_[PlayerParts::Parts_Body].parent_ = &worldTransform_;
 	worldTransforms_[PlayerParts::Parts_Face].parent_ = &worldTransforms_[PlayerParts::Parts_Body];
@@ -52,10 +54,23 @@ void Player::Update() {
 	// 現在の状態を更新する
 	behaviorState_->Update();
 
+	// 弾の更新
+	for (const std::unique_ptr<PlayerBullet>& playerBullet : playerBulletList_) {
+		playerBullet->Update();
+	}
+
+	// 弾の削除
+	playerBulletList_.remove_if([](const std::unique_ptr<PlayerBullet>& bullet) {
+		if (bullet->GetIsDead()) {
+			return true;
+		}
+		return false;
+	});
+
 	// ---------------------------------------------
 	// ↓ 基本となる処理を行う
 	// ---------------------------------------------
-	
+
 	// 計算転送
 	BaseCharacter::Update();
 	// ImGuiの編集
@@ -68,6 +83,10 @@ void Player::Update() {
 
 void Player::Draw(const ViewProjection& viewProjection) {
 	BaseCharacter::Draw(viewProjection);
+
+	for (const std::unique_ptr<PlayerBullet>& playerBullet : playerBulletList_) {
+		playerBullet->Draw(viewProjection);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,6 +139,23 @@ void Player::Move() {
 			//worldTransform_.rotation_.y = std::atan2f(direction_.x, direction_.z);
 		}
 	}
+
+	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+		velocity_ = { 10, 0,0 };
+		worldTransform_.translation_ += velocity_ * kDeltaTime_;
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+		velocity_ = { -10, 0,0 };
+		worldTransform_.translation_ += velocity_ * kDeltaTime_;
+	}
+}
+
+
+void Player::AddBulletList(const Vector3& velocity) {
+	playerBulletList_.emplace_back(std::move(std::make_unique<PlayerBullet>(
+		bullerModel_, worldTransform_.translation_, velocity, worldTransform_.rotation_
+	)));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,7 +181,7 @@ void Player::CheckBehaviorRequest() {
 			ChangeBehavior(std::make_unique<PlayerRootState>(this));
 			break;
 		case PlayerBehavior::kAttack:
-
+			ChangeBehavior(std::make_unique<PlayerAttackState>(this));
 			break;
 		case PlayerBehavior::kDash:
 			ChangeBehavior(std::make_unique<PlayerDashState>(this));

@@ -61,9 +61,6 @@
     <Filter Include="Game\WorldObject">
       <UniqueIdentifier>{5f2554bf-ce01-495d-acb7-3dd2e4df538f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Loder">
-      <UniqueIdentifier>{a7098e2f-b3ee-4ac4-82b1-c9bb62eba627}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Adjustment">
       <UniqueIdentifier>{09a213d5-3c57-4b4e-bc23-2fcf45b9f41b}</UniqueIdentifier>
     </Filter>
@@ -75,6 +72,9 @@
     </Filter>
     <Filter Include="Game\Camera">
       <UniqueIdentifier>{223f8a29-ddba-4b96-9e21-3823207fe608}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Loader">
+      <UniqueIdentifier>{a7098e2f-b3ee-4ac4-82b1-c9bb62eba627}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -101,9 +101,6 @@
     </ClCompile>
     <ClCompile Include="Game\WorldObject\Skydome.cpp">
       <Filter>Game\WorldObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Loder\ModelLoader.cpp">
-      <Filter>Game\Loder</Filter>
     </ClCompile>
     <ClCompile Include="Game\WorldObject\Trajectory.cpp">
       <Filter>Game\WorldObject</Filter>
@@ -146,6 +143,12 @@
     </ClCompile>
     <ClCompile Include="Game\State\PlayerDashState.cpp">
       <Filter>Game\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\State\PlayerAttackState.cpp">
+      <Filter>Game\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Loader\ModelLoader.cpp">
+      <Filter>Game\Loader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -245,9 +248,6 @@
     <ClInclude Include="Game\WorldObject\Skydome.h">
       <Filter>Game\WorldObject</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Loder\ModelLoader.h">
-      <Filter>Game\Loder</Filter>
-    </ClInclude>
     <ClInclude Include="Game\WorldObject\Trajectory.h">
       <Filter>Game\WorldObject</Filter>
     </ClInclude>
@@ -286,6 +286,15 @@
     </ClInclude>
     <ClInclude Include="Game\State\PlayerDashState.h">
       <Filter>Game\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\State\PlayerAttackState.h">
+      <Filter>Game\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Loader\ModelLoader.h">
+      <Filter>Game\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="Enviroment.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,13 +1,14 @@
 #pragma once
 #include "GameObject/BaseBullet.h"
+
 class PlayerBullet :
 	public BaseBullet {
 public:
 
-	PlayerBullet(Model* model);
+	PlayerBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation);
 	~PlayerBullet();
 
-	void Init(Model* model) override;
+	void Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation) override;
 
 	void Update() override;
 
@@ -15,11 +16,7 @@ public:
 
 private:
 
-	// ------------ 移動に関する変数 ------------ // 
-	// 方向
-	Vector3 direction_;
-	// 速度
-	Vector3 velocity_;
+	
 
 };
 

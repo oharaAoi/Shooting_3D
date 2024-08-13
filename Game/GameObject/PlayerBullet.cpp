@@ -1,14 +1,16 @@
 #include "PlayerBullet.h"
 
-PlayerBullet::PlayerBullet(Model* model) { Init(model); }
+PlayerBullet::PlayerBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation) {
+	Init(model, pos, velocity, rotation); 
+}
 PlayerBullet::~PlayerBullet() {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void PlayerBullet::Init(Model* model) {
-	BaseBullet::Init(model);
+void PlayerBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation) {
+	BaseBullet::Init(model, pos, velocity, rotation);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

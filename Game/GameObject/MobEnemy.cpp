@@ -9,6 +9,8 @@ MobEnemy::~MobEnemy() {}
 
 void MobEnemy::Init(std::vector<Model*> models) {
 	BaseEnemy::Init(models);
+
+	worldTransforms_[EnmeyParts::Enmey_Body].parent_ = &worldTransform_;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -16,6 +18,7 @@ void MobEnemy::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void MobEnemy::Update() {
+	worldTransform_.translation_.z = 4;
 	BaseEnemy::Update();
 }
 
