@@ -20,6 +20,6 @@ void BaseEnemy::Update() {
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void BaseEnemy::Draw(const ViewProjection& viewProjection) {
+void BaseEnemy::Draw(const ViewProjection& viewProjection) const {
 	BaseCharacter::Draw(viewProjection);
 }

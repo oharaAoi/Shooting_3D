@@ -25,6 +25,11 @@ public:
 ///////////////////////////////////////////////////////////
 
 	/// <summary>
+	/// カメラを移動させる
+	/// </summary>
+	void RailMove();
+
+	/// <summary>
 	/// カメラを回転させる
 	/// </summary>
 	void Rotate();
@@ -59,6 +64,8 @@ private:
 	ViewProjection viewProjection_;
 
 	const WorldTransform* target_ = nullptr;
+
+	WorldTransform worldTransform_;
 
 	// 追従対象の残像座標
 	Vector3 interTarget_ = {};

@@ -25,7 +25,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	virtual void Draw(const ViewProjection& viewProjection) override;
+	virtual void Draw(const ViewProjection& viewProjection) const override;
 
 protected:
 

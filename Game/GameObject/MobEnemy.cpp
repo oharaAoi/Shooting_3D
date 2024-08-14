@@ -26,7 +26,7 @@ void MobEnemy::Update() {
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void MobEnemy::Draw(const ViewProjection& viewProjection) {
+void MobEnemy::Draw(const ViewProjection& viewProjection) const {
 	BaseEnemy::Draw(viewProjection);
 }
 

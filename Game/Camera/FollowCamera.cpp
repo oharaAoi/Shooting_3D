@@ -9,6 +9,7 @@ FollowCamera::~FollowCamera() {}
 
 void FollowCamera::Init() {
 	viewProjection_.Initialize();
+	worldTransform_.Initialize();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,7 +25,10 @@ void FollowCamera::Update() {
 	if (target_) {
 		interTarget_ = Lerp(interTarget_, target_->translation_, 0.3f);
 	}
+	// worldTransformを設定する
+	worldTransform_.UpdateMatrix();
 
+	viewProjection_.matView = Inverse(worldTransform_.matWorld_);
 	viewProjection_.UpdateMatrix();
 }
 

@@ -81,7 +81,7 @@ void Player::Update() {
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Player::Draw(const ViewProjection& viewProjection) {
+void Player::Draw(const ViewProjection& viewProjection) const {
 	BaseCharacter::Draw(viewProjection);
 
 	for (const std::unique_ptr<PlayerBullet>& playerBullet : playerBulletList_) {

@@ -25,6 +25,6 @@ void PlayerBullet::Update() {
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void PlayerBullet::Draw(const ViewProjection& viewProjection) {
+void PlayerBullet::Draw(const ViewProjection& viewProjection) const {
 	BaseBullet::Draw(viewProjection);
 }

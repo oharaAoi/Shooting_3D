@@ -32,7 +32,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	virtual void Draw(const ViewProjection& viewProjection);
+	virtual void Draw(const ViewProjection& viewProjection) const;
 
 	/// <summary>
 	/// 移動

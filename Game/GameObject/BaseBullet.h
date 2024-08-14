@@ -34,7 +34,7 @@ public:
 	/// <summary>
 	/// 描画処理
 	/// </summary>
-	virtual void Draw(const ViewProjection& viewProjection);
+	virtual void Draw(const ViewProjection& viewProjection) const;
 
 ///////////////////////////////////////////////////////////
 // accessor

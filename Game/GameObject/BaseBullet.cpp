@@ -45,7 +45,7 @@ void BaseBullet::Update() {
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void BaseBullet::Draw(const ViewProjection& viewProjection) {
+void BaseBullet::Draw(const ViewProjection& viewProjection) const {
 	model_->Draw(worldTransform_, viewProjection);
 }
 

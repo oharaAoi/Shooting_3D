@@ -33,7 +33,7 @@ void BaseCharacter::Update() {
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void BaseCharacter::Draw(const ViewProjection& viewProjection) {
+void BaseCharacter::Draw(const ViewProjection& viewProjection) const {
 	for (uint32_t oi = 0; oi < models_.size(); oi++) {
 		models_[oi]->Draw(worldTransforms_[oi], viewProjection);
 	}

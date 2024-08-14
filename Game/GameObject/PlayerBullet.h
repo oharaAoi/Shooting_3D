@@ -12,7 +12,7 @@ public:
 
 	void Update() override;
 
-	void Draw(const ViewProjection& viewProjection) override;
+	void Draw(const ViewProjection& viewProjection) const override;
 
 private:
 

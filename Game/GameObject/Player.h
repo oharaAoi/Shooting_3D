@@ -52,7 +52,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(const ViewProjection& viewProjection) override;
+	void Draw(const ViewProjection& viewProjection) const override;
 
 ///////////////////////////////////////////////////////////
 // メンバ関数
