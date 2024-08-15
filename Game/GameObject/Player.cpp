@@ -21,6 +21,8 @@ void Player::Init(std::vector<Model*> models) {
 	worldTransforms_[PlayerParts::Parts_LeftArm].parent_ = &worldTransforms_[PlayerParts::Parts_Body];
 	worldTransforms_[PlayerParts::Parts_RightArm].parent_ = &worldTransforms_[PlayerParts::Parts_Body];
 
+	worldTransform_.translation_.z = 20;
+
 	// ---------------------------------------------
 	// ↓ 基本となる変数の初期化
 	// ---------------------------------------------
@@ -252,4 +254,18 @@ void Player::ApplyAdjustItems() {
 	worldTransforms_[PlayerParts::Parts_Face].translation_ = adjustItem->GetValue<Vector3>(groupName, "face_Translation");
 	worldTransforms_[PlayerParts::Parts_LeftArm].translation_ = adjustItem->GetValue<Vector3>(groupName, "L_Arm_Translation");
 	worldTransforms_[PlayerParts::Parts_RightArm].translation_ = adjustItem->GetValue<Vector3>(groupName, "R_Arm_Translation");
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　accessor
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Player::SetParent(const WorldTransform* parent) {
+	// 親子関係を結ぶ
+	worldTransform_.parent_ = parent;
+}
+
+void Player::SetWorldTransform(const WorldTransform& worldTransform) {
+	worldTransform_.translation_ = worldTransform.translation_;
+	worldTransform_.rotation_ = worldTransform.rotation_;
 }

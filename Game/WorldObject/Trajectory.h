@@ -50,6 +50,12 @@ public:
 	/// </summary>
 	void ImGuiDraw();
 
+///////////////////////////////////////////////////////////
+// メンバ関数
+///////////////////////////////////////////////////////////
+
+	std::vector<Vector3> GetPlayerTrajectoryVector() { return playerTrajectoryVector_; }
+
 private:
 
 	// --------- プレイヤーの軌道　--------- //

@@ -9,6 +9,7 @@
 // Camera
 #include "DebugCamera.h"
 #include "Camera/FollowCamera.h"
+#include "Camera/RailCamera.h"
 // GameObject
 #include "WorldObject/Skydome.h"
 // Loader
@@ -81,6 +82,7 @@ private: // メンバ変数
 	bool isDebugCamera = false;
 
 	std::unique_ptr<FollowCamera> followCamera_ = nullptr;
+	std::unique_ptr<RailCamera> railCamera_ = nullptr;
 
 	// ------------ Loader ------------ // 
 	std::unique_ptr<ModelLoader> modelLoader_ = nullptr;
@@ -101,4 +103,6 @@ private: // メンバ変数
 	// ------------ Collision ------------ // 
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 
+	// ------------ メンバ変数 ------------ // 
+	bool isBossBattle_ = false;
 };

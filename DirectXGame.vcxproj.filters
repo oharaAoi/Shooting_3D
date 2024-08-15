@@ -157,6 +157,9 @@
       <Filter>Game\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Game\Collision\CollisionManager.cpp">
+      <Filter>Game\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Camera\RailCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -309,9 +312,12 @@
       <Filter>Game\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Game\Collision\CollisionTypeIdDef.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Game\Collision\CollisionManager.h">
+      <Filter>Game\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Camera\RailCamera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

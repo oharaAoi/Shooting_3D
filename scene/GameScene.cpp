@@ -38,6 +38,10 @@ void GameScene::Initialize() {
 
 	followCamera_ = std::make_unique<FollowCamera>();
 
+	Vector3 translation = { 0.0f, 5.0f, -30.0f };
+	Vector3 rotation = { 0.0f, 0.0f, 0.0f };
+	railCamera_ = std::make_unique<RailCamera>(translation, rotation);
+
 	AxisIndicator::GetInstance()->SetVisible(true);
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 
@@ -75,6 +79,12 @@ void GameScene::Initialize() {
 	// ↓ Managerの初期化
 	// ---------------------------------------------
 	collisionManager_ = std::make_unique<CollisionManager>();
+
+	// ---------------------------------------------
+	// ↓ 初期化時に設定して置く処理をしておく
+	// ---------------------------------------------
+	railCamera_->SetControlPoints(trajectory_->GetPlayerTrajectoryVector());
+	player_->SetParent(&railCamera_->GetWorldTransform());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,6 +92,35 @@ void GameScene::Initialize() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Update() {
+
+	// ---------------------------------------------
+	// ↓ Cameraの処理
+	// ---------------------------------------------
+	if (input_->TriggerKey(DIK_C)) {
+		isDebugCamera = !isDebugCamera;
+	}
+
+	if (isDebugCamera) {
+		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		AxisIndicator::GetInstance()->SetVisible(true);
+	} else {
+		if (isBossBattle_) {
+			followCamera_->Update();
+			viewProjection_.matView = followCamera_->GetViewProjection().matView;
+			viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
+		} else {
+			railCamera_->Update();
+			viewProjection_.matView = railCamera_->GetViewProjection().matView;
+			viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
+		}
+		AxisIndicator::GetInstance()->SetVisible(false);
+	}
+
+	viewProjection_.TransferMatrix();
+
+	PrimitiveDrawer::GetInstance()->SetViewProjection(&viewProjection_);
 
 	// ---------------------------------------------
 	// ↓ GameObjectの処理
@@ -104,29 +143,6 @@ void GameScene::Update() {
 	// ---------------------------------------------
 
 	CheckAllCollision();
-
-	// ---------------------------------------------
-	// ↓ Cameraの処理
-	// ---------------------------------------------
-	if (input_->TriggerKey(DIK_C)) {
-		isDebugCamera = !isDebugCamera;
-	}
-
-	if (isDebugCamera) {
-		debugCamera_->Update();
-		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		AxisIndicator::GetInstance()->SetVisible(true);
-	} else {
-		followCamera_->Update();
-		viewProjection_.matView = followCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
-		AxisIndicator::GetInstance()->SetVisible(false);
-	}
-
-	viewProjection_.TransferMatrix();
-
-	PrimitiveDrawer::GetInstance()->SetViewProjection(&viewProjection_);
 
 	// ---------------------------------------------
 	// ↓ ImGuiの処理

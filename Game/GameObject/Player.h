@@ -134,6 +134,10 @@ public:
 	// ------------ PlayerのMatrix ------------ // 
 	const Matrix4x4 GetMatWorld() const { return worldTransform_.matWorld_; }
 
+	// ------------ Transform ------------ // 
+	void SetParent(const WorldTransform* parent);
+	void SetWorldTransform(const WorldTransform& worldTransform);
+	
 	// ------------ bulletList ------------ // 
 	std::list<std::unique_ptr<PlayerBullet>>& GetPlayerBulletList() { return playerBulletList_; }
 
