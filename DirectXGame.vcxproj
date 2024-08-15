@@ -114,6 +114,7 @@
     <ClCompile Include="Game\Adjustment\AdjustmentItem.cpp" />
     <ClCompile Include="Game\Camera\FollowCamera.cpp" />
     <ClCompile Include="Game\Collision\Collider.cpp" />
+    <ClCompile Include="Game\Collision\CollisionManager.cpp" />
     <ClCompile Include="Game\GameObject\BaseBullet.cpp" />
     <ClCompile Include="Game\GameObject\BaseCharacter.cpp" />
     <ClCompile Include="Game\GameObject\BaseEnemy.cpp" />
@@ -161,6 +162,8 @@
     <ClInclude Include="Game\Adjustment\AdjustmentItem.h" />
     <ClInclude Include="Game\Camera\FollowCamera.h" />
     <ClInclude Include="Game\Collision\Collider.h" />
+    <ClInclude Include="Game\Collision\CollisionManager.h" />
+    <ClInclude Include="Game\Collision\CollisionTypeIdDef.h" />
     <ClInclude Include="Game\GameObject\BaseBullet.h" />
     <ClInclude Include="Game\GameObject\BaseCharacter.h" />
     <ClInclude Include="Game\GameObject\BaseEnemy.h" />

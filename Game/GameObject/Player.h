@@ -61,7 +61,12 @@ public:
 	/// <summary>
 	/// Playerを動かす
 	/// </summary>
-	void Move() override;
+	void Move();
+
+	/// <summary>
+	/// 弾の更新を行う
+	/// </summary>
+	void BulletsUpdate();
 
 	/// <summary>
 	///	弾をリストに追加する
@@ -81,6 +86,11 @@ public:
 	void CheckBehaviorRequest();
 
 	/// <summary>
+	/// 衝突時に呼ばれる関数
+	/// </summary>
+	void OnCollision([[maybe_unused]] Collider* other) override;
+
+	/// <summary>
 	/// ImGui
 	/// </summary>
 	void EditImGui();
@@ -93,6 +103,12 @@ public:
 ///////////////////////////////////////////////////////////
 // accessor
 ///////////////////////////////////////////////////////////
+
+	/// <summary>
+	/// world空間での座標を取得する
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetWorldPosition() const override;
 
 	/// <summary>
 	/// ViewProjectionのポインタを設定する
@@ -117,6 +133,9 @@ public:
 
 	// ------------ PlayerのMatrix ------------ // 
 	const Matrix4x4 GetMatWorld() const { return worldTransform_.matWorld_; }
+
+	// ------------ bulletList ------------ // 
+	std::list<std::unique_ptr<PlayerBullet>>& GetPlayerBulletList() { return playerBulletList_; }
 
 private:
 

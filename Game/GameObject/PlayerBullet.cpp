@@ -1,6 +1,7 @@
 #include "PlayerBullet.h"
 
 PlayerBullet::PlayerBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation) {
+	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kPlayerBullet));
 	Init(model, pos, velocity, rotation); 
 }
 PlayerBullet::~PlayerBullet() {}
@@ -27,4 +28,28 @@ void PlayerBullet::Update() {
 
 void PlayerBullet::Draw(const ViewProjection& viewProjection) const {
 	BaseBullet::Draw(viewProjection);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　メンバ関数
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+// ------------------- 衝突時に行う処理 ------------------- //
+ 
+void PlayerBullet::OnCollision(Collider* other) {
+	uint32_t typeID = other->GetTypeID();
+	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kEnemy)) {
+		isDead_ = true;
+	}
+}
+
+// ------------------- world空間上での位置を取得する ------------------- //
+
+Vector3 PlayerBullet::GetWorldPosition() const {
+	// ローカル座標でのオフセット
+	const Vector3 offset = { 0.0f, 0.0f, 0.0f };
+	// ワールド座標に変換
+	Vector3 worldPos = Transform(offset, worldTransform_.matWorld_);
+
+	return worldPos;
 }

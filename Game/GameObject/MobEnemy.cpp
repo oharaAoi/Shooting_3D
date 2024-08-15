@@ -1,6 +1,9 @@
 #include "MobEnemy.h"
 
-MobEnemy::MobEnemy(std::vector<Model*> models) { Init(models); }
+MobEnemy::MobEnemy(std::vector<Model*> models) {
+	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kEnemy));
+	Init(models);
+}
 MobEnemy::~MobEnemy() {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,4 +40,28 @@ void MobEnemy::Draw(const ViewProjection& viewProjection) const {
 // ------------------- 移動させる関数 ------------------- //
 
 void MobEnemy::Move() {
+}
+
+// ------------------- 当たり判定を取った時の関数 ------------------- //
+
+void MobEnemy::OnCollision(Collider* other) {
+	uint32_t typeID = other->GetTypeID();
+	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kEnemy)) {
+
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　値を返す関数群
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+// ------------------- world空間での座標を取得する ------------------- //
+
+Vector3 MobEnemy::GetWorldPosition() const {
+	// ローカル座標でのオフセット
+	const Vector3 offset = { 0.0f, 0.0f, 0.0f };
+	// ワールド座標に変換
+	Vector3 worldPos = Transform(offset, worldTransform_.matWorld_);
+
+	return worldPos;
 }

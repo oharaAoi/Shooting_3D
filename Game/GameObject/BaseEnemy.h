@@ -27,6 +27,17 @@ public:
 	/// </summary>
 	virtual void Draw(const ViewProjection& viewProjection) const override;
 
+	/// <summary>
+	/// 衝突時に呼ばれる関数
+	/// </summary>
+	virtual void OnCollision([[maybe_unused]] Collider* other) override {};
+
+	/// <summary>
+	/// world空間での座標を取得する
+	/// </summary>
+	/// <returns></returns>
+	virtual Vector3 GetWorldPosition() const override;
+
 protected:
 
 	// ------------ キャラクターの情報に関する変数 ------------ // 

@@ -1,6 +1,9 @@
 #include "Player.h"
 
-Player::Player(std::vector<Model*> models) { Init(models); }
+Player::Player(std::vector<Model*> models) { 
+	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kPlayer));
+	Init(models); 
+}
 Player::~Player() {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,18 +57,8 @@ void Player::Update() {
 	// 現在の状態を更新する
 	behaviorState_->Update();
 
-	// 弾の更新
-	for (const std::unique_ptr<PlayerBullet>& playerBullet : playerBulletList_) {
-		playerBullet->Update();
-	}
-
-	// 弾の削除
-	playerBulletList_.remove_if([](const std::unique_ptr<PlayerBullet>& bullet) {
-		if (bullet->GetIsDead()) {
-			return true;
-		}
-		return false;
-	});
+	// 弾の更新を行う
+	BulletsUpdate();
 
 	// ---------------------------------------------
 	// ↓ 基本となる処理を行う
@@ -151,11 +144,29 @@ void Player::Move() {
 	}
 }
 
+// ------------------- 弾の更新を行う ------------------- //
+
+void Player::BulletsUpdate() {
+	// 弾の更新
+	for (const std::unique_ptr<PlayerBullet>& playerBullet : playerBulletList_) {
+		playerBullet->Update();
+	}
+
+	// 弾の削除
+	playerBulletList_.remove_if([](const std::unique_ptr<PlayerBullet>& bullet) {
+		if (bullet->GetIsDead()) {
+			return true;
+		}
+		return false;
+	});
+}
+
+// ------------------- 弾をリストに追加する ------------------- //
 
 void Player::AddBulletList(const Vector3& velocity) {
-	playerBulletList_.emplace_back(std::move(std::make_unique<PlayerBullet>(
-		bullerModel_, worldTransform_.translation_, velocity, worldTransform_.rotation_
-	)));
+	playerBulletList_.push_back(
+		std::make_unique<PlayerBullet>(bullerModel_, worldTransform_.translation_, velocity, worldTransform_.rotation_
+	));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,6 +201,28 @@ void Player::CheckBehaviorRequest() {
 		// ふるまいリクエストをリセット
 		behaviorRequest_ = std::nullopt;
 	}
+}
+
+void Player::OnCollision(Collider* other) {
+	uint32_t typeID = other->GetTypeID();
+	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kEnemy)) {
+		
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　値を返す関数群
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+// ------------------- world空間での座標を取得する ------------------- //
+
+Vector3 Player::GetWorldPosition() const {
+	// ローカル座標でのオフセット
+	const Vector3 offset = { 0.0f, 0.0f, 0.0f };
+	// ワールド座標に変換
+	Vector3 worldPos = Transform(offset, worldTransform_.matWorld_);
+
+	return worldPos;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -21,6 +21,8 @@
 // GameObject
 #include "GameObject/Player.h"
 #include "GameObject/MobEnemy.h"
+// Manager
+#include "Collision/CollisionManager.h"
 
 /// <summary>
 /// ゲームシーン
@@ -52,6 +54,15 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	void Draw();
+
+///////////////////////////////////////////////////////////
+// メンバ関数
+///////////////////////////////////////////////////////////
+
+	/// <summary>
+	/// すべての当たり判定を実行する
+	/// </summary>
+	void CheckAllCollision();
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -86,5 +97,8 @@ private: // メンバ変数
 	// ------------ WorldEnvironment ------------ // 
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	std::unique_ptr<Trajectory> trajectory_ = nullptr;
+
+	// ------------ Collision ------------ // 
+	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 
 };

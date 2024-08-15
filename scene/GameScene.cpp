@@ -70,6 +70,11 @@ void GameScene::Initialize() {
 	// ---------------------------------------------
 	skydome_ = std::make_unique<Skydome>(modelLoader->GetModel("skydome"));
 	trajectory_ = std::make_unique<Trajectory>();
+
+	// ---------------------------------------------
+	// ↓ Managerの初期化
+	// ---------------------------------------------
+	collisionManager_ = std::make_unique<CollisionManager>();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,6 +98,12 @@ void GameScene::Update() {
 	// ---------------------------------------------
 	skydome_->Update();
 	trajectory_->Update();
+
+	// ---------------------------------------------
+	// ↓ 当たり判定の処理
+	// ---------------------------------------------
+
+	CheckAllCollision();
 
 	// ---------------------------------------------
 	// ↓ Cameraの処理
@@ -193,4 +204,33 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓ メンバ関数
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+// ------------------- すべての当たり判定を実行する ------------------- //
+
+void GameScene::CheckAllCollision() {
+	// リストのリセット
+	collisionManager_->Rest();
+
+	// ---------------------------------------------
+	// ↓ リストに当たり判定を取るオブジェクトをセットする
+	// ---------------------------------------------
+	collisionManager_->AddCollider(player_.get());
+
+	for (const std::unique_ptr<PlayerBullet>& bullet : player_->GetPlayerBulletList()) {
+		collisionManager_->AddCollider(bullet.get());
+	}
+
+	for (const std::unique_ptr<MobEnemy>& enemy : mobEnemyList_) {
+		collisionManager_->AddCollider(enemy.get());
+	}
+
+	// ---------------------------------------------
+	// ↓ 当たり判定を取る
+	// ---------------------------------------------
+	collisionManager_->CheckAllCollision();
 }

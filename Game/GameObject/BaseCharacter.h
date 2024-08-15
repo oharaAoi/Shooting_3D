@@ -8,12 +8,16 @@
 #include "ViewProjection.h"
 #include "Vector3.h"
 #include "Math/MyMath.h"
+// collision
+#include "Collision/Collider.h"
+#include "Collision/CollisionTypeIdDef.h"
 
 #ifdef _DEBUG
 #include "ImGuiManager.h"
 #endif
 
-class BaseCharacter {
+class BaseCharacter 
+: public Collider {
 public:
 
 	BaseCharacter() = default;
@@ -35,9 +39,9 @@ public:
 	virtual void Draw(const ViewProjection& viewProjection) const;
 
 	/// <summary>
-	/// 移動
+	/// 衝突時に呼ばれる関数
 	/// </summary>
-	virtual void Move();
+	void OnCollision([[maybe_unused]] Collider* other) override {};
 
 ///////////////////////////////////////////////////////////
 // accessor
@@ -49,8 +53,11 @@ public:
 	/// <returns></returns>
 	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 
-
-	//virtual Vector3 GetCenterPosition() const override;
+	/// <summary>
+	/// World上の位置を取得する関数
+	/// </summary>
+	/// <returns>worldPosition</returns>
+	virtual Vector3 GetWorldPosition() const override;
 
 protected:
 	// モデルデータ配列

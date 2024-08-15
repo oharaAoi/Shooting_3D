@@ -34,7 +34,23 @@ public:
 	/// <summary>
 	/// Playerを動かす
 	/// </summary>
-	void Move() override;
+	void Move();
+
+	/// <summary>
+	/// 衝突時に呼ばれる関数
+	/// </summary>
+	void OnCollision([[maybe_unused]] Collider* other) override;
+
+
+///////////////////////////////////////////////////////////
+// accessor
+///////////////////////////////////////////////////////////
+
+	/// <summary>
+	/// world空間での座標を取得する
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetWorldPosition() const override;
 
 private:
 

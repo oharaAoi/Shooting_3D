@@ -23,3 +23,7 @@ void BaseEnemy::Update() {
 void BaseEnemy::Draw(const ViewProjection& viewProjection) const {
 	BaseCharacter::Draw(viewProjection);
 }
+
+Vector3 BaseEnemy::GetWorldPosition() const {
+	return Vector3();
+}

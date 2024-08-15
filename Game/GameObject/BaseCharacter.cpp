@@ -39,8 +39,6 @@ void BaseCharacter::Draw(const ViewProjection& viewProjection) const {
 	}
 }
 
-/// <summary>
-/// 移動の関数
-/// </summary>
-void BaseCharacter::Move() {
+Vector3 BaseCharacter::GetWorldPosition() const {
+	return Vector3();
 }

@@ -13,7 +13,7 @@ PlayerAttackState::~PlayerAttackState() {
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void PlayerAttackState::Init() {
-	workAttack_.coolTime_ = 15;
+	workAttack_.coolTime_ = 0;
 	workAttack_.exitStateTime_ = 40;
 }
 
@@ -23,6 +23,13 @@ void PlayerAttackState::Init() {
 void PlayerAttackState::Update() {
 	player_->Move();
 
+	// 弾を撃つクールタイム
+	if (workAttack_.coolTime_ > 0) {
+		workAttack_.coolTime_--;
+		return;
+	}
+
+	// 弾を撃つ
 	Shot();
 }
 
@@ -31,11 +38,11 @@ void PlayerAttackState::Update() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerAttackState::Shot() {
-	/*XINPUT_STATE joyState;
+	XINPUT_STATE joyState;
 
-	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }*/
-
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
+	
+	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
 		const float kBulletSpeed = 0.6f;
 		Vector3 velocity(0, 0, kBulletSpeed);
 		// 自機から昇順オブジェクトへのベクトル
@@ -44,5 +51,7 @@ void PlayerAttackState::Shot() {
 		velocity = TransformNormal(velocity, player_->GetMatWorld());
 		// bulletのインスタンスを生成する
 		player_->AddBulletList(velocity);
+		// coolTimeを設定する
+		workAttack_.coolTime_ = 15;
 	}
 }
