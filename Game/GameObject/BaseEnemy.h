@@ -33,10 +33,19 @@ public:
 	virtual void OnCollision([[maybe_unused]] Collider* other) override {};
 
 	/// <summary>
+	/// ImGui
+	/// </summary>
+	virtual void EditImGui() {};
+
+	/// <summary>
 	/// world空間での座標を取得する
 	/// </summary>
 	/// <returns></returns>
 	virtual Vector3 GetWorldPosition() const override;
+
+	// ------------ worldTransform ------------ // 
+	void SetParent(const WorldTransform* parent);
+
 
 protected:
 

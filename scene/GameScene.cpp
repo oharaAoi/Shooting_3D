@@ -130,6 +130,7 @@ void GameScene::Update() {
 	// enmey
 	for (const std::unique_ptr<MobEnemy>& mobEnemy : mobEnemyList_) {
 		mobEnemy->Update();
+		mobEnemy->SetParent(&railCamera_->GetWorldTransform());
 	}
 
 	// ---------------------------------------------

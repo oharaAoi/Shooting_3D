@@ -24,6 +24,15 @@ void BaseEnemy::Draw(const ViewProjection& viewProjection) const {
 	BaseCharacter::Draw(viewProjection);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　accessor
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 Vector3 BaseEnemy::GetWorldPosition() const {
 	return Vector3();
+}
+
+void BaseEnemy::SetParent(const WorldTransform* parent) {
+	// 親子関係を結ぶ
+	worldTransform_.parent_ = parent;
 }

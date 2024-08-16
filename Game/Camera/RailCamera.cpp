@@ -23,7 +23,7 @@ void RailCamera::Update() {
 	// カメラを一定フレームで移動させる
 	// --------------------------------------
 	frameCount_++;
-	if (frameCount_ > 5) {
+	if (frameCount_ > moveCount_) {
 		RailMove();
 		frameCount_ = 0;
 	}
@@ -51,7 +51,7 @@ void RailCamera::RailMove() {
 	}
 
 	// ここを編集する必要がある
-	uint32_t forwardIndex = eyeIndex_ + 5;
+	uint32_t forwardIndex = eyeIndex_ + moveCount_;
 	if (controlPoints_.size() <= forwardIndex) {
 		forwardIndex = static_cast<uint32_t>(controlPoints_.size()) - 1;
 	}

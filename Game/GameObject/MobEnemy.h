@@ -1,6 +1,8 @@
 #pragma once
 #include "GameObject/BaseEnemy.h"
 
+static uint32_t mobEnemyNum = 0;
+
 enum EnmeyParts {
 	Enmey_Body = 0,
 };
@@ -41,6 +43,11 @@ public:
 	/// </summary>
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
+	/// <summary>
+	/// ImGuiの編集
+	/// </summary>
+	void EditImGui() override;
+
 
 ///////////////////////////////////////////////////////////
 // accessor
@@ -54,7 +61,7 @@ public:
 
 private:
 
-	
+	uint32_t enemyId_;
 
 };
 

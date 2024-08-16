@@ -123,6 +123,7 @@
     <ClCompile Include="Game\GameObject\Player.cpp" />
     <ClCompile Include="Game\GameObject\PlayerBullet.cpp" />
     <ClCompile Include="Game\Loader\ModelLoader.cpp" />
+    <ClCompile Include="Game\Manager\EnemyManager.cpp" />
     <ClCompile Include="Game\Math\MyMath.cpp" />
     <ClCompile Include="Game\Math\MyMatrix4x4.cpp" />
     <ClCompile Include="Game\State\BaseCharacterState.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="Game\GameObject\Player.h" />
     <ClInclude Include="Game\GameObject\PlayerBullet.h" />
     <ClInclude Include="Game\Loader\ModelLoader.h" />
+    <ClInclude Include="Game\Manager\EnemyManager.h" />
     <ClInclude Include="Game\Math\MyMath.h" />
     <ClInclude Include="Game\Math\MyMatrix4x4.h" />
     <ClInclude Include="Game\State\BaseCharacterState.h" />

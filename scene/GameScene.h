@@ -64,6 +64,11 @@ public: // メンバ関数
 	/// すべての当たり判定を実行する
 	/// </summary>
 	void CheckAllCollision();
+	
+	/// <summary>
+	/// 敵を生成する関数
+	/// </summary>
+	void EnemyPop();
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -95,6 +100,8 @@ private: // メンバ変数
 	// mobEnemy
 	std::vector<Model*> mobEnemyPartsModels_;
 	std::list<std::unique_ptr<MobEnemy>> mobEnemyList_;
+
+	std::list<std::unique_ptr<BaseEnemy>> enemysList_;
 
 	// ------------ WorldEnvironment ------------ // 
 	std::unique_ptr<Skydome> skydome_ = nullptr;

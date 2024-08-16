@@ -79,6 +79,9 @@
     <Filter Include="Game\Collision">
       <UniqueIdentifier>{ee4fd637-cac0-44de-9ff4-d9ef0ed1f65d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Manager">
+      <UniqueIdentifier>{bac625e9-a8c3-4e49-abbd-12c90ba3ed97}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -159,8 +162,11 @@
     <ClCompile Include="Game\Collision\CollisionManager.cpp">
       <Filter>Game\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Manager\EnemyManager.cpp">
+      <Filter>Game\Manager</Filter>
+    </ClCompile>
     <ClCompile Include="Game\Camera\RailCamera.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -317,8 +323,11 @@
     <ClInclude Include="Game\Collision\CollisionManager.h">
       <Filter>Game\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Manager\EnemyManager.h">
+      <Filter>Game\Manager</Filter>
+    </ClInclude>
     <ClInclude Include="Game\Camera\RailCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

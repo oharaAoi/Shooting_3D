@@ -65,6 +65,7 @@ private:
 	std::vector<Vector3> controlPoints_;
 	uint32_t eyeIndex_ = 0;
 	uint32_t frameCount_ = 0;
+	uint32_t moveCount_ = 8;
 
 	Vector3 localTranslation_;	// カメラ自体がどのくらい動いているか
 	Vector3 localRotate_;		// カメラ自体の回転
