@@ -24,6 +24,7 @@
 #include "GameObject/MobEnemy.h"
 // Manager
 #include "Collision/CollisionManager.h"
+#include "Manager/EnemyManager.h"
 
 /// <summary>
 /// ゲームシーン
@@ -97,18 +98,15 @@ private: // メンバ変数
 	std::vector<Model*> playerPartsModels_;
 	std::unique_ptr<Player> player_ = nullptr;
 
-	// mobEnemy
-	std::vector<Model*> mobEnemyPartsModels_;
-	std::list<std::unique_ptr<MobEnemy>> mobEnemyList_;
-
-	std::list<std::unique_ptr<BaseEnemy>> enemysList_;
-
 	// ------------ WorldEnvironment ------------ // 
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	std::unique_ptr<Trajectory> trajectory_ = nullptr;
 
 	// ------------ Collision ------------ // 
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
+
+	// ------------ Manager ------------ // 
+	std::unique_ptr<EnemyManager> enemyManager_ = nullptr;
 
 	// ------------ メンバ変数 ------------ // 
 	bool isBossBattle_ = false;

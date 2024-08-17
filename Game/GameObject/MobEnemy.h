@@ -11,7 +11,7 @@ class MobEnemy :
     public BaseEnemy {
 public:
 
-    MobEnemy(std::vector<Model*> models);
+    MobEnemy(std::vector<Model*> models, const Vector3& pos);
     ~MobEnemy();
 
 	/// <summary>

@@ -67,6 +67,9 @@ public:
 	/// <returns></returns>
 	const bool GetIsDead() const { return isDead_; }
 
+	// ------------ Transform ------------ // 
+	void SetParent(const WorldTransform* parent);
+
 protected:
 
 	// 3Dモデルのポインタ

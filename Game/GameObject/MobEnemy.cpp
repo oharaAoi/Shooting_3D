@@ -1,9 +1,10 @@
 #include "MobEnemy.h"
 
-MobEnemy::MobEnemy(std::vector<Model*> models) {
+MobEnemy::MobEnemy(std::vector<Model*> models, const Vector3& pos) {
 	enemyId_ = mobEnemyNum;
 	mobEnemyNum++;
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kEnemy));
+	worldTransform_.translation_ = pos;
 	Init(models);
 }
 MobEnemy::~MobEnemy() {}
@@ -16,8 +17,6 @@ void MobEnemy::Init(std::vector<Model*> models) {
 	BaseEnemy::Init(models);
 
 	worldTransforms_[EnmeyParts::Enmey_Body].parent_ = &worldTransform_;
-
-	worldTransform_.translation_ = { 2.0f, 1.0f, 40.0f };
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

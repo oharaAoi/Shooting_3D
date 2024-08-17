@@ -1,6 +1,12 @@
 #pragma once
 #include "GameObject/BaseCharacter.h"
 
+enum EnemyType {
+	Type_Mob = 0,
+	Type_MidBoss,
+	Type_Boss
+};
+
 /// <summary>
 /// Enemyの基本となるクラス
 /// </summary>

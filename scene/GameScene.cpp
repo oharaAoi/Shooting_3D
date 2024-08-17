@@ -63,11 +63,7 @@ void GameScene::Initialize() {
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
 	// enemy ---------------------------------------------------------
-	mobEnemyPartsModels_.emplace_back(modelLoader->GetModel("mobEnemy"));
-
-	// インスタンス生成と初期化
-	std::unique_ptr<MobEnemy> mobEnemy = std::make_unique<MobEnemy>(mobEnemyPartsModels_);
-	mobEnemyList_.emplace_back(std::move(mobEnemy));
+	
 
 	// ---------------------------------------------
 	// ↓ WorldObjectの初期化
@@ -79,12 +75,15 @@ void GameScene::Initialize() {
 	// ↓ Managerの初期化
 	// ---------------------------------------------
 	collisionManager_ = std::make_unique<CollisionManager>();
+	enemyManager_ = std::make_unique<EnemyManager>();
 
 	// ---------------------------------------------
 	// ↓ 初期化時に設定して置く処理をしておく
 	// ---------------------------------------------
 	railCamera_->SetControlPoints(trajectory_->GetPlayerTrajectoryVector());
 	player_->SetParent(&railCamera_->GetWorldTransform());
+
+	enemyManager_->SetParent(&railCamera_->GetWorldTransform());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,10 +127,7 @@ void GameScene::Update() {
 	player_->Update();
 
 	// enmey
-	for (const std::unique_ptr<MobEnemy>& mobEnemy : mobEnemyList_) {
-		mobEnemy->Update();
-		mobEnemy->SetParent(&railCamera_->GetWorldTransform());
-	}
+	enemyManager_->Update();
 
 	// ---------------------------------------------
 	// ↓ WorldObjectの処理
@@ -194,10 +190,7 @@ void GameScene::Draw() {
 	// ---------------------------------------------
 	player_->Draw(viewProjection_);
 
-	// enemy
-	for (const std::unique_ptr<MobEnemy>& mobEnemy : mobEnemyList_) {
-		mobEnemy->Draw(viewProjection_);
-	}
+	enemyManager_->Draw(viewProjection_);
 
 	// ---------------------------------------------
 	// ↓ 線の描画
@@ -242,7 +235,7 @@ void GameScene::CheckAllCollision() {
 		collisionManager_->AddCollider(bullet.get());
 	}
 
-	for (const std::unique_ptr<MobEnemy>& enemy : mobEnemyList_) {
+	for (const std::unique_ptr<BaseEnemy>& enemy : enemyManager_->GetEnemysList()) {
 		collisionManager_->AddCollider(enemy.get());
 	}
 
