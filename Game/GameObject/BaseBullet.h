@@ -30,7 +30,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	virtual void Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation);
+	virtual void Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent);
 
 	/// <summary>
 	/// 更新処理

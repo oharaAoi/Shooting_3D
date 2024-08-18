@@ -5,7 +5,7 @@ class PlayerBullet :
 	public BaseBullet {
 public:
 
-	PlayerBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation);
+	PlayerBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent);
 	~PlayerBullet();
 
 	/// <summary>
@@ -15,7 +15,7 @@ public:
 	/// <param name="pos"></param>
 	/// <param name="velocity"></param>
 	/// <param name="rotation"></param>
-	void Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation) override;
+	void Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent) override;
 
 	/// <summary>
 	/// 更新処理

@@ -122,6 +122,7 @@
     <ClCompile Include="Game\GameObject\MobEnemy.cpp" />
     <ClCompile Include="Game\GameObject\Player.cpp" />
     <ClCompile Include="Game\GameObject\PlayerBullet.cpp" />
+    <ClCompile Include="Game\GameObject\Reticle.cpp" />
     <ClCompile Include="Game\Loader\ModelLoader.cpp" />
     <ClCompile Include="Game\Manager\EnemyManager.cpp" />
     <ClCompile Include="Game\Math\MyMath.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="Game\GameObject\MobEnemy.h" />
     <ClInclude Include="Game\GameObject\Player.h" />
     <ClInclude Include="Game\GameObject\PlayerBullet.h" />
+    <ClInclude Include="Game\GameObject\Reticle.h" />
     <ClInclude Include="Game\Loader\ModelLoader.h" />
     <ClInclude Include="Game\Manager\EnemyManager.h" />
     <ClInclude Include="Game\Math\MyMath.h" />

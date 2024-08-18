@@ -4,6 +4,8 @@
 // GameObject
 #include "GameObject/BaseCharacter.h"
 #include "GameObject/PlayerBullet.h"
+#include "GameObject/Reticle.h"
+// Adjustment
 #include "Adjustment/AdjustmentItem.h"
 // State
 #include "State/BaseCharacterState.h"
@@ -53,6 +55,11 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection) const override;
+
+	/// <summary>
+	/// 2Dのレティクルを描画する
+	/// </summary>
+	void Draw2DReticle();
 
 ///////////////////////////////////////////////////////////
 // メンバ関数
@@ -137,6 +144,7 @@ public:
 	// ------------ Transform ------------ // 
 	void SetParent(const WorldTransform* parent);
 	void SetWorldTransform(const WorldTransform& worldTransform);
+	void SetReticleParent(const WorldTransform* parent);
 	
 	// ------------ bulletList ------------ // 
 	std::list<std::unique_ptr<PlayerBullet>>& GetPlayerBulletList() { return playerBulletList_; }
@@ -157,11 +165,16 @@ private:
 	std::optional<PlayerBehavior> behaviorRequest_ = std::nullopt;
 
 	// ------------ Bulletに関する変数 ------------ // 
-	
 	// model
 	Model* bullerModel_;
 
 	// 通常弾のリスト
 	std::list<std::unique_ptr<PlayerBullet>> playerBulletList_;
+
+	// ------------ Reticleに関する変数 ------------ // 
+	std::unique_ptr<Reticle> reticle_ = nullptr;
+
+	// ------------ 単体で機能させる変数 ------------ // 
+	bool isBossBattle_;
 
 };

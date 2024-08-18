@@ -53,8 +53,7 @@ void PlayerRootState::Attack() {
 
 	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
 
-	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
+	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
 		player_->SetBehaviorRequest(PlayerBehavior::kAttack);
 	}
-
 }

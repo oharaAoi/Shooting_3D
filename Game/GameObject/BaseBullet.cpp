@@ -4,7 +4,7 @@
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void BaseBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation) {
+void BaseBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent) {
 	model_ = model;
 
 	worldTransform_.Initialize();
@@ -14,6 +14,9 @@ void BaseBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity,
 
 	// 速度
 	velocity_ = velocity;
+
+	// 親を設定する
+	worldTransform_.parent_ = parent;
 
 	// -------------------------------------------------
 	// ↓ 生存しているかを判断するフラグを設定する
@@ -36,6 +39,8 @@ void BaseBullet::Update() {
 	}
 
 	// 移動させる
+	/*Matrix4x4 matWorld = Multiply(worldTransform_.matWorld_, worldTransform_.parent_->matWorld_);
+	Vector3 velocity = TransformNormal({0,0,0.1f}, matWorld);*/
 	worldTransform_.translation_ += velocity_;
 	// 行列を更新させる
 	worldTransform_.UpdateMatrix();

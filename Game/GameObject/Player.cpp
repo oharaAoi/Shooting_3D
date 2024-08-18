@@ -29,6 +29,13 @@ void Player::Init(std::vector<Model*> models) {
 	behaviorRequest_ = PlayerBehavior::kRoot;
 	ChangeBehavior(std::make_unique<PlayerRootState>(this));
 
+	isBossBattle_ = false;
+
+	// ---------------------------------------------
+	// ↓ Reticle初期化
+	// ---------------------------------------------
+	reticle_ = std::make_unique<Reticle>();
+
 	// ---------------------------------------------
 	// ↓ 調整項目
 	// ---------------------------------------------
@@ -49,6 +56,11 @@ void Player::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Update() {
+	// ---------------------------------------------
+	// ↓ Reticleの更新を行う
+	// ---------------------------------------------
+	reticle_->Update(worldTransform_, *viewProjection_);
+
 	// ---------------------------------------------
 	// ↓ Playerの状態に関する処理を行う
 	// ---------------------------------------------
@@ -79,9 +91,17 @@ void Player::Update() {
 void Player::Draw(const ViewProjection& viewProjection) const {
 	BaseCharacter::Draw(viewProjection);
 
+	// 弾の描画
 	for (const std::unique_ptr<PlayerBullet>& playerBullet : playerBulletList_) {
 		playerBullet->Draw(viewProjection);
 	}
+
+	// Reticleの描画
+	reticle_->Draw(viewProjection);
+}
+
+void Player::Draw2DReticle() {
+	reticle_->Draw2DReticle();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,11 +117,19 @@ void Player::Move() {
 		const float speed = 0.3f;
 		float targetAngle = 0;
 
-		velocity_ = {
-			static_cast<float>(joyState.Gamepad.sThumbLX) / SHRT_MAX,
-			0.0f,
-			static_cast<float>(joyState.Gamepad.sThumbLY) / SHRT_MAX,
-		};
+		if (isBossBattle_) {
+			velocity_ = {
+				static_cast<float>(joyState.Gamepad.sThumbLX) / SHRT_MAX,
+				0.0f,
+				static_cast<float>(joyState.Gamepad.sThumbLY) / SHRT_MAX,
+			};
+		} else {
+			velocity_ = {
+				static_cast<float>(joyState.Gamepad.sThumbLX) / SHRT_MAX,
+				static_cast<float>(joyState.Gamepad.sThumbLY) / SHRT_MAX,
+				0.0f
+			};
+		}
 
 		// スティックの押し込みが閾値を超えていたら移動可能にする
 		if (Length(velocity_) > threshold) {
@@ -128,10 +156,12 @@ void Player::Move() {
 		// --------------------------------------
 		// 回転させる
 		// y軸まわり(z軸方向とy軸方向のベクトルで求まる)
-		if (isMoving) {
-			worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngle, 0.1f);
-		} else {
-			//worldTransform_.rotation_.y = std::atan2f(direction_.x, direction_.z);
+		if (isBossBattle_) {
+			if (isMoving) {
+				worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngle, 0.1f);
+			} else {
+				//worldTransform_.rotation_.y = std::atan2f(direction_.x, direction_.z);
+			}
 		}
 	}
 
@@ -167,7 +197,7 @@ void Player::BulletsUpdate() {
 
 void Player::AddBulletList(const Vector3& velocity) {
 	playerBulletList_.push_back(
-		std::make_unique<PlayerBullet>(bullerModel_, worldTransform_.translation_, velocity, worldTransform_.rotation_
+		std::make_unique<PlayerBullet>(bullerModel_, worldTransform_.translation_, velocity, worldTransform_.rotation_, worldTransform_.parent_
 	));
 }
 
@@ -268,4 +298,8 @@ void Player::SetParent(const WorldTransform* parent) {
 void Player::SetWorldTransform(const WorldTransform& worldTransform) {
 	worldTransform_.translation_ = worldTransform.translation_;
 	worldTransform_.rotation_ = worldTransform.rotation_;
+}
+
+void Player::SetReticleParent(const WorldTransform* parent) {
+	reticle_->SetParent(parent);
 }

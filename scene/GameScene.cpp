@@ -81,7 +81,10 @@ void GameScene::Initialize() {
 	// ↓ 初期化時に設定して置く処理をしておく
 	// ---------------------------------------------
 	railCamera_->SetControlPoints(trajectory_->GetPlayerTrajectoryVector());
+
 	player_->SetParent(&railCamera_->GetWorldTransform());
+	//player_->SetReticleParent(&railCamera_->GetWorldTransform());
+	player_->SetViewProjection(&railCamera_->GetViewProjection());
 
 	enemyManager_->SetParent(&railCamera_->GetWorldTransform());
 }
@@ -114,11 +117,11 @@ void GameScene::Update() {
 			viewProjection_.matView = railCamera_->GetViewProjection().matView;
 			viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
 		}
+		//player_->SetViewProjection(&viewProjection_);
 		AxisIndicator::GetInstance()->SetVisible(false);
 	}
 
 	viewProjection_.TransferMatrix();
-
 	PrimitiveDrawer::GetInstance()->SetViewProjection(&viewProjection_);
 
 	// ---------------------------------------------
@@ -209,6 +212,8 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+
+	player_->Draw2DReticle();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

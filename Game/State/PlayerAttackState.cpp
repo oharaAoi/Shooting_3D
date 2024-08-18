@@ -42,7 +42,7 @@ void PlayerAttackState::Shot() {
 
 	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
 	
-	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
+	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
 		const float kBulletSpeed = 0.6f;
 		Vector3 velocity(0, 0, kBulletSpeed);
 		// 自機から昇順オブジェクトへのベクトル

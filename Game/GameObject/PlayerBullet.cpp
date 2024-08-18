@@ -1,8 +1,8 @@
 #include "PlayerBullet.h"
 
-PlayerBullet::PlayerBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation) {
+PlayerBullet::PlayerBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent) {
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kPlayerBullet));
-	Init(model, pos, velocity, rotation); 
+	Init(model, pos, velocity, rotation, parent);
 }
 PlayerBullet::~PlayerBullet() {}
 
@@ -10,8 +10,8 @@ PlayerBullet::~PlayerBullet() {}
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void PlayerBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation) {
-	BaseBullet::Init(model, pos, velocity, rotation);
+void PlayerBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent) {
+	BaseBullet::Init(model, pos, velocity, rotation, parent);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
