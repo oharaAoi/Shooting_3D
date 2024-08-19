@@ -103,6 +103,10 @@ public:
 	/// <returns></returns>
 	Vector3 GetReticlePosition();
 
+	const WorldTransform& Get3DReticleTransform() { return worldTransform3D_; }
+
+	const Matrix4x4 GetMatWorld() const { return matWorld_; }
+
 private:
 
 	Model* model_ = nullptr;
@@ -114,6 +118,8 @@ private:
 	uint32_t textureReticle_;
 
 	float cameraToReticle_;
+
+	Matrix4x4 matWorld_;
 
 	// 2Dレティクルを使用するか3Dレティクルを使用するか
 	bool is3dReticle_ = false;

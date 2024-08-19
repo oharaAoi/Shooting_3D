@@ -149,6 +149,9 @@ public:
 	// ------------ bulletList ------------ // 
 	std::list<std::unique_ptr<PlayerBullet>>& GetPlayerBulletList() { return playerBulletList_; }
 
+	// ------------ Reticle関連 ------------ // 
+	Reticle* GetReticle() { return reticle_.get(); }
+
 private:
 
 	const ViewProjection* viewProjection_ = nullptr;

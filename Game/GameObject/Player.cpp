@@ -266,6 +266,8 @@ Vector3 Player::GetWorldPosition() const {
 void Player::EditImGui() {
 #ifdef _DEBUG
 	ImGui::Begin("Player");
+	Vector3 worldPos = GetWorldPosition();
+	ImGui::DragFloat3("worldPos", &worldPos.x, 0.1f);
 	ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.1f);
 	ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.1f);
 	ImGui::DragFloat3("head", &worldTransforms_[PlayerParts::Parts_Face].translation_.x, 0.1f);

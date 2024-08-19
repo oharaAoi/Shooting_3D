@@ -17,6 +17,7 @@ void BaseBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity,
 
 	// 親を設定する
 	worldTransform_.parent_ = parent;
+	//worldTransform_.parent_ = nullptr;
 
 	// -------------------------------------------------
 	// ↓ 生存しているかを判断するフラグを設定する

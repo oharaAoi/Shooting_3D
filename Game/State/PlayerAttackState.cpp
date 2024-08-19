@@ -44,11 +44,12 @@ void PlayerAttackState::Shot() {
 	
 	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
 		const float kBulletSpeed = 0.6f;
-		Vector3 velocity(0, 0, kBulletSpeed);
+		Matrix4x4 reticleMat = player_->GetReticle()->Get3DReticleTransform().matWorld_ * Inverse(player_->GetWorldTransform().parent_->matWorld_);
+		Vector3 velocity = Transform({0,0,0}, reticleMat) - player_->GetTranslation();
 		// 自機から昇順オブジェクトへのベクトル
 		velocity = Normalize(velocity) * kBulletSpeed;
 		// 速度ベクトルを自機の向きに合わせて回転させる
-		velocity = TransformNormal(velocity, player_->GetMatWorld());
+		//velocity = TransformNormal(velocity, player_->GetMatWorld());
 		// bulletのインスタンスを生成する
 		player_->AddBulletList(velocity);
 		// coolTimeを設定する

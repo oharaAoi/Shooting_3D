@@ -38,10 +38,15 @@ void Reticle::Update(const WorldTransform& worldTransform, const ViewProjection&
 	// 3Dレティクルの位置をScreen上からworld上の位置を求める
 	ScreenToWorldOf3DReticle(viewProjection);
 
+	matWorld_ = Multiply(worldTransform3D_.matWorld_, worldTransform.parent_->matWorld_);
+
 	worldTransform3D_.UpdateMatrix();
 
 	ImGui::Begin("Reticle");
 	ImGui::SliderFloat("cameraTo3DReticle", &cameraToReticle_, 0, 1000);
+	ImGui::DragFloat3("worldTransform3D.translation", &worldTransform3D_.translation_.x);
+	Vector3 pos = Get3DReticleWorldPos();
+	ImGui::DragFloat3("3DReticleWorldPos", &pos.x);
 	ImGui::End();
 }
 
