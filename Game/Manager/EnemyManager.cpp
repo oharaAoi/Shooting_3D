@@ -11,8 +11,8 @@ void EnemyManager::Init() {
 	ModelLoader* modelLoader = ModelLoader::GetInstacne();
 	mobEnemyPartsModels_.emplace_back(modelLoader->GetModel("mobEnemy"));
 
-	// インスタンス生成と初期化
-	LoadFile();
+	AllLoadFilesName();
+	currentIndex_ = 0;
 }
 
 ///////////////////////////////////////////////////////////
@@ -20,6 +20,9 @@ void EnemyManager::Init() {
 ///////////////////////////////////////////////////////////
 
 void EnemyManager::Update() {
+	
+	ImGuiEdit();
+
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemysList_) {
 		enemy->Update();
 	}
@@ -60,7 +63,6 @@ void EnemyManager::LoadFile() {
 	// --------------------------------------
 	// 読み込んだデータからEnemyを生成する
 	// --------------------------------------
-
 	for (auto& element : root.items()) {
 		std::string enemyName = element.key();
 		json enemyData = element.value();
@@ -86,6 +88,60 @@ void EnemyManager::LoadFile() {
 			break;
 		}
 	}
+
+	// --------------------------------------
+	// 親を登録する
+	// --------------------------------------
+	for (const std::unique_ptr<BaseEnemy>& enemy : enemysList_) {
+		enemy->SetParent(parentWorldTransform_);
+	}
+}
+
+void EnemyManager::AllLoadFilesName() {
+	const std::string directoryPath = "./Resources/EnemyPos/";
+
+	for (const auto& entry : std::filesystem::directory_iterator(directoryPath)) {
+		// 拡張子が .json のファイルを探す
+		if (entry.is_regular_file() && entry.path().extension() == ".json") {
+			// ファイル名を vector に追加
+			filePathArray_.push_back(entry.path().filename().string());
+		}
+	}
+}
+
+void EnemyManager::ImGuiEdit() {
+#ifdef _DEBUG
+	ImGui::Begin("EnemyManager");
+	// --------------------------------------
+	// 読み込みたいファイルを選択する
+	// --------------------------------------
+	if (ImGui::BeginCombo("Select File", filePathArray_[currentIndex_].c_str())) {
+		// json_files の各要素をプルダウンのアイテムとして追加
+		for (uint32_t i = 0; i < filePathArray_.size(); ++i) {
+			bool is_selected = (currentIndex_ == i); // 現在のアイテムが選択されているかどうか
+			if (ImGui::Selectable(filePathArray_[i].c_str(), is_selected)) {
+				currentIndex_ = i; // 新しいアイテムが選択されたら、current_item を更新
+			}
+
+			// 現在の選択がまだ続いている場合はアイテムを強調表示
+			if (is_selected) {
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	// --------------------------------------
+	// 実際に読み込む
+	// --------------------------------------
+	if (ImGui::Button("Load")) {
+		nowWaveEnemyPos_ = currentIndex_;
+		enemysList_.clear();
+		LoadFile();
+	}
+
+	ImGui::End();
+#endif
 }
 
 
@@ -94,7 +150,5 @@ void EnemyManager::LoadFile() {
 ///////////////////////////////////////////////////////////
 
 void EnemyManager::SetParent(const WorldTransform* parent) {
-	for (const std::unique_ptr<BaseEnemy>& enemy : enemysList_) {
-		enemy->SetParent(parent);
-	}
+	parentWorldTransform_ = parent;
 }

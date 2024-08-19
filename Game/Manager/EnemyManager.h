@@ -2,6 +2,7 @@
 // STL
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 #include <vector>
 #include <map>
 #include <unordered_map>
@@ -46,6 +47,16 @@ public:
 	/// </summary>
 	void LoadFile();
 
+	/// <summary>
+	/// すべてのファイル名を取得する
+	/// </summary>
+	void AllLoadFilesName();
+
+	/// <summary>
+	/// ImGuiを編集する
+	/// </summary>
+	void ImGuiEdit();
+
 ///////////////////////////////////////////////////////////
 // accessor
 ///////////////////////////////////////////////////////////
@@ -58,11 +69,16 @@ public:
 
 private:
 
+	const WorldTransform* parentWorldTransform_;
+
 	// ------------ ファイル読み込みに関する変数 ------------ // 
 	// グローバル変数の保存先ファイルパス
 	const std::string kDirectorPath_ = "Resources/EnemyPos/";
 	// 今どの配置を行っているか
 	uint32_t nowWaveEnemyPos_ = 0;
+	// 敵の配置が入った配列
+	std::vector<std::string> filePathArray_;
+	uint32_t currentIndex_ = 0;
 
 	// ------------ Enemyに関する変数 ------------ // 
 	// Model
