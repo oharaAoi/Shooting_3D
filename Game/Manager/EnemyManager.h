@@ -53,6 +53,16 @@ public:
 	void AllLoadFilesName();
 
 	/// <summary>
+	/// Enemyの配置を保存する
+	/// </summary>
+	void SaveEnemyPos();
+
+	/// <summary>
+	/// 敵をImGui上で配置しファイルに保存する関数
+	/// </summary>
+	void EditEnemyPos();
+
+	/// <summary>
 	/// ImGuiを編集する
 	/// </summary>
 	void ImGuiEdit();
@@ -73,17 +83,26 @@ private:
 
 	// ------------ ファイル読み込みに関する変数 ------------ // 
 	// グローバル変数の保存先ファイルパス
-	const std::string kDirectorPath_ = "Resources/EnemyPos/";
+	const std::string kDirectorPath_ = "./Resources/EnemyPos/";
 	// 今どの配置を行っているか
 	uint32_t nowWaveEnemyPos_ = 0;
 	// 敵の配置が入った配列
 	std::vector<std::string> filePathArray_;
 	uint32_t currentIndex_ = 0;
+	uint32_t fileNum_ = 0;
 
 	// ------------ Enemyに関する変数 ------------ // 
 	// Model
 	std::vector<Model*> mobEnemyPartsModels_;
 	// enemyList
 	std::list<std::unique_ptr<BaseEnemy>> enemysList_;
+
+	// ------------ 敵の配置に関する変数 ------------ // 
+	// 生成する敵の種類
+	int createEnemyType_ = 0;
+	// 生成する敵の配置
+	Vector3 createEnemyPos_;
+	// 生成する敵の配列
+	std::list<std::unique_ptr<BaseEnemy>> createEnemysList_;
 };
 

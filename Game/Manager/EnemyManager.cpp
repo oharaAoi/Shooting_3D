@@ -13,6 +13,7 @@ void EnemyManager::Init() {
 
 	AllLoadFilesName();
 	currentIndex_ = 0;
+	fileNum_ = 0;
 }
 
 ///////////////////////////////////////////////////////////
@@ -23,7 +24,13 @@ void EnemyManager::Update() {
 	
 	ImGuiEdit();
 
+	EditEnemyPos();
+
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemysList_) {
+		enemy->Update();
+	}
+
+	for (const std::unique_ptr<BaseEnemy>& enemy : createEnemysList_) {
 		enemy->Update();
 	}
 }
@@ -34,6 +41,10 @@ void EnemyManager::Update() {
 
 void EnemyManager::Draw(const ViewProjection& viewProjection) const {
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemysList_) {
+		enemy->Draw(viewProjection);
+	}
+
+	for (const std::unique_ptr<BaseEnemy>& enemy : createEnemysList_) {
 		enemy->Draw(viewProjection);
 	}
 }
@@ -65,7 +76,7 @@ void EnemyManager::LoadFile() {
 	// --------------------------------------
 	for (auto& element : root.items()) {
 		std::string enemyName = element.key();
-		json enemyData = element.value();
+		json enemyData = element.value();;
 
 		// 位置データを取得
 		Vector3 pos = { enemyData["pos"].at(0), enemyData["pos"].at(1),enemyData["pos"].at(2), };
@@ -97,17 +108,117 @@ void EnemyManager::LoadFile() {
 	}
 }
 
-void EnemyManager::AllLoadFilesName() {
-	const std::string directoryPath = "./Resources/EnemyPos/";
+// ------------------- Enemyの配置のファイル名をすべて配列に格納する ------------------- //
 
-	for (const auto& entry : std::filesystem::directory_iterator(directoryPath)) {
+void EnemyManager::AllLoadFilesName() {
+	filePathArray_.clear();
+
+	for (const auto& entry : std::filesystem::directory_iterator(kDirectorPath_)) {
 		// 拡張子が .json のファイルを探す
 		if (entry.is_regular_file() && entry.path().extension() == ".json") {
 			// ファイル名を vector に追加
 			filePathArray_.push_back(entry.path().filename().string());
 		}
+
+		fileNum_++;
 	}
 }
+
+// ------------------- Enemyの配置をファイルに保存する ------------------- //
+
+void EnemyManager::SaveEnemyPos() {
+	json data = json::object();
+
+	uint32_t createListIndex = 0;
+	for (const std::unique_ptr<BaseEnemy>& enemy : createEnemysList_) {
+		std::string enemyNum = "Enemy" + std::to_string(createListIndex);
+		data[enemyNum]["pos"] = { -0.4000000059604645, 1.7999999523162842, 0.0 };
+		data[enemyNum]["type"] = { 0 };
+		createListIndex++;
+
+		enemy->Update();
+	}
+
+	// パス
+	std::string filePath = kDirectorPath_ + "EnemyPos" + std::to_string(fileNum_) + ".json";
+	// 書き込み用のファイルストリーム
+	std::ofstream ofs;
+	// ファイルを書き込みように開く
+	ofs.open(filePath);
+
+	// ファイルオープンが出来ているか
+	if (ofs.fail()) {
+		std::string message = "Faild open data file for write";
+		MessageBoxA(nullptr, message.c_str(), "Adjustment", 0);
+		assert(0);
+		return;
+	}
+
+	// ファイルにjson文字列を書き込む(インデント幅4)
+	ofs << data.dump(4) << std::endl; // rootにあるデータをjson文字列に変換してファイルへ
+	// 閉じる
+	ofs.close();
+}
+
+// ------------------- Enemyの配置を作成する ------------------- //
+
+void EnemyManager::EditEnemyPos() {
+#ifdef _DEBUG
+	ImGui::Begin("EnemyManager");
+
+	// 敵の種類を選択する
+	ImGui::RadioButton("mob", &createEnemyType_, 0);
+	ImGui::SameLine();
+	ImGui::RadioButton("midMob", &createEnemyType_, 1);
+	ImGui::SameLine();
+	ImGui::RadioButton("boss", &createEnemyType_, 2);
+
+	// 敵の座標を指定する
+	ImGui::DragFloat3("position", &createEnemyPos_.x, 0.01f);
+
+	// 敵をリストに追加する
+	if (ImGui::Button("Create")) {
+		switch (createEnemyType_) {
+		case EnemyType::Type_Mob:
+			createEnemysList_.push_back(std::make_unique<MobEnemy>(mobEnemyPartsModels_, createEnemyPos_));
+			break;
+
+		case EnemyType::Type_MidBoss:
+
+			break;
+
+		case EnemyType::Type_Boss:
+
+			break;
+		}
+	}
+
+	ImGui::Spacing();
+
+	// リストの中を表示
+	uint32_t createListIndex = 0;
+	for (const std::unique_ptr<BaseEnemy>& enemy : createEnemysList_) {
+		std::string label = "Enemy " + std::to_string(createListIndex);
+		if (ImGui::BeginMenu(label.c_str())) {
+			enemy->ImGuiSetTranslation();
+			ImGui::EndMenu();
+		}
+		enemy->SetParent(parentWorldTransform_);
+		createListIndex++;
+	}
+
+	// リストの中身をファイルに保存する
+	if (ImGui::Button("Save")) {
+		SaveEnemyPos();
+		AllLoadFilesName();
+		createEnemysList_.clear();
+	}
+
+	ImGui::End();
+#endif
+}
+
+// ------------------- ImGuiを配置する ------------------- //
 
 void EnemyManager::ImGuiEdit() {
 #ifdef _DEBUG
@@ -139,6 +250,8 @@ void EnemyManager::ImGuiEdit() {
 		enemysList_.clear();
 		LoadFile();
 	}
+
+	ImGui::Separator();
 
 	ImGui::End();
 #endif

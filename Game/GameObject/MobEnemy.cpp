@@ -15,7 +15,7 @@ MobEnemy::~MobEnemy() {}
 
 void MobEnemy::Init(std::vector<Model*> models) {
 	BaseEnemy::Init(models);
-
+	enemyType_ = EnemyType::Type_Mob;
 	worldTransforms_[EnmeyParts::Enmey_Body].parent_ = &worldTransform_;
 }
 

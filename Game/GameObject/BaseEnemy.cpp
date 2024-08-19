@@ -36,3 +36,7 @@ void BaseEnemy::SetParent(const WorldTransform* parent) {
 	// 親子関係を結ぶ
 	worldTransform_.parent_ = parent;
 }
+
+void BaseEnemy::ImGuiSetTranslation() {
+	ImGui::DragFloat3("Enemy", &worldTransform_.translation_.x, 0.01f);
+}

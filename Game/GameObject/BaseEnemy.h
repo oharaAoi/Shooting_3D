@@ -52,11 +52,16 @@ public:
 	// ------------ worldTransform ------------ // 
 	void SetParent(const WorldTransform* parent);
 
+	// ------------ enemyType ------------ // 
+	const int GetEnemyType() const { return enemyType_; }
+
+	void ImGuiSetTranslation();
 
 protected:
 
 	// ------------ キャラクターの情報に関する変数 ------------ // 
 	uint32_t hp_ = 0;
 
+	int enemyType_;
 };
 
