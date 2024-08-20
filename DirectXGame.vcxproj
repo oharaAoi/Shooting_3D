@@ -127,6 +127,7 @@
     <ClCompile Include="Game\Manager\EnemyManager.cpp" />
     <ClCompile Include="Game\Math\MyMath.cpp" />
     <ClCompile Include="Game\Math\MyMatrix4x4.cpp" />
+    <ClCompile Include="Game\Scene\TitleScene.cpp" />
     <ClCompile Include="Game\State\BaseCharacterState.cpp" />
     <ClCompile Include="Game\State\BasePlayerState.cpp" />
     <ClCompile Include="Game\State\PlayerAttackState.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Game\Manager\EnemyManager.h" />
     <ClInclude Include="Game\Math\MyMath.h" />
     <ClInclude Include="Game\Math\MyMatrix4x4.h" />
+    <ClInclude Include="Game\Scene\TitleScene.h" />
     <ClInclude Include="Game\State\BaseCharacterState.h" />
     <ClInclude Include="Game\State\BasePlayerState.h" />
     <ClInclude Include="Game\State\PlayerAttackState.h" />

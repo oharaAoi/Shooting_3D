@@ -82,6 +82,9 @@
     <Filter Include="Game\Manager">
       <UniqueIdentifier>{bac625e9-a8c3-4e49-abbd-12c90ba3ed97}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scene">
+      <UniqueIdentifier>{df50a3cf-2d21-47f2-8a4a-4eb1de9d0c56}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -168,8 +171,11 @@
     <ClCompile Include="Game\Camera\RailCamera.cpp">
       <Filter>Game\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Scene\TitleScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="Game\GameObject\Reticle.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -332,8 +338,11 @@
     <ClInclude Include="Game\Camera\RailCamera.h">
       <Filter>Game\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Scene\TitleScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="Game\GameObject\Reticle.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
