@@ -17,7 +17,6 @@ void BaseBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity,
 
 	// 親を設定する
 	worldTransform_.parent_ = parent;
-	//worldTransform_.parent_ = nullptr;
 
 	// -------------------------------------------------
 	// ↓ 生存しているかを判断するフラグを設定する
@@ -40,8 +39,6 @@ void BaseBullet::Update() {
 	}
 
 	// 移動させる
-	/*Matrix4x4 matWorld = Multiply(worldTransform_.matWorld_, worldTransform_.parent_->matWorld_);
-	Vector3 velocity = TransformNormal({0,0,0.1f}, matWorld);*/
 	worldTransform_.translation_ += velocity_;
 	// 行列を更新させる
 	worldTransform_.UpdateMatrix();

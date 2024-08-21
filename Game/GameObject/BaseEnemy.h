@@ -7,6 +7,8 @@ enum EnemyType {
 	Type_Boss
 };
 
+class GameScene;
+
 /// <summary>
 /// Enemyの基本となるクラス
 /// </summary>
@@ -44,6 +46,17 @@ public:
 	virtual void EditImGui() {};
 
 	/// <summary>
+	/// 攻撃に関する関数
+	/// </summary>
+	virtual void Attack() {};
+
+	void ImGuiSetTranslation();
+
+///////////////////////////////////////////////////////////
+// accessor
+///////////////////////////////////////////////////////////
+
+	/// <summary>
 	/// world空間での座標を取得する
 	/// </summary>
 	/// <returns></returns>
@@ -51,17 +64,32 @@ public:
 
 	// ------------ worldTransform ------------ // 
 	void SetParent(const WorldTransform* parent);
+	const WorldTransform& GetWorldTransform() const { return worldTransform_; }
+	
+	void SetScale(const Vector3& scale) { worldTransform_.scale_ = scale; }
+	void SetRotation(const Vector3& rotation) { worldTransform_.rotation_ = rotation; }
+	void SetTranslation(const Vector3& translation) { worldTransform_.translation_ = translation; }
 
 	// ------------ enemyType ------------ // 
 	const int GetEnemyType() const { return enemyType_; }
 
-	void ImGuiSetTranslation();
+	// ------------ position ------------ // 
+	void SetPlayerPosition(const Vector3& position) { playerPosition_ = position; }
+
+	
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 protected:
+
+	GameScene* gameScene_ = nullptr;
 
 	// ------------ キャラクターの情報に関する変数 ------------ // 
 	uint32_t hp_ = 0;
 
 	int enemyType_;
+
+	// ------------ Bulletに必要な変数 ------------ // 
+
+	Vector3 playerPosition_;
 };
 

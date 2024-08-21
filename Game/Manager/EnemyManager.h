@@ -14,6 +14,8 @@
 // Loader
 #include "Loader/ModelLoader.h"
 
+class GameScene;
+
 /// <summary>
 /// Enemyを管理するクラス
 /// </summary>
@@ -77,9 +79,17 @@ public:
 	// ------------ List ------------ // 
 	std::list<std::unique_ptr<BaseEnemy>>& GetEnemysList() { return enemysList_; }
 
+	// ------------ Position ------------ // 
+	void SetPlayerPosition(const Vector3& playerPosition) { playerPosition_ = playerPosition; }
+
+	// ------------ gameScene ------------ // 
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
 private:
 
 	const WorldTransform* parentWorldTransform_;
+
+	GameScene* gameScene_ = nullptr;
 
 	// ------------ ファイル読み込みに関する変数 ------------ // 
 	// グローバル変数の保存先ファイルパス
@@ -104,5 +114,9 @@ private:
 	Vector3 createEnemyPos_;
 	// 生成する敵の配列
 	std::list<std::unique_ptr<BaseEnemy>> createEnemysList_;
+
+	// ------------ playerに関する変数 ------------ // 
+
+	Vector3 playerPosition_;
 };
 

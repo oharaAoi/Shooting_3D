@@ -87,6 +87,7 @@ void GameScene::Initialize() {
 	player_->SetViewProjection(&railCamera_->GetViewProjection());
 
 	enemyManager_->SetParent(&railCamera_->GetWorldTransform());
+	enemyManager_->SetGameScene(this);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +131,13 @@ void GameScene::Update() {
 	player_->Update();
 
 	// enmey
+	enemyManager_->SetPlayerPosition(player_->GetTranslation());
 	enemyManager_->Update();
+
+	// bullet
+	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBulletList_) {
+		bullet->Update();
+	}
 
 	// ---------------------------------------------
 	// ↓ WorldObjectの処理
@@ -195,6 +202,10 @@ void GameScene::Draw() {
 
 	enemyManager_->Draw(viewProjection_);
 
+	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBulletList_) {
+		bullet->Draw(viewProjection_);
+	}
+
 	// ---------------------------------------------
 	// ↓ 線の描画
 	// ---------------------------------------------
@@ -248,4 +259,10 @@ void GameScene::CheckAllCollision() {
 	// ↓ 当たり判定を取る
 	// ---------------------------------------------
 	collisionManager_->CheckAllCollision();
+}
+
+// ------------------- 敵の弾をリストに追加する ------------------- //
+
+void GameScene::AddEnemyBullet(std::unique_ptr<EnemyBullet> enemyBullet) {
+	enemyBulletList_.push_back(std::move(enemyBullet));
 }

@@ -1,4 +1,5 @@
 #include "MobEnemy.h"
+#include "GameScene.h"
 
 MobEnemy::MobEnemy(std::vector<Model*> models, const Vector3& pos) {
 	enemyId_ = mobEnemyNum;
@@ -17,6 +18,11 @@ void MobEnemy::Init(std::vector<Model*> models) {
 	BaseEnemy::Init(models);
 	enemyType_ = EnemyType::Type_Mob;
 	worldTransforms_[EnmeyParts::Enmey_Body].parent_ = &worldTransform_;
+
+	bulletModel_ = ModelLoader::GetInstacne()->GetModel("cube");
+
+	behaviorRequest_ = MobEnemyBehavior::kAttack;
+	ChangeBehavior(std::make_unique<MobRootState>(this));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,6 +30,11 @@ void MobEnemy::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void MobEnemy::Update() {
+	// 状態の変更のリクエストがあるかを確認する
+	CheckBehaviorRequest();
+	// 現在の状態を更新する
+	behaviorState_->Update();
+
 	BaseEnemy::Update();
 
 	// ImGuiの編集
@@ -45,6 +56,48 @@ void MobEnemy::Draw(const ViewProjection& viewProjection) const {
 // ------------------- 移動させる関数 ------------------- //
 
 void MobEnemy::Move() {
+}
+
+// ------------------- 攻撃に関する関数 ------------------- //
+
+void MobEnemy::Attack() {
+	Shot();
+}
+
+// ------------------- 弾を撃つ ------------------- //
+
+void MobEnemy::Shot() {
+	gameScene_->AddEnemyBullet(std::move(std::make_unique<EnemyBullet>(
+		bulletModel_, worldTransform_.translation_, playerPosition_, worldTransform_.rotation_, worldTransform_.parent_
+	)));
+}
+
+// ------------------- 状態を遷移させる ------------------- //
+
+void MobEnemy::ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior) {
+	behaviorState_ = std::move(behavior);
+}
+
+// ------------------- 状態遷移のリクエストがあるかを確認する ------------------- //
+
+void MobEnemy::CheckBehaviorRequest() {
+	// リクエストがあったら
+	if (behaviorRequest_) {
+		// 振る舞いを変更する
+		behavior_ = behaviorRequest_.value();
+
+		switch (behavior_) {
+		case MobEnemyBehavior::kRoot:
+			ChangeBehavior(std::make_unique<MobRootState>(this));
+			break;
+
+		case MobEnemyBehavior::kAttack:
+			ChangeBehavior(std::make_unique<MobAttackState>(this));
+			break;
+		}
+		// ふるまいリクエストをリセット
+		behaviorRequest_ = std::nullopt;
+	}
 }
 
 // ------------------- 当たり判定を取った時の関数 ------------------- //

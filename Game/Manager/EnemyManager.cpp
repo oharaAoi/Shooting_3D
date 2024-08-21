@@ -1,4 +1,5 @@
 #include "EnemyManager.h"
+#include "GameScene.h"
 
 EnemyManager::EnemyManager() { Init(); }
 EnemyManager::~EnemyManager() {}
@@ -27,10 +28,13 @@ void EnemyManager::Update() {
 	EditEnemyPos();
 
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemysList_) {
+		enemy->SetPlayerPosition(playerPosition_);
+		enemy->SetGameScene(gameScene_);
 		enemy->Update();
 	}
 
 	for (const std::unique_ptr<BaseEnemy>& enemy : createEnemysList_) {
+		enemy->SetGameScene(gameScene_);
 		enemy->Update();
 	}
 }

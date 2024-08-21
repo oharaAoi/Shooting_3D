@@ -22,6 +22,7 @@
 // GameObject
 #include "GameObject/Player.h"
 #include "GameObject/MobEnemy.h"
+#include "GameObject/EnemyBullet.h"
 // Manager
 #include "Collision/CollisionManager.h"
 #include "Manager/EnemyManager.h"
@@ -71,6 +72,12 @@ public: // メンバ関数
 	/// </summary>
 	void EnemyPop();
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="enemyBullet"></param>
+	void AddEnemyBullet(std::unique_ptr<EnemyBullet> enemyBullet);
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -97,6 +104,9 @@ private: // メンバ変数
 	// player
 	std::vector<Model*> playerPartsModels_;
 	std::unique_ptr<Player> player_ = nullptr;
+
+	// enemy
+	std::list<std::unique_ptr<EnemyBullet>> enemyBulletList_;
 
 	// ------------ WorldEnvironment ------------ // 
 	std::unique_ptr<Skydome> skydome_ = nullptr;
