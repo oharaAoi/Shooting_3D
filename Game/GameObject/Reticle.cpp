@@ -17,14 +17,16 @@ void Reticle::Init() {
 	// --------------------------------------
 	// 2Dのレティクル
 	// --------------------------------------
-	textureReticle_ = TextureManager::Load("reticle.png");
+	lockOnReticleHandle_ = TextureManager::Load("reticle.png");
+	unLockReticleHandle_ = TextureManager::Load("reticle2.png");
 	Vector2 spriteReticlePos = { 640, 320 };
 	// spriteの生成
-	Sprite* sprite = Sprite::Create(textureReticle_, spriteReticlePos, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f });
-	sprite2DReticle_ = std::unique_ptr<Sprite>(sprite);
+	Sprite* sprite = Sprite::Create(lockOnReticleHandle_, spriteReticlePos, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f });
+	Sprite* unLockSprite = Sprite::Create(unLockReticleHandle_, spriteReticlePos, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f });
+	lockOnReticle_ = std::unique_ptr<Sprite>(sprite);
+	unLockReticle_ = std::unique_ptr<Sprite>(unLockSprite);
 
 	cameraToReticle_ = 50;
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,6 +39,9 @@ void Reticle::Update(const WorldTransform& worldTransform, const ViewProjection&
 
 	// 3Dレティクルの位置をScreen上からworld上の位置を求める
 	ScreenToWorldOf3DReticle(viewProjection);
+
+	// unLockOn用の座標の設定しておく
+	unLockReticle_->SetPosition(lockOnReticle_->GetPosition());
 
 	matWorld_ = Multiply(worldTransform3D_.matWorld_, worldTransform.parent_->matWorld_);
 
@@ -58,8 +63,12 @@ void Reticle::Draw(const ViewProjection& viewProjection) {
 	model_->Draw(worldTransform3D_, viewProjection);
 }
 
-void Reticle::Draw2DReticle() {
-	sprite2DReticle_->Draw();
+void Reticle::Draw2DReticle(const bool& isLockOnMode) {
+	if (isLockOnMode) {
+		lockOnReticle_->Draw();
+	} else {
+		unLockReticle_->Draw();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +95,7 @@ void Reticle::Calculate3DReticleWorldPos(const WorldTransform& worldTransform) {
 void Reticle::ScreenToWorldOf3DReticle(const ViewProjection& viewProjection) {
 
 	// joyState------------------------------------------------------------
-	Vector2 spritePos = sprite2DReticle_->GetPosition();
+	Vector2 spritePos = lockOnReticle_->GetPosition();
 
 	XINPUT_STATE joyState;
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
@@ -94,10 +103,10 @@ void Reticle::ScreenToWorldOf3DReticle(const ViewProjection& viewProjection) {
 		spritePos.y -= static_cast<float>(joyState.Gamepad.sThumbRY) / SHRT_MAX * 8.0f;
 
 		// 反映
-		sprite2DReticle_->SetPosition(Vector2(static_cast<float>(spritePos.x), static_cast<float>(spritePos.y)));
+		lockOnReticle_->SetPosition(Vector2(static_cast<float>(spritePos.x), static_cast<float>(spritePos.y)));
 	}
 
-	spritePos = sprite2DReticle_->GetPosition();
+	spritePos = lockOnReticle_->GetPosition();
 
 	// ビューポート行列
 	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
@@ -153,7 +162,7 @@ void Reticle::Set3DReticleTo2DReticle(const ViewProjection& viewProjection) {
 	// ワールドからスクリーン
 	positionReticle = Transform(positionReticle, matViewProjectionViewport);
 	// 座標の設定
-	sprite2DReticle_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
+	lockOnReticle_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
 }
 
 Vector3 Reticle::GetReticlePosition() {

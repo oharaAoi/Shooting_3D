@@ -48,7 +48,7 @@ public:
 	/// <summary>
 	/// 2Dのレティクルを描画する
 	/// </summary>
-	void Draw2DReticle();
+	void Draw2DReticle(const bool& isLockOnMode);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　メンバ関数
@@ -84,13 +84,13 @@ public:
 	/// レティクルのスクリーン座標を取得(2D)
 	/// </summary>
 	/// <returns></returns>
-	Vector2 Get2DReticleScreenPos() { return sprite2DReticle_->GetPosition(); };
+	Vector2 Get2DReticleScreenPos() { return lockOnReticle_->GetPosition(); };
 
 	/// <summary>
 	/// レティクルのスクリーン座標を設定
 	/// </summary>
 	/// <returns></returns>
-	void Set2DReticleScreenPos(const Vector3& pos) { sprite2DReticle_->SetPosition({ pos.x, pos.y }); }
+	void Set2DReticleScreenPos(const Vector3& pos) { lockOnReticle_->SetPosition({ pos.x, pos.y }); }
 
 	/// <summary>
 	/// 3Dのレティクルのワールドから2Dへ
@@ -113,9 +113,11 @@ private:
 	// 3dレティクル用ワールドトランスフォーム
 	WorldTransform worldTransform3D_;
 	// 2dReticle
-	std::unique_ptr<Sprite> sprite2DReticle_;
+	std::unique_ptr<Sprite> lockOnReticle_;
+	std::unique_ptr<Sprite> unLockReticle_;
 	// 2dReticleResource
-	uint32_t textureReticle_;
+	uint32_t lockOnReticleHandle_;
+	uint32_t unLockReticleHandle_;
 
 	float cameraToReticle_;
 

@@ -59,7 +59,7 @@ public:
 	/// <summary>
 	/// 2Dのレティクルを描画する
 	/// </summary>
-	void Draw2DReticle();
+	void Draw2DReticle(const bool& isLockOnMode);
 
 ///////////////////////////////////////////////////////////
 // メンバ関数
@@ -151,6 +151,7 @@ public:
 
 	// ------------ Reticle関連 ------------ // 
 	Reticle* GetReticle() { return reticle_.get(); }
+	const bool GetIsLockOnMode() const { return isLockOnMode_; }
 
 private:
 
@@ -179,6 +180,8 @@ private:
 
 	// ------------ 単体で機能させる変数 ------------ // 
 	bool isBossBattle_;
+
+	bool isLockOnMode_;
 
 	uint32_t hp_;
 };

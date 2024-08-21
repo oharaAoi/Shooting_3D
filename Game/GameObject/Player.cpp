@@ -31,6 +31,8 @@ void Player::Init(std::vector<Model*> models) {
 
 	isBossBattle_ = false;
 
+	isLockOnMode_ = false;
+
 	// ---------------------------------------------
 	// ↓ Reticle初期化
 	// ---------------------------------------------
@@ -78,6 +80,9 @@ void Player::Update() {
 	// ---------------------------------------------
 	// ↓ 基本となる処理を行う
 	// ---------------------------------------------
+	if (Input::GetInstance()->TriggerKey(DIK_Q)) {
+		isLockOnMode_ = !isLockOnMode_;
+	}
 
 	// 計算転送
 	BaseCharacter::Update();
@@ -101,8 +106,8 @@ void Player::Draw(const ViewProjection& viewProjection) const {
 	reticle_->Draw(viewProjection);
 }
 
-void Player::Draw2DReticle() {
-	reticle_->Draw2DReticle();
+void Player::Draw2DReticle(const bool& isLockOnMode) {
+	reticle_->Draw2DReticle(isLockOnMode);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
