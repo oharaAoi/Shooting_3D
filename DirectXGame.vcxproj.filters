@@ -91,6 +91,12 @@
     <Filter Include="Game\State\Enemy">
       <UniqueIdentifier>{4909a488-7199-4cc7-abb7-9da75c7fbf64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameObject\Enemy">
+      <UniqueIdentifier>{f5246b40-a194-49db-a76b-0ddd0cf691aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameObject\Bullet">
+      <UniqueIdentifier>{0dd56311-0e69-48a8-818f-3e228f50616f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -138,18 +144,6 @@
     <ClCompile Include="Game\Camera\FollowCamera.cpp">
       <Filter>Game\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject\BaseEnemy.cpp">
-      <Filter>Game\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameObject\MobEnemy.cpp">
-      <Filter>Game\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameObject\BaseBullet.cpp">
-      <Filter>Game\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameObject\PlayerBullet.cpp">
-      <Filter>Game\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Loader\ModelLoader.cpp">
       <Filter>Game\Loader</Filter>
     </ClCompile>
@@ -171,9 +165,6 @@
     <ClCompile Include="Game\GameObject\Reticle.cpp">
       <Filter>Game\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject\EnemyBullet.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\State\BasePlayerState.cpp">
       <Filter>Game\State\Player</Filter>
     </ClCompile>
@@ -193,7 +184,22 @@
       <Filter>Game\State\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Game\State\MobAttackState.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\State\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\BaseEnemy.cpp">
+      <Filter>Game\GameObject\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\MobEnemy.cpp">
+      <Filter>Game\GameObject\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\BaseBullet.cpp">
+      <Filter>Game\GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\EnemyBullet.cpp">
+      <Filter>Game\GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\PlayerBullet.cpp">
+      <Filter>Game\GameObject\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -311,18 +317,6 @@
     <ClInclude Include="Game\Camera\FollowCamera.h">
       <Filter>Game\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameObject\BaseEnemy.h">
-      <Filter>Game\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameObject\MobEnemy.h">
-      <Filter>Game\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameObject\BaseBullet.h">
-      <Filter>Game\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameObject\PlayerBullet.h">
-      <Filter>Game\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Loader\ModelLoader.h">
       <Filter>Game\Loader</Filter>
     </ClInclude>
@@ -350,9 +344,6 @@
     <ClInclude Include="Game\GameObject\Reticle.h">
       <Filter>Game\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameObject\EnemyBullet.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game\State\BasePlayerState.h">
       <Filter>Game\State\Player</Filter>
     </ClInclude>
@@ -372,7 +363,22 @@
       <Filter>Game\State\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Game\State\MobAttackState.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\State\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\BaseEnemy.h">
+      <Filter>Game\GameObject\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\MobEnemy.h">
+      <Filter>Game\GameObject\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\BaseBullet.h">
+      <Filter>Game\GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\EnemyBullet.h">
+      <Filter>Game\GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\PlayerBullet.h">
+      <Filter>Game\GameObject\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

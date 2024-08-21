@@ -180,4 +180,5 @@ private:
 	// ------------ 単体で機能させる変数 ------------ // 
 	bool isBossBattle_;
 
+	uint32_t hp_;
 };

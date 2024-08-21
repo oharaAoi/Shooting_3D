@@ -12,9 +12,11 @@ void EnemyManager::Init() {
 	ModelLoader* modelLoader = ModelLoader::GetInstacne();
 	mobEnemyPartsModels_.emplace_back(modelLoader->GetModel("mobEnemy"));
 
-	AllLoadFilesName();
 	currentIndex_ = 0;
 	fileNum_ = 0;
+
+	// ファイルを読み込む
+	AllLoadFilesName();
 }
 
 ///////////////////////////////////////////////////////////
@@ -136,8 +138,8 @@ void EnemyManager::SaveEnemyPos() {
 	uint32_t createListIndex = 0;
 	for (const std::unique_ptr<BaseEnemy>& enemy : createEnemysList_) {
 		std::string enemyNum = "Enemy" + std::to_string(createListIndex);
-		data[enemyNum]["pos"] = { -0.4000000059604645, 1.7999999523162842, 0.0 };
-		data[enemyNum]["type"] = { 0 };
+		data[enemyNum]["pos"] = { createEnemyPos_.x, createEnemyPos_.y, createEnemyPos_.z};
+		data[enemyNum]["type"] = { createEnemyType_ };
 		createListIndex++;
 
 		enemy->Update();
@@ -227,6 +229,12 @@ void EnemyManager::EditEnemyPos() {
 void EnemyManager::ImGuiEdit() {
 #ifdef _DEBUG
 	ImGui::Begin("EnemyManager");
+	if (ImGui::Button("ListClear")) {
+		enemysList_.clear();
+	}
+
+	ImGui::Separator();
+
 	// --------------------------------------
 	// 読み込みたいファイルを選択する
 	// --------------------------------------

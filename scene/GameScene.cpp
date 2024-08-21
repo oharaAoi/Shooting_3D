@@ -78,7 +78,7 @@ void GameScene::Initialize() {
 	enemyManager_ = std::make_unique<EnemyManager>();
 
 	// ---------------------------------------------
-	// ↓ 初期化時に設定して置く処理をしておく
+	// ↓ 初期化時に設定しておく処理をしておく
 	// ---------------------------------------------
 	railCamera_->SetControlPoints(trajectory_->GetPlayerTrajectoryVector());
 
@@ -138,6 +138,13 @@ void GameScene::Update() {
 	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBulletList_) {
 		bullet->Update();
 	}
+
+	enemyBulletList_.remove_if([](const std::unique_ptr<EnemyBullet>& bullet) {
+		if (bullet->GetIsDead()) {
+			return true;
+		}
+		return false;
+	});
 
 	// ---------------------------------------------
 	// ↓ WorldObjectの処理
@@ -253,6 +260,10 @@ void GameScene::CheckAllCollision() {
 
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemyManager_->GetEnemysList()) {
 		collisionManager_->AddCollider(enemy.get());
+	}
+
+	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBulletList_) {
+		collisionManager_->AddCollider(bullet.get());
 	}
 
 	// ---------------------------------------------

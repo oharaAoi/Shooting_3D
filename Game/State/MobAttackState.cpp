@@ -37,5 +37,5 @@ void MobAttackState::Update() {
 
 void MobAttackState::Attack() {
 	enemy_->Attack();
-	attackCoolTime_ = 15;
+	attackCoolTime_ = 60;
 }

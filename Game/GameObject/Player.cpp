@@ -47,6 +47,7 @@ void Player::Init(std::vector<Model*> models) {
 	adjustItem->AddItem(groupName, "face_Translation", worldTransforms_[PlayerParts::Parts_Face].translation_);
 	adjustItem->AddItem(groupName, "L_Arm_Translation", worldTransforms_[PlayerParts::Parts_LeftArm].translation_);
 	adjustItem->AddItem(groupName, "R_Arm_Translation", worldTransforms_[PlayerParts::Parts_RightArm].translation_);
+	adjustItem->AddItem(groupName, "Hp", hp_);
 
 	ApplyAdjustItems();
 }
@@ -273,6 +274,11 @@ void Player::EditImGui() {
 	ImGui::DragFloat3("head", &worldTransforms_[PlayerParts::Parts_Face].translation_.x, 0.1f);
 	ImGui::DragFloat3("leftArm", &worldTransforms_[PlayerParts::Parts_LeftArm].translation_.x, 0.1f);
 	ImGui::DragFloat3("rightArm", &worldTransforms_[PlayerParts::Parts_RightArm].translation_.x, 0.1f);
+
+	ImGui::Separator();
+
+	ImGui::DragScalar("hp", ImGuiDataType_U32, &hp_);
+
 	ImGui::End();
 #endif // _DEBUG
 }
@@ -286,6 +292,7 @@ void Player::ApplyAdjustItems() {
 	worldTransforms_[PlayerParts::Parts_Face].translation_ = adjustItem->GetValue<Vector3>(groupName, "face_Translation");
 	worldTransforms_[PlayerParts::Parts_LeftArm].translation_ = adjustItem->GetValue<Vector3>(groupName, "L_Arm_Translation");
 	worldTransforms_[PlayerParts::Parts_RightArm].translation_ = adjustItem->GetValue<Vector3>(groupName, "R_Arm_Translation");
+	hp_ = adjustItem->GetValue<uint32_t>(groupName, "Hp");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

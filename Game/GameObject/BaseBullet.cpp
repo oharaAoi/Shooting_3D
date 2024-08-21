@@ -23,9 +23,6 @@ void BaseBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity,
 	// -------------------------------------------------
 	deathTimer_ = kLifeTime;
 	isDead_ = false;
-
-	deathTimer_ = kLifeTime;
-	isDead_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

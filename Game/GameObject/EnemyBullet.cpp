@@ -43,7 +43,7 @@ void EnemyBullet::Draw(const ViewProjection& viewProjection) const {
 
 void EnemyBullet::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
-	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kEnemy)) {
+	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kPlayer)) {
 		isDead_ = true;
 	}
 }
