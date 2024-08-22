@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "GameScene.h"
 
 Player::Player(std::vector<Model*> models) { 
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kPlayer));
@@ -62,7 +63,10 @@ void Player::Update() {
 	// ---------------------------------------------
 	// ↓ Reticleの更新を行う
 	// ---------------------------------------------
-	reticle_->Update(worldTransform_, *viewProjection_);
+	LockOnTargetChange();
+	LockOn();
+
+	reticle_->Update(isLockOnMode_, worldTransform_, *viewProjection_);
 
 	// ---------------------------------------------
 	// ↓ Playerの状態に関する処理を行う
@@ -182,6 +186,59 @@ void Player::Move() {
 	}
 }
 
+// ------------------- LockOnを行う ------------------- //
+
+void Player::LockOn() {
+	XINPUT_STATE joyState;
+	XINPUT_STATE preJoyState;
+	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
+	if (!Input::GetInstance()->GetJoystickStatePrevious(0, preJoyState)) { return; }
+
+	if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) && !(preJoyState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)) {
+		// 現在LockOn状態だったら
+		if (isLockOnMode_) {
+			isLockOnMode_ = false;
+			canLockOnList_.clear();
+
+			// 現在LockOn状態じゃなかったら
+		} else {
+			// リストの登録
+			gameScene_->CheckCanLockOnEnemy();
+
+			// リストが空だったら
+			if (canLockOnList_.size() == 0) {
+				return;
+			}
+
+			isLockOnMode_ = true;
+			Vector3 enemyPos = canLockOnList_.front()->GetScreenPosition(*viewProjection_);
+			reticle_->SetLockOnScreenPos({ enemyPos.x, enemyPos.y });
+		}
+	}
+}
+
+// ------------------- LockOnの対象を変更する ------------------- //
+
+void Player::LockOnTargetChange() {
+	if (!isLockOnMode_) {
+		return;
+	}
+
+	XINPUT_STATE joyState;
+	XINPUT_STATE preJoyState;
+	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
+	if (!Input::GetInstance()->GetJoystickStatePrevious(0, preJoyState)) { return; }
+
+	if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) && !(preJoyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+		BaseEnemy* baseEnemy = canLockOnList_.front();
+		canLockOnList_.pop_front();
+		canLockOnList_.push_back(baseEnemy);
+		// Reticleの位置を変更する
+		Vector3 enemyPos = canLockOnList_.front()->GetScreenPosition(*viewProjection_);
+		reticle_->SetLockOnScreenPos({ enemyPos.x, enemyPos.y });
+	}
+}
+
 // ------------------- 弾の更新を行う ------------------- //
 
 void Player::BulletsUpdate() {
@@ -205,6 +262,10 @@ void Player::AddBulletList(const Vector3& velocity) {
 	playerBulletList_.push_back(
 		std::make_unique<PlayerBullet>(bullerModel_, worldTransform_.translation_, velocity, worldTransform_.rotation_, worldTransform_.parent_
 	));
+}
+
+void Player::AddCanLockOnList(BaseEnemy* baseEnemy) {
+	canLockOnList_.push_back(baseEnemy);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -38,7 +38,7 @@ public:
 	/// <summary>
 	/// 更新関数
 	/// </summary>
-	void Update(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
+	void Update(const bool& isLockOn, const WorldTransform& worldTransform, const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 描画関数
@@ -53,6 +53,11 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　メンバ関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/// <summary>
+	/// Reticleの移動
+	/// </summary>
+	void Move();
 
 	/// <summary>
 	/// 3Dレティクルのworld座標を計算
@@ -90,7 +95,7 @@ public:
 	/// レティクルのスクリーン座標を設定
 	/// </summary>
 	/// <returns></returns>
-	void Set2DReticleScreenPos(const Vector3& pos) { lockOnReticle_->SetPosition({ pos.x, pos.y }); }
+	void SetLockOnScreenPos(const Vector3& pos) { lockOnReticle_->SetPosition({ pos.x, pos.y }); }
 
 	/// <summary>
 	/// 3Dのレティクルのワールドから2Dへ

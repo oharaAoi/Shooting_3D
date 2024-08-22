@@ -73,10 +73,20 @@ public: // メンバ関数
 	void EnemyPop();
 
 	/// <summary>
-	/// 
+	/// 敵弾をリストに追加する
 	/// </summary>
 	/// <param name="enemyBullet"></param>
 	void AddEnemyBullet(std::unique_ptr<EnemyBullet> enemyBullet);
+
+	/// <summary>
+	/// reticleと敵の当たり判定を行う
+	/// </summary>
+	void CheckCanLockOnEnemy();
+
+	/// <summary>
+	/// ImGuiを編集する
+	/// </summary>
+	void EditImGui();
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;

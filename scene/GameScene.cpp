@@ -85,6 +85,7 @@ void GameScene::Initialize() {
 	player_->SetParent(&railCamera_->GetWorldTransform());
 	//player_->SetReticleParent(&railCamera_->GetWorldTransform());
 	player_->SetViewProjection(&railCamera_->GetViewProjection());
+	player_->SetGameScene(this);
 
 	enemyManager_->SetParent(&railCamera_->GetWorldTransform());
 	enemyManager_->SetGameScene(this);
@@ -128,11 +129,11 @@ void GameScene::Update() {
 	// ---------------------------------------------
 	// ↓ GameObjectの処理
 	// ---------------------------------------------
-	player_->Update();
-
 	// enmey
 	enemyManager_->SetPlayerPosition(player_->GetTranslation());
 	enemyManager_->Update();
+
+	player_->Update();
 
 	// bullet
 	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBulletList_) {
@@ -163,6 +164,8 @@ void GameScene::Update() {
 	// ---------------------------------------------
 #ifdef _DEBUG
 	AdjustmentItem::GetInstance()->Update();
+
+	EditImGui();
 #endif // _DEBUG
 }
 
@@ -276,4 +279,30 @@ void GameScene::CheckAllCollision() {
 
 void GameScene::AddEnemyBullet(std::unique_ptr<EnemyBullet> enemyBullet) {
 	enemyBulletList_.push_back(std::move(enemyBullet));
+}
+
+// ------------------- LockOnできるEnemyを探索する ------------------- //
+
+void GameScene::CheckCanLockOnEnemy() {
+	const float canLockOnDistance = 30;
+	
+	// ---------------------------------------------
+	// ↓ LockOnできる範囲の敵をリストに追加する
+	// ---------------------------------------------
+	for (const std::unique_ptr<BaseEnemy>& enemy : enemyManager_->GetEnemysList()) {
+		float distance = Distance(player_->GetWorldPosition(), enemy->GetWorldPosition());
+		if (distance < canLockOnDistance) {
+			player_->AddCanLockOnList(enemy.get());
+		}
+	}
+}
+
+// ------------------- ImGuiを編集する ------------------- //
+
+void GameScene::EditImGui() {
+#ifdef _DEBUG
+	ImGui::Begin("GameScene");
+	ImGui::Checkbox("BossBattle", &isBossBattle_);
+	ImGui::End();
+#endif // _DEBUG
 }

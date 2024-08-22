@@ -62,6 +62,12 @@ public:
 	/// <returns></returns>
 	virtual Vector3 GetWorldPosition() const override;
 
+	/// <summary>
+	/// ScreenPositionを返す
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetScreenPosition(const ViewProjection& viewProjection);
+
 	// ------------ worldTransform ------------ // 
 	void SetParent(const WorldTransform* parent);
 	const WorldTransform& GetWorldTransform() const { return worldTransform_; }
@@ -76,7 +82,7 @@ public:
 	// ------------ position ------------ // 
 	void SetPlayerPosition(const Vector3& position) { playerPosition_ = position; }
 
-	
+	// ------------ gameSceneをセットする ------------ // 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 protected:

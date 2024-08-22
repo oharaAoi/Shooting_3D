@@ -5,6 +5,7 @@
 #include "GameObject/BaseCharacter.h"
 #include "GameObject/PlayerBullet.h"
 #include "GameObject/Reticle.h"
+#include "GameObject/BaseEnemy.h"
 // Adjustment
 #include "Adjustment/AdjustmentItem.h"
 // State
@@ -30,6 +31,8 @@ enum class PlayerBehavior {
 	kAttack,	// 攻撃中,
 	kDash,		// ダッシュ中
 };
+
+class GameScene;
 
 /// <summary>
 /// Playerクラス
@@ -71,6 +74,16 @@ public:
 	void Move();
 
 	/// <summary>
+	/// LockOnを行う
+	/// </summary>
+	void LockOn();
+
+	/// <summary>
+	/// LockOnの対象を変更する
+	/// </summary>
+	void LockOnTargetChange();
+
+	/// <summary>
 	/// 弾の更新を行う
 	/// </summary>
 	void BulletsUpdate();
@@ -80,6 +93,12 @@ public:
 	/// </summary>
 	/// <param name="velocity"></param>
 	void AddBulletList(const Vector3& velocity);
+
+	/// <summary>
+	/// ロックオンできるEnemyのポインタをリストに登録する
+	/// </summary>
+	/// <param name="baseEnemy"></param>
+	void AddCanLockOnList(BaseEnemy* baseEnemy);
 
 	/// <summary>
 	///	状態を変更する
@@ -153,9 +172,14 @@ public:
 	Reticle* GetReticle() { return reticle_.get(); }
 	const bool GetIsLockOnMode() const { return isLockOnMode_; }
 
+	// ------------ gameScene ------------ // 
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
 private:
 
+	// ------------ 所有権のないポインタ ------------ // 
 	const ViewProjection* viewProjection_ = nullptr;
+	GameScene* gameScene_ = nullptr;
 
 	// ------------ 移動に関する変数 ------------ // 
 	// 方向
@@ -177,6 +201,9 @@ private:
 
 	// ------------ Reticleに関する変数 ------------ // 
 	std::unique_ptr<Reticle> reticle_ = nullptr;
+
+	// ------------ Enemyに関する変数 ------------ // 
+	std::list<BaseEnemy*> canLockOnList_;
 
 	// ------------ 単体で機能させる変数 ------------ // 
 	bool isBossBattle_;

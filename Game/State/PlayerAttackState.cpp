@@ -42,7 +42,7 @@ void PlayerAttackState::Shot() {
 
 	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
 	
-	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+	if (joyState.Gamepad.bRightTrigger > 50) {
 		const float kBulletSpeed = 0.6f;
 		Matrix4x4 reticleMat = player_->GetReticle()->Get3DReticleTransform().matWorld_ * Inverse(player_->GetWorldTransform().parent_->matWorld_);
 		Vector3 velocity = Transform({0,0,0}, reticleMat) - player_->GetTranslation();

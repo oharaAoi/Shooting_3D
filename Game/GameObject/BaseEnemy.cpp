@@ -33,6 +33,17 @@ Vector3 BaseEnemy::GetWorldPosition() const {
 	return Vector3();
 }
 
+Vector3 BaseEnemy::GetScreenPosition(const ViewProjection& viewProjection) {
+	Vector3 result{};
+	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
+	// ビュープロの算出
+	Matrix4x4 matView = viewProjection.matView * viewProjection.matProjection * matViewport;
+	// スクリーン座標を出す
+	result = Transform(GetWorldPosition(), matView);
+
+	return result;
+}
+
 void BaseEnemy::SetParent(const WorldTransform* parent) {
 	// 親子関係を結ぶ
 	worldTransform_.parent_ = parent;

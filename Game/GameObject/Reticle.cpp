@@ -33,7 +33,11 @@ void Reticle::Init() {
 // ↓　更新関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Reticle::Update(const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
+void Reticle::Update(const bool& isLockOn, const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
+	if (!isLockOn) {
+		Move();
+	}
+
 	// 3Dレティクルのworld座標を計算
 	Calculate3DReticleWorldPos(worldTransform);
 
@@ -75,6 +79,22 @@ void Reticle::Draw2DReticle(const bool& isLockOnMode) {
 // ↓　メンバ関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
+// ------------------- Reticleを移動させる ------------------- //
+
+void Reticle::Move() {
+	// joyState------------------------------------------------------------
+	Vector2 spritePos = lockOnReticle_->GetPosition();
+
+	XINPUT_STATE joyState;
+	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+		spritePos.x += static_cast<float>(joyState.Gamepad.sThumbRX) / SHRT_MAX * 8.0f;
+		spritePos.y -= static_cast<float>(joyState.Gamepad.sThumbRY) / SHRT_MAX * 8.0f;
+
+		// 反映
+		lockOnReticle_->SetPosition(Vector2(static_cast<float>(spritePos.x), static_cast<float>(spritePos.y)));
+	}
+}
+
 // ------------------- 3Dレティクルのworld座標を計算 ------------------- //
 
 void Reticle::Calculate3DReticleWorldPos(const WorldTransform& worldTransform) {
@@ -96,18 +116,6 @@ void Reticle::ScreenToWorldOf3DReticle(const ViewProjection& viewProjection) {
 
 	// joyState------------------------------------------------------------
 	Vector2 spritePos = lockOnReticle_->GetPosition();
-
-	XINPUT_STATE joyState;
-	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-		spritePos.x += static_cast<float>(joyState.Gamepad.sThumbRX) / SHRT_MAX * 8.0f;
-		spritePos.y -= static_cast<float>(joyState.Gamepad.sThumbRY) / SHRT_MAX * 8.0f;
-
-		// 反映
-		lockOnReticle_->SetPosition(Vector2(static_cast<float>(spritePos.x), static_cast<float>(spritePos.y)));
-	}
-
-	spritePos = lockOnReticle_->GetPosition();
-
 	// ビューポート行列
 	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
 	// viewprojectionViewport合成行列

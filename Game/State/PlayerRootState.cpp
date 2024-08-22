@@ -53,7 +53,7 @@ void PlayerRootState::Attack() {
 
 	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
 
-	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+	if (joyState.Gamepad.bRightTrigger > 50) {
 		player_->SetBehaviorRequest(PlayerBehavior::kAttack);
 	}
 }
