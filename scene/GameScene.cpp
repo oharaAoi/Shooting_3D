@@ -111,6 +111,9 @@ void GameScene::Update() {
 		AxisIndicator::GetInstance()->SetVisible(true);
 	} else {
 		if (isBossBattle_) {
+			player_->SetParent(nullptr);
+			enemyManager_->SetParent(nullptr);
+
 			followCamera_->Update();
 			viewProjection_.matView = followCamera_->GetViewProjection().matView;
 			viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;

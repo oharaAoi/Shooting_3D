@@ -38,16 +38,20 @@ void Reticle::Update(const bool& isLockOn, const WorldTransform& worldTransform,
 		Move();
 	}
 
-	// 3Dレティクルのworld座標を計算
-	Calculate3DReticleWorldPos(worldTransform);
-
-	// 3Dレティクルの位置をScreen上からworld上の位置を求める
-	ScreenToWorldOf3DReticle(viewProjection);
+	if (worldTransform.parent_) {
+		// 3Dレティクルの位置をScreen上からworld上の位置を求める
+		ScreenToWorldOf3DReticle(viewProjection);
+	} else {
+		// 3Dレティクルのworld座標を計算
+		Calculate3DReticleWorldPos(worldTransform);
+	}
 
 	// unLockOn用の座標の設定しておく
 	unLockReticle_->SetPosition(lockOnReticle_->GetPosition());
 
-	matWorld_ = Multiply(worldTransform3D_.matWorld_, worldTransform.parent_->matWorld_);
+	if (worldTransform.parent_) {
+		matWorld_ = Multiply(worldTransform3D_.matWorld_, worldTransform.parent_->matWorld_);
+	}
 
 	worldTransform3D_.UpdateMatrix();
 
@@ -171,17 +175,4 @@ void Reticle::Set3DReticleTo2DReticle(const ViewProjection& viewProjection) {
 	positionReticle = Transform(positionReticle, matViewProjectionViewport);
 	// 座標の設定
 	lockOnReticle_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
-}
-
-Vector3 Reticle::GetReticlePosition() {
-	// 3DReticleの位置を渡す
-	if (is3dReticle_) {
-
-
-		// 2DReticleの位置を渡す
-	} else {
-
-	}
-
-	return Vector3();
 }

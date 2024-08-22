@@ -88,6 +88,12 @@ public: // メンバ関数
 	/// </summary>
 	void EditImGui();
 
+///////////////////////////////////////////////////////////
+// accessor
+///////////////////////////////////////////////////////////
+
+	const bool GetIsBossBattle() const { return isBossBattle_; }
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;

@@ -175,6 +175,8 @@ public:
 	// ------------ gameScene ------------ // 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
+	const bool GetIsBossBattle() const { return isBossBattle_; }
+
 private:
 
 	// ------------ 所有権のないポインタ ------------ // 

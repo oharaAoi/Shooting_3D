@@ -60,6 +60,8 @@ void Player::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Update() {
+	isBossBattle_ = gameScene_->GetIsBossBattle();
+
 	// ---------------------------------------------
 	// ↓ Reticleの更新を行う
 	// ---------------------------------------------
@@ -170,19 +172,9 @@ void Player::Move() {
 			if (isMoving) {
 				worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngle, 0.1f);
 			} else {
-				//worldTransform_.rotation_.y = std::atan2f(direction_.x, direction_.z);
+				worldTransform_.rotation_.y = std::atan2f(direction_.x, direction_.z);
 			}
 		}
-	}
-
-	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
-		velocity_ = { 10, 0,0 };
-		worldTransform_.translation_ += velocity_ * kDeltaTime_;
-	}
-
-	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-		velocity_ = { -10, 0,0 };
-		worldTransform_.translation_ += velocity_ * kDeltaTime_;
 	}
 }
 

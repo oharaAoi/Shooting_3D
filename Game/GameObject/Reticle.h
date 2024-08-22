@@ -102,12 +102,6 @@ public:
 	/// </summary>
 	void Set3DReticleTo2DReticle(const ViewProjection& viewProjection);
 
-	/// <summary>
-	/// レティクルのある位置を取得する
-	/// </summary>
-	/// <returns></returns>
-	Vector3 GetReticlePosition();
-
 	const WorldTransform& Get3DReticleTransform() { return worldTransform3D_; }
 
 	const Matrix4x4 GetMatWorld() const { return matWorld_; }
