@@ -46,6 +46,21 @@ void Reticle::Update(const bool& isLockOn, const WorldTransform& worldTransform,
 		Calculate3DReticleWorldPos(worldTransform);
 	}
 
+	// ロックオン状態なら
+	if (target_ != nullptr) {
+		// 座標の計算を行う
+		// 敵のロックオン座標取得
+		Vector3 positionWorld = target_->GetWorldPosition();
+		// ワールド座標からスクリーン座標に変換
+		Vector3 positionScreen = target_->GetScreenPosition(positionWorld, viewProjection);
+		// Vector2に格納
+		Vector2 spritePos(positionScreen.x, positionScreen.y);
+		// 設定
+		lockOnReticle_->SetPosition(spritePos);
+
+		worldTransform3D_.translation_ = target_->GetWorldTransform().translation_;
+	}
+
 	// unLockOn用の座標の設定しておく
 	unLockReticle_->SetPosition(lockOnReticle_->GetPosition());
 
@@ -99,6 +114,12 @@ void Reticle::Move() {
 	}
 }
 
+// ------------------- Z注目を行う ------------------- //
+
+void Reticle::ZTargeting() {
+
+}
+
 // ------------------- 3Dレティクルのworld座標を計算 ------------------- //
 
 void Reticle::Calculate3DReticleWorldPos(const WorldTransform& worldTransform) {
@@ -144,6 +165,28 @@ void Reticle::ScreenToWorldOf3DReticle(const ViewProjection& viewProjection) {
 	worldTransform3D_.translation_ = posNear + direction * kDistanceTestObject;
 }
 
+// ------------------- レティクルのスクリーン座標を取得(3D) ------------------- //
+
+bool Reticle::IsOutOfRange(const BaseEnemy* enemy, const ViewProjection& viewProjection) {
+	Vector3 positionView = GetViewPosition(enemy, viewProjection);
+
+	// 距離条件チェック
+	if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
+		// カメラ前方との角度を計算
+		float arcTangent = std::atan2(
+			std::sqrt(positionView.x * positionView.x + positionView.y * positionView.y),
+			positionView.z);
+
+		// 角度条件チェック
+		if (std::abs(arcTangent) <= angleRange_) {
+			return false;
+		}
+	}
+
+	// 範囲外である
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,4 +218,15 @@ void Reticle::Set3DReticleTo2DReticle(const ViewProjection& viewProjection) {
 	positionReticle = Transform(positionReticle, matViewProjectionViewport);
 	// 座標の設定
 	lockOnReticle_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
+}
+
+// ------------------- レティクルのスクリーン座標を設定(2D) ------------------- //
+
+Vector3 Reticle::GetViewPosition(const BaseEnemy* enemy, const ViewProjection& viewProjection) {
+	// 敵のロックオン座標取得
+	Vector3 positionWorld = enemy->GetWorldPosition();
+	// ワールド→ビュー座標変換
+	Vector3 positionView = Transform(positionWorld, viewProjection.matView);
+
+	return positionView;
 }

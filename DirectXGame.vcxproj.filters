@@ -201,6 +201,9 @@
     <ClCompile Include="Game\GameObject\PlayerBullet.cpp">
       <Filter>Game\GameObject\Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GameObject\BossEnemy.cpp">
+      <Filter>Game\GameObject\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -379,6 +382,9 @@
     </ClInclude>
     <ClInclude Include="Game\GameObject\PlayerBullet.h">
       <Filter>Game\GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\BossEnemy.h">
+      <Filter>Game\GameObject\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -119,6 +119,7 @@
     <ClCompile Include="Game\GameObject\BaseBullet.cpp" />
     <ClCompile Include="Game\GameObject\BaseCharacter.cpp" />
     <ClCompile Include="Game\GameObject\BaseEnemy.cpp" />
+    <ClCompile Include="Game\GameObject\BossEnemy.cpp" />
     <ClCompile Include="Game\GameObject\EnemyBullet.cpp" />
     <ClCompile Include="Game\GameObject\MobEnemy.cpp" />
     <ClCompile Include="Game\GameObject\Player.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Game\GameObject\BaseBullet.h" />
     <ClInclude Include="Game\GameObject\BaseCharacter.h" />
     <ClInclude Include="Game\GameObject\BaseEnemy.h" />
+    <ClInclude Include="Game\GameObject\BossEnemy.h" />
     <ClInclude Include="Game\GameObject\EnemyBullet.h" />
     <ClInclude Include="Game\GameObject\MobEnemy.h" />
     <ClInclude Include="Game\GameObject\Player.h" />

@@ -66,9 +66,30 @@ void Player::Update() {
 	// ↓ Reticleの更新を行う
 	// ---------------------------------------------
 	LockOnTargetChange();
+	
 	LockOn();
 
 	reticle_->Update(isLockOnMode_, worldTransform_, *viewProjection_);
+
+	for (auto it = canLockOnList_.begin(); it != canLockOnList_.end(); ) {
+		if ((*it)->GetIsDead()) {
+			it = canLockOnList_.erase(it);
+
+			if (canLockOnList_.size() == 0) {
+				isLockOnMode_ = false;
+				continue;
+			}
+
+			Vector3 enemyPos = canLockOnList_.front()->GetScreenPosition(*viewProjection_);
+			reticle_->SetLockOnScreenPos({ enemyPos.x, enemyPos.y });
+		} else {
+			++it;
+		}
+	}
+
+	if (canLockOnList_.size() == 0) {
+		isLockOnMode_ = false;
+	}
 
 	// ---------------------------------------------
 	// ↓ Playerの状態に関する処理を行う
@@ -148,11 +169,11 @@ void Player::Move() {
 			isMoving = true;
 		}
 
-		velocity_ = Normalize(velocity_) * speed;
-
 		// 移動ベクトルをカメラの角度だけ回転する
 		Matrix4x4 cameraRotate = MakeRotateXYZMatrix(viewProjection_->rotation_);
 		velocity_ = TransformNormal(velocity_, cameraRotate);
+
+		velocity_ = Normalize(velocity_) * speed;
 
 		// 移動処理
 		if (isMoving) {
@@ -205,6 +226,10 @@ void Player::LockOn() {
 			isLockOnMode_ = true;
 			Vector3 enemyPos = canLockOnList_.front()->GetScreenPosition(*viewProjection_);
 			reticle_->SetLockOnScreenPos({ enemyPos.x, enemyPos.y });
+
+			if (isBossBattle_) {
+				reticle_->SetTarget(canLockOnList_.front());
+			}
 		}
 	}
 }
@@ -228,6 +253,10 @@ void Player::LockOnTargetChange() {
 		// Reticleの位置を変更する
 		Vector3 enemyPos = canLockOnList_.front()->GetScreenPosition(*viewProjection_);
 		reticle_->SetLockOnScreenPos({ enemyPos.x, enemyPos.y });
+
+		if (isBossBattle_) {
+			reticle_->SetTarget(canLockOnList_.front());
+		}
 	}
 }
 

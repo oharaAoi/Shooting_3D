@@ -16,10 +16,14 @@
 #include "Math/MyMath.h"
 // Loader
 #include "Loader/ModelLoader.h"
+// GameObject
+#include "GameObject/BaseEnemy.h"
 
 #ifdef _DEBUG
 #include "ImGuiManager.h"
 #endif
+
+const static float kDegreeToRadian = std::numbers::pi_v<float> / 6.0f;
 
 /// <summary>
 /// Playerのレティクル
@@ -59,6 +63,8 @@ public:
 	/// </summary>
 	void Move();
 
+	void ZTargeting();
+
 	/// <summary>
 	/// 3Dレティクルのworld座標を計算
 	/// </summary>
@@ -68,6 +74,24 @@ public:
 	/// スクリーン座標からワールド座標を取得して配置する関数(コントローラー)
 	/// </summary>
 	void ScreenToWorldOf3DReticle(const ViewProjection& viewProjection);
+
+	// ------------ z注目用の関数 ------------ //
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="enemy"></param>
+	/// <param name="viewProjection"></param>
+	/// <returns></returns>
+	bool IsOutOfRange(const BaseEnemy* enemy, const ViewProjection& viewProjection);
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="enemy"></param>
+	/// <param name="viewProjection"></param>
+	/// <returns></returns>
+	Vector3 GetViewPosition(const BaseEnemy* enemy, const ViewProjection& viewProjection);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　accessor
@@ -106,6 +130,18 @@ public:
 
 	const Matrix4x4 GetMatWorld() const { return matWorld_; }
 
+	/// <summary>
+	/// Targetを設定する
+	/// </summary>
+	/// <param name="enemy"></param>
+	void SetTarget(BaseEnemy* enemy) { target_ = enemy; }
+
+	/// <summary>
+	/// 敵の中心座標を取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetTargetWorldPos() const { return target_->GetWorldPosition(); }
+
 private:
 
 	Model* model_ = nullptr;
@@ -122,7 +158,16 @@ private:
 
 	Matrix4x4 matWorld_;
 
-	// 2Dレティクルを使用するか3Dレティクルを使用するか
-	bool is3dReticle_ = false;
+	// ------------ z注目用の変数 ------------ //
+	// ロックオン対象
+	const BaseEnemy* target_ = nullptr;
+
+	// parameter
+	// 最小距離
+	float minDistance_ = 10.0f;
+	// 最大距離
+	float maxDistance_ = 30.0f;
+	// 角度範囲
+	float angleRange_ = 20.0f * kDegreeToRadian;
 };
 

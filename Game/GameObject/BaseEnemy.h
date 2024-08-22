@@ -67,6 +67,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	Vector3 GetScreenPosition(const ViewProjection& viewProjection);
+	Vector3 GetScreenPosition(const Vector3& posWorld, const ViewProjection& viewProjection) const;
 
 	// ------------ worldTransform ------------ // 
 	void SetParent(const WorldTransform* parent);
@@ -82,8 +83,12 @@ public:
 	// ------------ position ------------ // 
 	void SetPlayerPosition(const Vector3& position) { playerPosition_ = position; }
 
-	// ------------ gameSceneをセットする ------------ // 
+	// ------------ gameScene ------------ // 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
+	// ------------ isDead ------------ // 
+	const bool GetIsDead() const { return isDead_; }
+	void SetIsDead(const bool& isDead) { isDead_ = isDead; }
 
 protected:
 
@@ -91,6 +96,7 @@ protected:
 
 	// ------------ キャラクターの情報に関する変数 ------------ // 
 	uint32_t hp_ = 0;
+	bool isDead_;
 
 	int enemyType_;
 

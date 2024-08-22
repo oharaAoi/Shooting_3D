@@ -38,19 +38,15 @@ void FollowCamera::Update() {
 void FollowCamera::Rotate() {
 	XINPUT_STATE joyState;
 
-	//if (lockOn_ != nullptr) {
-	//	// カメラを敵の方向に向ける
-	//	// カメラと敵のベクトルをとる
-	//	Vector3 diff = lockOn_->GetCenterPos() - target_->translation_;
-	//	diff = Normalize(diff);
+	if ((reticle_ != nullptr) && (target_ != nullptr)) {
+		// カメラを敵の方向に向ける
+		// カメラと敵のベクトルをとる
+		Vector3 diff = reticle_->GetTargetWorldPos() - target_->translation_;
+		diff = Normalize(diff);
 
-	//	viewProjection_.rotation_.y = std::atan2f(diff.x, diff.z);
-	//	/*float xzLength = Length({ diff.x, 0, diff.z });
-	//	viewProjection_.rotation_.x = std::atan2f(-diff.y, xzLength);*/
-
-	//} else
-
-	 if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+		viewProjection_.rotation_.y = std::atan2f(diff.x, diff.z);
+	
+	} else if (Input::GetInstance()->GetJoystickState(0, joyState)) {
 		const float speed = 0.1f;
 		destinationAngleY_ += (float)static_cast<float>(joyState.Gamepad.sThumbRX) / SHRT_MAX * speed;
 		// 
@@ -89,7 +85,7 @@ void FollowCamera::ResetTarget() {
 // ------------------- ImGuiの編集 ------------------- //
 
 Vector3 FollowCamera::CalculationOffset() {
-	Vector3 offset = { 0.0f, 0.0f, -30.0f };
+	Vector3 offset = { 0.0f, 2.0f, -20.0f };
 	// 回転行列の合成
 	Matrix4x4 matRotate = MakeRotateXYZMatrix(viewProjection_.rotation_);
 	offset = TransformNormal(offset, matRotate);

@@ -11,6 +11,7 @@ EnemyManager::~EnemyManager() {}
 void EnemyManager::Init() {
 	ModelLoader* modelLoader = ModelLoader::GetInstacne();
 	mobEnemyPartsModels_.emplace_back(modelLoader->GetModel("mobEnemy"));
+	bossEnemyPartsModels_.emplace_back(modelLoader->GetModel("mobEnemy"));
 
 	currentIndex_ = 0;
 	fileNum_ = 0;
@@ -39,6 +40,13 @@ void EnemyManager::Update() {
 		enemy->SetGameScene(gameScene_);
 		enemy->Update();
 	}
+
+	enemysList_.remove_if([](const std::unique_ptr<BaseEnemy>& enemy) {
+		if (enemy->GetIsDead()) {
+			return true;
+		}
+		return false;
+	});
 }
 
 ///////////////////////////////////////////////////////////
@@ -101,7 +109,7 @@ void EnemyManager::LoadFile() {
 			break;
 
 		case EnemyType::Type_Boss:
-
+			enemysList_.push_back(std::make_unique<BossEnemy>(bossEnemyPartsModels_, pos));
 			break;
 		}
 	}
@@ -138,11 +146,13 @@ void EnemyManager::SaveEnemyPos() {
 	uint32_t createListIndex = 0;
 	for (const std::unique_ptr<BaseEnemy>& enemy : createEnemysList_) {
 		std::string enemyNum = "Enemy" + std::to_string(createListIndex);
-		data[enemyNum]["pos"] = { createEnemyPos_.x, createEnemyPos_.y, createEnemyPos_.z};
-		data[enemyNum]["type"] = { createEnemyType_ };
-		createListIndex++;
+		Vector3 enemyPos = enemy->GetWorldTransform().translation_;
+		uint32_t enemyType = enemy->GetEnemyType();
 
-		enemy->Update();
+		data[enemyNum]["pos"] = { enemyPos.x, enemyPos.y, enemyPos.z};
+		data[enemyNum]["type"] = { enemyType };
+
+		createListIndex++;
 	}
 
 	// パス
@@ -194,7 +204,7 @@ void EnemyManager::EditEnemyPos() {
 			break;
 
 		case EnemyType::Type_Boss:
-
+			createEnemysList_.push_back(std::make_unique<BossEnemy>(bossEnemyPartsModels_, createEnemyPos_));
 			break;
 		}
 	}

@@ -23,6 +23,10 @@ void MobEnemy::Init(std::vector<Model*> models) {
 
 	behaviorRequest_ = MobEnemyBehavior::kAttack;
 	ChangeBehavior(std::make_unique<MobRootState>(this));
+
+	hp_ = 3;
+
+	radius_ = 2.0f;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,8 +108,8 @@ void MobEnemy::CheckBehaviorRequest() {
 
 void MobEnemy::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
-	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kEnemy)) {
-
+	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kPlayerBullet)) {
+		hp_--;
 	}
 }
 

@@ -7,6 +7,7 @@
 
 void BaseEnemy::Init(std::vector<Model*> models) {
 	BaseCharacter::Init(models);
+	isDead_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -14,6 +15,9 @@ void BaseEnemy::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void BaseEnemy::Update() {
+	if (hp_ <= 0) {
+		isDead_ = true;
+	}
 	BaseCharacter::Update();
 }
 
@@ -42,6 +46,15 @@ Vector3 BaseEnemy::GetScreenPosition(const ViewProjection& viewProjection) {
 	result = Transform(GetWorldPosition(), matView);
 
 	return result;
+}
+
+Vector3 BaseEnemy::GetScreenPosition(const Vector3& posWorld, const ViewProjection& viewProjection) const {
+	// ビューポート行列
+	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
+	// 行列の合成
+	Matrix4x4 matViewProjection = viewProjection.matView * viewProjection.matProjection * matViewport;
+	// ワールド→スクリーン座標変換
+	return Transform(posWorld, matViewProjection);
 }
 
 void BaseEnemy::SetParent(const WorldTransform* parent) {

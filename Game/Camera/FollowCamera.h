@@ -2,7 +2,10 @@
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 #include "Input.h"
+// Math
 #include "Math/MyMath.h"
+// GameObject
+#include "GameObject/Reticle.h"
 
 class FollowCamera {
 public:
@@ -57,6 +60,7 @@ public:
 	/// <returns></returns>
 	Vector3 CalculationOffset();
 
+	void SetReticle(const Reticle* reticle) { reticle_ = reticle; }
 
 private:
 
@@ -64,6 +68,8 @@ private:
 	ViewProjection viewProjection_;
 
 	const WorldTransform* target_ = nullptr;
+
+	const Reticle* reticle_ = nullptr;
 
 	WorldTransform worldTransform_;
 

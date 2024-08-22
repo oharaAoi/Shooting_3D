@@ -111,8 +111,17 @@ void GameScene::Update() {
 		AxisIndicator::GetInstance()->SetVisible(true);
 	} else {
 		if (isBossBattle_) {
+			// 苦肉の策 -----------------------------------
 			player_->SetParent(nullptr);
 			enemyManager_->SetParent(nullptr);
+			player_->SetViewProjection(&followCamera_->GetViewProjection());
+
+			if (player_->GetIsLockOnMode()) {
+				followCamera_->SetReticle(player_->GetReticle());
+			} else {
+				followCamera_->SetReticle(nullptr);
+			}
+			// -------------------------------------------
 
 			followCamera_->Update();
 			viewProjection_.matView = followCamera_->GetViewProjection().matView;

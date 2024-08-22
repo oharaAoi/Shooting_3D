@@ -11,6 +11,7 @@
 #include "WorldTransform.h"
 // Enemy
 #include "GameObject/MobEnemy.h"
+#include "GameObject/BossEnemy.h"
 // Loader
 #include "Loader/ModelLoader.h"
 
@@ -104,6 +105,7 @@ private:
 	// ------------ Enemyに関する変数 ------------ // 
 	// Model
 	std::vector<Model*> mobEnemyPartsModels_;
+	std::vector<Model*> bossEnemyPartsModels_;
 	// enemyList
 	std::list<std::unique_ptr<BaseEnemy>> enemysList_;
 
