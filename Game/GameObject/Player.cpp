@@ -35,11 +35,6 @@ void Player::Init(std::vector<Model*> models) {
 	isLockOnMode_ = false;
 
 	// ---------------------------------------------
-	// ↓ Reticle初期化
-	// ---------------------------------------------
-	reticle_ = std::make_unique<Reticle>();
-
-	// ---------------------------------------------
 	// ↓ 調整項目
 	// ---------------------------------------------
 	AdjustmentItem* adjustItem = AdjustmentItem::GetInstance();
@@ -65,12 +60,7 @@ void Player::Update() {
 	// ---------------------------------------------
 	// ↓ Reticleの更新を行う
 	// ---------------------------------------------
-	LockOnTargetChange();
 	
-	LockOn();
-
-	reticle_->Update(isLockOnMode_, worldTransform_, *viewProjection_);
-
 	for (auto it = canLockOnList_.begin(); it != canLockOnList_.end(); ) {
 		if ((*it)->GetIsDead()) {
 			it = canLockOnList_.erase(it);
@@ -128,13 +118,6 @@ void Player::Draw(const ViewProjection& viewProjection) const {
 	for (const std::unique_ptr<PlayerBullet>& playerBullet : playerBulletList_) {
 		playerBullet->Draw(viewProjection);
 	}
-
-	// Reticleの描画
-	reticle_->Draw(viewProjection);
-}
-
-void Player::Draw2DReticle(const bool& isLockOnMode) {
-	reticle_->Draw2DReticle(isLockOnMode);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,67 +178,6 @@ void Player::Move() {
 			} else {
 				worldTransform_.rotation_.y = std::atan2f(direction_.x, direction_.z);
 			}
-		}
-	}
-}
-
-// ------------------- LockOnを行う ------------------- //
-
-void Player::LockOn() {
-	XINPUT_STATE joyState;
-	XINPUT_STATE preJoyState;
-	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
-	if (!Input::GetInstance()->GetJoystickStatePrevious(0, preJoyState)) { return; }
-
-	if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) && !(preJoyState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)) {
-		// 現在LockOn状態だったら
-		if (isLockOnMode_) {
-			isLockOnMode_ = false;
-			canLockOnList_.clear();
-
-			// 現在LockOn状態じゃなかったら
-		} else {
-			// リストの登録
-			gameScene_->CheckCanLockOnEnemy();
-
-			// リストが空だったら
-			if (canLockOnList_.size() == 0) {
-				return;
-			}
-
-			isLockOnMode_ = true;
-			Vector3 enemyPos = canLockOnList_.front()->GetScreenPosition(*viewProjection_);
-			reticle_->SetLockOnScreenPos({ enemyPos.x, enemyPos.y });
-
-			if (isBossBattle_) {
-				reticle_->SetTarget(canLockOnList_.front());
-			}
-		}
-	}
-}
-
-// ------------------- LockOnの対象を変更する ------------------- //
-
-void Player::LockOnTargetChange() {
-	if (!isLockOnMode_) {
-		return;
-	}
-
-	XINPUT_STATE joyState;
-	XINPUT_STATE preJoyState;
-	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
-	if (!Input::GetInstance()->GetJoystickStatePrevious(0, preJoyState)) { return; }
-
-	if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) && !(preJoyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
-		BaseEnemy* baseEnemy = canLockOnList_.front();
-		canLockOnList_.pop_front();
-		canLockOnList_.push_back(baseEnemy);
-		// Reticleの位置を変更する
-		Vector3 enemyPos = canLockOnList_.front()->GetScreenPosition(*viewProjection_);
-		reticle_->SetLockOnScreenPos({ enemyPos.x, enemyPos.y });
-
-		if (isBossBattle_) {
-			reticle_->SetTarget(canLockOnList_.front());
 		}
 	}
 }

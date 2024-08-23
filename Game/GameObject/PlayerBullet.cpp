@@ -35,11 +35,16 @@ void PlayerBullet::Draw(const ViewProjection& viewProjection) const {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 // ------------------- 衝突時に行う処理 ------------------- //
- 
+
 void PlayerBullet::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
-	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kEnemy)) {
+	switch (typeID) {
+	case static_cast<uint32_t>(CollisionTypeIdDef::kEnemy):
 		isDead_ = true;
+		break;
+	case static_cast<uint32_t>(CollisionTypeIdDef::kBoss):
+		isDead_ = true;
+		break;
 	}
 }
 

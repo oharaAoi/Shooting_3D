@@ -62,6 +62,8 @@ void GameScene::Initialize() {
 	player_->SetViewProjection(&viewProjection_);
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
+	reticle_ = std::make_unique<Reticle>();
+
 	// enemy ---------------------------------------------------------
 	
 
@@ -86,6 +88,7 @@ void GameScene::Initialize() {
 	//player_->SetReticleParent(&railCamera_->GetWorldTransform());
 	player_->SetViewProjection(&railCamera_->GetViewProjection());
 	player_->SetGameScene(this);
+	player_->SetReticle(reticle_.get());
 
 	enemyManager_->SetParent(&railCamera_->GetWorldTransform());
 	enemyManager_->SetGameScene(this);
@@ -97,46 +100,7 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-	// ---------------------------------------------
-	// ↓ Cameraの処理
-	// ---------------------------------------------
-	if (input_->TriggerKey(DIK_C)) {
-		isDebugCamera = !isDebugCamera;
-	}
-
-	if (isDebugCamera) {
-		debugCamera_->Update();
-		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		AxisIndicator::GetInstance()->SetVisible(true);
-	} else {
-		if (isBossBattle_) {
-			// 苦肉の策 -----------------------------------
-			player_->SetParent(nullptr);
-			enemyManager_->SetParent(nullptr);
-			player_->SetViewProjection(&followCamera_->GetViewProjection());
-
-			if (player_->GetIsLockOnMode()) {
-				followCamera_->SetReticle(player_->GetReticle());
-			} else {
-				followCamera_->SetReticle(nullptr);
-			}
-			// -------------------------------------------
-
-			followCamera_->Update();
-			viewProjection_.matView = followCamera_->GetViewProjection().matView;
-			viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
-		} else {
-			railCamera_->Update();
-			viewProjection_.matView = railCamera_->GetViewProjection().matView;
-			viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
-		}
-		//player_->SetViewProjection(&viewProjection_);
-		AxisIndicator::GetInstance()->SetVisible(false);
-	}
-
-	viewProjection_.TransferMatrix();
-	PrimitiveDrawer::GetInstance()->SetViewProjection(&viewProjection_);
+	UpdateViewProjection();
 
 	// ---------------------------------------------
 	// ↓ GameObjectの処理
@@ -144,6 +108,12 @@ void GameScene::Update() {
 	// enmey
 	enemyManager_->SetPlayerPosition(player_->GetTranslation());
 	enemyManager_->Update();
+
+	if (isBossBattle_) {
+		reticle_->Update(enemyManager_->GetEnemysList(), isBossBattle_, player_->GetWorldTransform(), railCamera_->GetViewProjection());
+	} else {
+		reticle_->Update(enemyManager_->GetEnemysList(), isBossBattle_, player_->GetWorldTransform(), followCamera_->GetViewProjection());
+	}
 
 	player_->Update();
 
@@ -170,6 +140,11 @@ void GameScene::Update() {
 	// ---------------------------------------------
 
 	CheckAllCollision();
+
+	// ---------------------------------------------
+	// ↓ 次フレーム前に行っておきたい処理
+	// ---------------------------------------------
+	reticle_->CheckTargerAlive(enemyManager_->GetEnemysList(), viewProjection_);
 
 	// ---------------------------------------------
 	// ↓ ImGuiの処理
@@ -228,6 +203,8 @@ void GameScene::Draw() {
 		bullet->Draw(viewProjection_);
 	}
 
+	reticle_->Draw(viewProjection_);
+
 	// ---------------------------------------------
 	// ↓ 線の描画
 	// ---------------------------------------------
@@ -246,7 +223,7 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
-	player_->Draw2DReticle(player_->GetIsLockOnMode());
+	reticle_->Draw2DReticle();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -257,6 +234,52 @@ void GameScene::Draw() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓ メンバ関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+// ------------------- Game上のViewProjectionを更新する ------------------- //
+
+void GameScene::UpdateViewProjection() {
+	// ---------------------------------------------
+	// ↓ Cameraの処理
+	// ---------------------------------------------
+	if (input_->TriggerKey(DIK_C)) {
+		isDebugCamera = !isDebugCamera;
+	}
+
+	if (isDebugCamera) {
+		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		AxisIndicator::GetInstance()->SetVisible(true);
+	} else {
+		if (isBossBattle_) {
+			// 苦肉の策 -----------------------------------
+			player_->SetParent(nullptr);
+			enemyManager_->SetParent(nullptr);
+			reticle_->SetParent(nullptr);
+			player_->SetViewProjection(&followCamera_->GetViewProjection());
+
+			if (player_->GetIsLockOnMode()) {
+				followCamera_->SetReticle(player_->GetReticle());
+			} else {
+				followCamera_->SetReticle(nullptr);
+			}
+			// -------------------------------------------
+
+			followCamera_->Update();
+			viewProjection_.matView = followCamera_->GetViewProjection().matView;
+			viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
+		} else {
+			railCamera_->Update();
+			viewProjection_.matView = railCamera_->GetViewProjection().matView;
+			viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
+		}
+		//player_->SetViewProjection(&viewProjection_);
+		AxisIndicator::GetInstance()->SetVisible(false);
+	}
+
+	viewProjection_.TransferMatrix();
+	PrimitiveDrawer::GetInstance()->SetViewProjection(&viewProjection_);
+}
 
 // ------------------- すべての当たり判定を実行する ------------------- //
 

@@ -59,11 +59,6 @@ public:
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection) const override;
 
-	/// <summary>
-	/// 2Dのレティクルを描画する
-	/// </summary>
-	void Draw2DReticle(const bool& isLockOnMode);
-
 ///////////////////////////////////////////////////////////
 // メンバ関数
 ///////////////////////////////////////////////////////////
@@ -72,16 +67,6 @@ public:
 	/// Playerを動かす
 	/// </summary>
 	void Move();
-
-	/// <summary>
-	/// LockOnを行う
-	/// </summary>
-	void LockOn();
-
-	/// <summary>
-	/// LockOnの対象を変更する
-	/// </summary>
-	void LockOnTargetChange();
 
 	/// <summary>
 	/// 弾の更新を行う
@@ -169,7 +154,8 @@ public:
 	std::list<std::unique_ptr<PlayerBullet>>& GetPlayerBulletList() { return playerBulletList_; }
 
 	// ------------ Reticle関連 ------------ // 
-	Reticle* GetReticle() { return reticle_.get(); }
+	Reticle* GetReticle() { return reticle_; }
+	void SetReticle(Reticle* reticle) { reticle_ = reticle; }
 	const bool GetIsLockOnMode() const { return isLockOnMode_; }
 
 	// ------------ gameScene ------------ // 
@@ -202,7 +188,7 @@ private:
 	std::list<std::unique_ptr<PlayerBullet>> playerBulletList_;
 
 	// ------------ Reticleに関する変数 ------------ // 
-	std::unique_ptr<Reticle> reticle_ = nullptr;
+	Reticle* reticle_ = nullptr;
 
 	// ------------ Enemyに関する変数 ------------ // 
 	std::list<BaseEnemy*> canLockOnList_;

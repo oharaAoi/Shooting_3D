@@ -42,7 +42,7 @@ public:
 	/// <summary>
 	/// 更新関数
 	/// </summary>
-	void Update(const bool& isLockOn, const WorldTransform& worldTransform, const ViewProjection& viewProjection);
+	void Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, const bool& isBossBattle, const WorldTransform& worldTransform, const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 描画関数
@@ -52,7 +52,7 @@ public:
 	/// <summary>
 	/// 2Dのレティクルを描画する
 	/// </summary>
-	void Draw2DReticle(const bool& isLockOnMode);
+	void Draw2DReticle();
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　メンバ関数
@@ -63,7 +63,23 @@ public:
 	/// </summary>
 	void Move();
 
-	void ZTargeting();
+	/// <summary>
+	/// LockOnを行う関数
+	/// </summary>
+	/// <param name="enemyList"></param>
+	/// <param name="viewProjection"></param>
+	void LockOn(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, const ViewProjection& viewProjection);
+
+	/// <summary>
+	/// LockOn対象を変更する
+	/// </summary>
+	/// <param name="viewProjection"></param>
+	void ChangetLockOnTarget(const ViewProjection& viewProjection);
+
+	/// <summary>
+	/// targetが生きているか
+	/// </summary>
+	void CheckTargerAlive(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 3Dレティクルのworld座標を計算
@@ -75,7 +91,12 @@ public:
 	/// </summary>
 	void ScreenToWorldOf3DReticle(const ViewProjection& viewProjection);
 
-	// ------------ z注目用の関数 ------------ //
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="enemies"></param>
+	/// <param name="viewProjection"></param>
+	void Search(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 
@@ -97,50 +118,30 @@ public:
 // ↓　accessor
 //////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/// <summary>
-	/// Parentの設定
-	/// </summary>
-	/// <param name="parent"></param>
+	// ------------ parent ------------ //
 	void SetParent(const WorldTransform* parent);
 
-	/// <summary>
-	/// レティクルのスクリーン座標を取得(3D)
-	/// </summary>
-	/// <returns></returns>
+	// ------------ 3dReticleの位置 ------------ //
 	Vector3 Get3DReticleWorldPos();
 
-	/// <summary>
-	/// レティクルのスクリーン座標を取得(2D)
-	/// </summary>
-	/// <returns></returns>
+	// ------------ 2dReticleの位置 ------------ //
 	Vector2 Get2DReticleScreenPos() { return lockOnReticle_->GetPosition(); };
-
-	/// <summary>
-	/// レティクルのスクリーン座標を設定
-	/// </summary>
-	/// <returns></returns>
 	void SetLockOnScreenPos(const Vector3& pos) { lockOnReticle_->SetPosition({ pos.x, pos.y }); }
 
-	/// <summary>
-	/// 3Dのレティクルのワールドから2Dへ
-	/// </summary>
+	// ------------ 3dReticleから3dReticleを設定する ------------ //
 	void Set3DReticleTo2DReticle(const ViewProjection& viewProjection);
 
+	// ------------ worldTransoform ------------ //
 	const WorldTransform& Get3DReticleTransform() { return worldTransform3D_; }
-
 	const Matrix4x4 GetMatWorld() const { return matWorld_; }
 
-	/// <summary>
-	/// Targetを設定する
-	/// </summary>
-	/// <param name="enemy"></param>
-	void SetTarget(BaseEnemy* enemy) { target_ = enemy; }
+	// ------------ bool ------------ //
+	const bool GetIsLockOn() const { return isLockOn_; }
 
-	/// <summary>
-	/// 敵の中心座標を取得
-	/// </summary>
-	/// <returns></returns>
+	// ------------ Target関連 ------------ //
 	Vector3 GetTargetWorldPos() const { return target_->GetWorldPosition(); }
+	Vector3 GetTargetTransform() const { return target_->GetWorldTransform().translation_; }
+	void SetTarget(BaseEnemy* enemy) { target_ = enemy; }
 
 private:
 
@@ -161,12 +162,15 @@ private:
 	// ------------ z注目用の変数 ------------ //
 	// ロックオン対象
 	const BaseEnemy* target_ = nullptr;
+	// ロックオン可能な敵のリスト
+	std::list<const BaseEnemy*> canLockOnList_;
+	bool isLockOn_;
 
 	// parameter
 	// 最小距離
 	float minDistance_ = 10.0f;
 	// 最大距離
-	float maxDistance_ = 30.0f;
+	float maxDistance_ = 50.0f;
 	// 角度範囲
 	float angleRange_ = 20.0f * kDegreeToRadian;
 };

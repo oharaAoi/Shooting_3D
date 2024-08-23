@@ -30,6 +30,13 @@ void EnemyManager::Update() {
 
 	EditEnemyPos();
 
+	enemysList_.remove_if([](const std::unique_ptr<BaseEnemy>& enemy) {
+		if (enemy->GetIsDead()) {
+			return true;
+		}
+		return false;
+	});
+
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemysList_) {
 		enemy->SetPlayerPosition(playerPosition_);
 		enemy->SetGameScene(gameScene_);
@@ -40,13 +47,6 @@ void EnemyManager::Update() {
 		enemy->SetGameScene(gameScene_);
 		enemy->Update();
 	}
-
-	enemysList_.remove_if([](const std::unique_ptr<BaseEnemy>& enemy) {
-		if (enemy->GetIsDead()) {
-			return true;
-		}
-		return false;
-	});
 }
 
 ///////////////////////////////////////////////////////////

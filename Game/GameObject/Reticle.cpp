@@ -33,22 +33,28 @@ void Reticle::Init() {
 // ↓　更新関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Reticle::Update(const bool& isLockOn, const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
-	if (!isLockOn) {
+void Reticle::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, const bool& isBossBattle,
+					 const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
+
+	// レティクルを移動させる
+	if (target_ == nullptr) {
 		Move();
 	}
 
-	if (worldTransform.parent_) {
-		// 3Dレティクルの位置をScreen上からworld上の位置を求める
+	// LockOnを行う
+	LockOn(enemyList, viewProjection);
+
+	ChangetLockOnTarget(viewProjection);
+
+	// 3Dレティクルの座標を計算する
+	if (!isBossBattle) {
 		ScreenToWorldOf3DReticle(viewProjection);
 	} else {
-		// 3Dレティクルのworld座標を計算
 		Calculate3DReticleWorldPos(worldTransform);
 	}
 
 	// ロックオン状態なら
 	if (target_ != nullptr) {
-		// 座標の計算を行う
 		// 敵のロックオン座標取得
 		Vector3 positionWorld = target_->GetWorldPosition();
 		// ワールド座標からスクリーン座標に変換
@@ -58,7 +64,12 @@ void Reticle::Update(const bool& isLockOn, const WorldTransform& worldTransform,
 		// 設定
 		lockOnReticle_->SetPosition(spritePos);
 
-		worldTransform3D_.translation_ = target_->GetWorldTransform().translation_;
+		// 3Dレティクルの位置も調整する
+		if (isBossBattle) {
+			worldTransform3D_.translation_ = target_->GetWorldTransform().translation_;
+		} else {
+			worldTransform3D_.translation_ = target_->GetWorldPosition();
+		}
 	}
 
 	// unLockOn用の座標の設定しておく
@@ -86,8 +97,8 @@ void Reticle::Draw(const ViewProjection& viewProjection) {
 	model_->Draw(worldTransform3D_, viewProjection);
 }
 
-void Reticle::Draw2DReticle(const bool& isLockOnMode) {
-	if (isLockOnMode) {
+void Reticle::Draw2DReticle() {
+	if (target_) {
 		lockOnReticle_->Draw();
 	} else {
 		unLockReticle_->Draw();
@@ -116,8 +127,110 @@ void Reticle::Move() {
 
 // ------------------- Z注目を行う ------------------- //
 
-void Reticle::ZTargeting() {
+void Reticle::LockOn(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, const ViewProjection& viewProjection) {
+	XINPUT_STATE joyState;
+	XINPUT_STATE preJoyState;
+	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
+	if (!Input::GetInstance()->GetJoystickStatePrevious(0, preJoyState)) { return; }
 
+	if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) && !(preJoyState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)) {
+		if (target_ == nullptr) {
+			// ロックオン対象の検索
+			Search(enemyList, viewProjection);
+		} else {
+			target_ = nullptr;
+			isLockOn_ = false;
+		}
+	}
+}
+
+// ------------------- LockOnする敵を変更 ------------------- //
+
+void Reticle::ChangetLockOnTarget(const ViewProjection& viewProjection) {
+	if (!isLockOn_) {
+		return;
+	}
+
+	XINPUT_STATE joyState;
+	XINPUT_STATE preJoyState;
+	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
+	if (!Input::GetInstance()->GetJoystickStatePrevious(0, preJoyState)) { return; }
+
+	if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) && !(preJoyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+		const BaseEnemy* baseEnemy = canLockOnList_.front();
+		canLockOnList_.pop_front();
+		canLockOnList_.push_back(baseEnemy);
+		// Reticleの位置を変更する
+		Vector3 enemyPos = canLockOnList_.front()->GetScreenPosition(viewProjection);
+		SetLockOnScreenPos({ enemyPos.x, enemyPos.y });
+
+		target_ = canLockOnList_.front();
+	}
+}
+
+void Reticle::CheckTargerAlive(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, const ViewProjection& viewProjection) {
+	if (isLockOn_) {
+		if (target_->GetIsDead()) {
+			Search(enemyList, viewProjection);
+		}
+	}
+}
+
+// ------------------- 敵を探す ------------------- //
+
+void Reticle::Search(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const ViewProjection& viewProjection) {
+	// ロックオン対象の絞り込み ---------
+	// 敵のポインタと敵のカメラとの距離をペアとして管理
+	std::list<std::pair<float, const BaseEnemy*>> targets;
+
+	// すべての敵に対して順にロックオン判定
+	for (const std::unique_ptr<BaseEnemy>& enemy : enemies) {
+		if (!IsOutOfRange(enemy.get(), viewProjection)) {
+			if (!enemy->GetIsDead()) {
+				// 条件を満たしていたらペアにしてリストに追加
+				targets.emplace_back(std::make_pair(GetViewPosition(enemy.get(), viewProjection).z, enemy.get()));
+			}
+		}
+	}
+
+	// 距離でソートしてロックオン
+	target_ = nullptr;
+	isLockOn_ = false;
+	if (targets.size() != 0) {
+		// 距離で昇順にソート
+		// ラムダ式で大小比較をする
+		targets.sort([](auto& pair1, auto& pair2) { return pair1.first < pair2.first; });
+		// ソートの結果一番近い敵をロックオン対象とする
+		target_ = targets.front().second;
+		isLockOn_ = true;
+	}
+
+
+	for (const auto& target : targets) {
+		canLockOnList_.push_back(target.second);
+	}
+}
+
+// ------------------- 敵がLockOnできる範囲にいるか ------------------- //
+
+bool Reticle::IsOutOfRange(const BaseEnemy* enemy, const ViewProjection& viewProjection) {
+	Vector3 positionView = GetViewPosition(enemy, viewProjection);
+
+	// 距離条件チェック
+	if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
+		// カメラ前方との角度を計算
+		float arcTangent = std::atan2(
+			std::sqrt(positionView.x * positionView.x + positionView.y * positionView.y),
+			positionView.z);
+
+		// 角度条件チェック
+		if (std::abs(arcTangent) <= angleRange_) {
+			return false;
+		}
+	}
+
+	// 範囲外である
+	return true;
 }
 
 // ------------------- 3Dレティクルのworld座標を計算 ------------------- //
@@ -128,7 +241,7 @@ void Reticle::Calculate3DReticleWorldPos(const WorldTransform& worldTransform) {
 	// 自機から3Dレティクルへのオフセット
 	Vector3 offset = { 0, 0, 1.0f };
 	// 自機のワールド行列回転を反映
-	//offset = TransformNormal(offset, worldTransform.matWorld_);
+	offset = TransformNormal(offset, worldTransform.matWorld_);
 	// ベクトルの長さを変える
 	offset = Normalize(offset) * kDistancePlayerTo3DReticle;
 	// 3Dレティクルの座標を設定
@@ -165,33 +278,11 @@ void Reticle::ScreenToWorldOf3DReticle(const ViewProjection& viewProjection) {
 	worldTransform3D_.translation_ = posNear + direction * kDistanceTestObject;
 }
 
-// ------------------- レティクルのスクリーン座標を取得(3D) ------------------- //
-
-bool Reticle::IsOutOfRange(const BaseEnemy* enemy, const ViewProjection& viewProjection) {
-	Vector3 positionView = GetViewPosition(enemy, viewProjection);
-
-	// 距離条件チェック
-	if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
-		// カメラ前方との角度を計算
-		float arcTangent = std::atan2(
-			std::sqrt(positionView.x * positionView.x + positionView.y * positionView.y),
-			positionView.z);
-
-		// 角度条件チェック
-		if (std::abs(arcTangent) <= angleRange_) {
-			return false;
-		}
-	}
-
-	// 範囲外である
-	return true;
-}
-
 //////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　
+// ↓　accessor
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-// ------------------- レティクルのスクリーン座標を取得(3D) ------------------- //
+// ------------------- 親を設定する ------------------- //
 
 void Reticle::SetParent(const WorldTransform* parent) {
 	// 親子関係を結ぶ

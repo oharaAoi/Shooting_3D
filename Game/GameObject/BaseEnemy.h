@@ -66,7 +66,7 @@ public:
 	/// ScreenPositionを返す
 	/// </summary>
 	/// <returns></returns>
-	Vector3 GetScreenPosition(const ViewProjection& viewProjection);
+	Vector3 GetScreenPosition(const ViewProjection& viewProjection) const ;
 	Vector3 GetScreenPosition(const Vector3& posWorld, const ViewProjection& viewProjection) const;
 
 	// ------------ worldTransform ------------ // 

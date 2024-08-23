@@ -46,11 +46,17 @@ void PlayerAttackState::Shot() {
 		const float kBulletSpeed = 0.6f;
 		// parentが登録されていたら
 		Vector3 velocity;
-		if (player_->GetWorldTransform().parent_) {
-			Matrix4x4 reticleMat = player_->GetReticle()->Get3DReticleTransform().matWorld_ * Inverse(player_->GetWorldTransform().parent_->matWorld_);
-			velocity = Transform({ 0,0,0 }, reticleMat) - player_->GetTranslation();
+		Reticle* reticle = player_->GetReticle();
+		if (player_->GetReticle()->GetIsLockOn()) {
+			velocity = reticle->GetTargetTransform() - player_->GetWorldTransform().translation_;
+
 		} else {
-			velocity = player_->GetReticle()->Get3DReticleWorldPos() - player_->GetWorldPosition();
+			if (player_->GetWorldTransform().parent_) {
+				Matrix4x4 reticleMat = reticle->Get3DReticleTransform().matWorld_ * Inverse(player_->GetWorldTransform().parent_->matWorld_);
+				velocity = Transform({ 0,0,0 }, reticleMat) - player_->GetTranslation();
+			} else {
+				velocity = player_->GetReticle()->Get3DReticleWorldPos() - player_->GetWorldPosition();
+			}
 		}
 
 		// 自機から昇順オブジェクトへのベクトル

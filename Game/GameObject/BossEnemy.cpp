@@ -24,6 +24,8 @@ void BossEnemy::Init(std::vector<Model*> models) {
 	hp_ = 50;
 
 	radius_ = 2.0f;
+
+	isDead_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +57,7 @@ void BossEnemy::Attack() {
 void BossEnemy::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
 	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kPlayerBullet)) {
-
+		hp_--;
 	}
 }
 

@@ -23,6 +23,7 @@
 #include "GameObject/Player.h"
 #include "GameObject/MobEnemy.h"
 #include "GameObject/EnemyBullet.h"
+#include "GameObject/Reticle.h"
 // Manager
 #include "Collision/CollisionManager.h"
 #include "Manager/EnemyManager.h"
@@ -61,6 +62,11 @@ public: // メンバ関数
 ///////////////////////////////////////////////////////////
 // メンバ関数
 ///////////////////////////////////////////////////////////
+
+	/// <summary>
+	/// Game上のViewProjectionを更新する
+	/// </summary>
+	void UpdateViewProjection();
 
 	/// <summary>
 	/// すべての当たり判定を実行する
@@ -120,6 +126,9 @@ private: // メンバ変数
 	// player
 	std::vector<Model*> playerPartsModels_;
 	std::unique_ptr<Player> player_ = nullptr;
+
+	 // reticle
+	std::unique_ptr<Reticle> reticle_ = nullptr;
 
 	// enemy
 	std::list<std::unique_ptr<EnemyBullet>> enemyBulletList_;
