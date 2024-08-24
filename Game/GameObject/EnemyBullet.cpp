@@ -16,13 +16,9 @@ EnemyBullet::~EnemyBullet() {
 void EnemyBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent) {
 	BaseBullet::Init(model, pos, velocity, rotation, parent);
 
-	if (isHomig_) {
-
-	} else {
-		// velocityにplayerの座標が入っているため,playerの方向へのVelocityに変更する
-		Vector3 direction = velocity_ - worldTransform_.translation_;
-		velocity_ = Normalize(direction) * kBulletSpeed_;
-	}
+	// velocityにplayerの座標が入っているため,playerの方向へのVelocityに変更する
+	Vector3 direction = velocity_ - worldTransform_.translation_;
+	velocity_ = Normalize(direction) * kBulletSpeed_;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,6 +26,19 @@ void EnemyBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void EnemyBullet::Update() {
+	// ---------------------------------------------
+	// ↓ 弾を進める
+	// ---------------------------------------------
+	if (isHomig_) {
+		Vector3 toPlayer = player_->GetWorldTransform().translation_ - worldTransform_.translation_;
+		toPlayer = Normalize(toPlayer);
+		velocity_ = Normalize(velocity_);
+
+		velocity_ = Slerp(velocity_, toPlayer, 0.5f) * kBulletSpeed_;
+
+	} else {
+
+	}
 	BaseBullet::Update();
 }
 

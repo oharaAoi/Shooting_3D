@@ -1,4 +1,5 @@
 #include "MidMobEnemy.h"
+#include "GameScene.h"
 
 MidMobEnemy::MidMobEnemy(std::vector<Model*> models, const Vector3& pos) {
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kBoss));
@@ -54,6 +55,15 @@ void MidMobEnemy::Draw(const ViewProjection& viewProjection) const {
 // ------------------- 攻撃する ------------------- //
 
 void MidMobEnemy::Attack() {
+	Shot();
+}
+
+// ------------------- 攻撃する ------------------- //
+
+void MidMobEnemy::Shot() {
+	gameScene_->AddEnemyBullet(std::move(std::make_unique<EnemyBullet>(
+		bulletModel_, worldTransform_.translation_, playerPosition_, worldTransform_.rotation_, worldTransform_.parent_, true
+	)));
 }
 
 // ------------------- 状態遷移を実際に行う ------------------- //

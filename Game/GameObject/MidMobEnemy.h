@@ -13,6 +13,8 @@ enum class MidEnemyBehavior {
 	kAttack,	// 攻撃中,
 };
 
+class GameScene;
+
 class MidMobEnemy :
 	public BaseEnemy {
 public:
@@ -43,6 +45,11 @@ public:
 	/// 攻撃をまとめた関数
 	/// </summary>
 	void Attack() override;
+
+	/// <summary>
+	/// 弾をリストに追加する関数
+	/// </summary>
+	void Shot();
 
 	/// <summary>
 	///	状態を変更する
