@@ -33,8 +33,12 @@ void BossEnemy::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void BossEnemy::Update() {
-	BaseEnemy::Update();
+	// 状態の変更のリクエストがあるかを確認する
+	CheckBehaviorRequest();
+	// 現在の状態を更新する
+	behaviorState_->Update();
 
+	BaseEnemy::Update();
 	// ImGuiの編集
 	EditImGui();
 }
@@ -51,8 +55,40 @@ void BossEnemy::Draw(const ViewProjection& viewProjection) const {
 // ↓　メンバ関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
+// ------------------- 攻撃を行う関数 ------------------- //
+
 void BossEnemy::Attack() {
 }
+
+// ------------------- 状態遷移を行う関数 ------------------- //
+
+void BossEnemy::ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior) {
+	behaviorState_ = std::move(behavior);
+}
+
+// ------------------- 状態遷移のリクエストがあるかを確認する ------------------- //
+
+void BossEnemy::CheckBehaviorRequest() {
+	// リクエストがあったら
+	if (behaviorRequest_) {
+		// 振る舞いを変更する
+		behavior_ = behaviorRequest_.value();
+
+		switch (behavior_) {
+		case BossEnemyBehavior::kRoot:
+			ChangeBehavior(std::make_unique<BossRootState>(this));
+			break;
+
+		case BossEnemyBehavior::kAttack:
+			ChangeBehavior(std::make_unique<BossAttackState>(this));
+			break;
+		}
+		// ふるまいリクエストをリセット
+		behaviorRequest_ = std::nullopt;
+	}
+}
+
+// ------------------- 衝突時に呼ばれる関数 ------------------- //
 
 void BossEnemy::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
@@ -60,6 +96,8 @@ void BossEnemy::OnCollision(Collider* other) {
 		hp_--;
 	}
 }
+
+// ------------------- ImGuiを編集する関数 ------------------- //
 
 void BossEnemy::EditImGui() {
 #ifdef _DEBUG

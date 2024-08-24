@@ -3,6 +3,9 @@
 #include "GameObject/BaseEnemy.h"
 // Adjustment
 #include "Adjustment/AdjustmentItem.h"
+// State
+#include "State/BossRootState.h"
+#include "State/BossAttackState.h"
 
 enum BossParts {
 	Boss_Body = 0,
@@ -46,6 +49,17 @@ public:
 	void Attack() override;
 
 	/// <summary>
+	///	状態を変更する
+	/// </summary>
+	/// <param name="behavior"></param>
+	void ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior);
+
+	/// <summary>
+	/// 状態を変化させるリクエストがあるかを確認する
+	/// </summary>
+	void CheckBehaviorRequest();
+
+	/// <summary>
 	/// 衝突時に呼ばれる関数
 	/// </summary>
 	void OnCollision([[maybe_unused]] Collider* other) override;
@@ -73,5 +87,9 @@ private:
 	// ------------  ------------ // 
 	uint32_t enemyId_;
 
+	// ------------ Enemyの状態に関する変数 ------------ // 
+	BossEnemyBehavior behavior_ = BossEnemyBehavior::kRoot;
+	std::unique_ptr<BaseCharacterState> behaviorState_ = nullptr;
+	std::optional<BossEnemyBehavior> behaviorRequest_ = std::nullopt;
 };
 

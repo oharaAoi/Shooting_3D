@@ -1,24 +1,24 @@
-#include "MidEnemyAttackState.h"
-#include "GameObject/MidMobEnemy.h"
+#include "BossAttackState.h"
+#include "GameObject/BossEnemy.h"
 
-MidEnemyAttackState::MidEnemyAttackState(MidMobEnemy* baseEnemy) 
+BossAttackState::BossAttackState(BossEnemy* baseEnemy) 
 	: BaseEnemyState("State_Attack", baseEnemy) {
 	Init();
 }
 
-MidEnemyAttackState::~MidEnemyAttackState() {
+BossAttackState::~BossAttackState() {
 }
 
 ///////////////////////////////////////////////////////////
 // 初期化関数
 ///////////////////////////////////////////////////////////
 
-void MidEnemyAttackState::Init() {
+void BossAttackState::Init() {
 }
 
 ///////////////////////////////////////////////////////////
 // 更新関数
 ///////////////////////////////////////////////////////////
 
-void MidEnemyAttackState::Update() {
+void BossAttackState::Update() {
 }
