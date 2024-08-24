@@ -135,6 +135,8 @@
     <ClCompile Include="Game\State\BaseCharacterState.cpp" />
     <ClCompile Include="Game\State\BaseEnemyState.cpp" />
     <ClCompile Include="Game\State\BasePlayerState.cpp" />
+    <ClCompile Include="Game\State\MidEnemyAttackState.cpp" />
+    <ClCompile Include="Game\State\MidEnemyRootState.cpp" />
     <ClCompile Include="Game\State\MobAttackState.cpp" />
     <ClCompile Include="Game\State\MobRootState.cpp" />
     <ClCompile Include="Game\State\PlayerAttackState.cpp" />
@@ -196,6 +198,8 @@
     <ClInclude Include="Game\State\BaseCharacterState.h" />
     <ClInclude Include="Game\State\BaseEnemyState.h" />
     <ClInclude Include="Game\State\BasePlayerState.h" />
+    <ClInclude Include="Game\State\MidEnemyAttackState.h" />
+    <ClInclude Include="Game\State\MidEnemyRootState.h" />
     <ClInclude Include="Game\State\MobAttackState.h" />
     <ClInclude Include="Game\State\MobRootState.h" />
     <ClInclude Include="Game\State\PlayerAttackState.h" />

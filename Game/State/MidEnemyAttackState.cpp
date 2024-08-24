@@ -1,0 +1,24 @@
+#include "MidEnemyAttackState.h"
+#include "GameObject/MidMobEnemy.h"
+
+MidEnemyAttackState::MidEnemyAttackState(MidMobEnemy* baseEnemy) 
+	: BaseEnemyState("State_Root", baseEnemy) {
+	Init();
+}
+
+MidEnemyAttackState::~MidEnemyAttackState() {
+}
+
+///////////////////////////////////////////////////////////
+// 初期化関数
+///////////////////////////////////////////////////////////
+
+void MidEnemyAttackState::Init() {
+}
+
+///////////////////////////////////////////////////////////
+// 更新関数
+///////////////////////////////////////////////////////////
+
+void MidEnemyAttackState::Update() {
+}
