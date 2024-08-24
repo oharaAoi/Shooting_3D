@@ -45,6 +45,9 @@ void PlayerBullet::OnCollision(Collider* other) {
 	case static_cast<uint32_t>(CollisionTypeIdDef::kBoss):
 		isDead_ = true;
 		break;
+	case static_cast<uint32_t>(CollisionTypeIdDef::kEnemyBullet):
+		isDead_;
+		break;
 	}
 }
 

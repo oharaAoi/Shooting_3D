@@ -119,6 +119,7 @@
     <ClCompile Include="Game\GameObject\BaseBullet.cpp" />
     <ClCompile Include="Game\GameObject\BaseCharacter.cpp" />
     <ClCompile Include="Game\GameObject\BaseEnemy.cpp" />
+    <ClCompile Include="Game\GameObject\BossBullet.cpp" />
     <ClCompile Include="Game\GameObject\BossEnemy.cpp" />
     <ClCompile Include="Game\GameObject\EnemyBullet.cpp" />
     <ClCompile Include="Game\GameObject\MidMobEnemy.cpp" />
@@ -139,6 +140,7 @@
     <ClCompile Include="Game\State\PlayerAttackState.cpp" />
     <ClCompile Include="Game\State\PlayerDashState.cpp" />
     <ClCompile Include="Game\State\PlayerRootState.cpp" />
+    <ClCompile Include="Game\UI\PlayerUI.cpp" />
     <ClCompile Include="Game\WorldObject\Skydome.cpp" />
     <ClCompile Include="Game\WorldObject\Trajectory.cpp" />
     <ClCompile Include="main.cpp" />
@@ -178,6 +180,7 @@
     <ClInclude Include="Game\GameObject\BaseBullet.h" />
     <ClInclude Include="Game\GameObject\BaseCharacter.h" />
     <ClInclude Include="Game\GameObject\BaseEnemy.h" />
+    <ClInclude Include="Game\GameObject\BossBullet.h" />
     <ClInclude Include="Game\GameObject\BossEnemy.h" />
     <ClInclude Include="Game\GameObject\EnemyBullet.h" />
     <ClInclude Include="Game\GameObject\MidMobEnemy.h" />
@@ -198,6 +201,7 @@
     <ClInclude Include="Game\State\PlayerAttackState.h" />
     <ClInclude Include="Game\State\PlayerDashState.h" />
     <ClInclude Include="Game\State\PlayerRootState.h" />
+    <ClInclude Include="Game\UI\PlayerUI.h" />
     <ClInclude Include="Game\WorldObject\Skydome.h" />
     <ClInclude Include="Game\WorldObject\Trajectory.h" />
     <ClInclude Include="input\Input.h" />

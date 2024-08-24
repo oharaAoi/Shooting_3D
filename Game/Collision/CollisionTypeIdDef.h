@@ -6,5 +6,7 @@ enum class CollisionTypeIdDef : uint32_t {
 	kPlayer,
 	kPlayerBullet,
 	kEnemy,
-	kBoss
+	kBoss,
+	kEnemyBullet,
+	kBossBullet
 };

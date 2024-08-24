@@ -80,6 +80,11 @@ void GameScene::Initialize() {
 	enemyManager_ = std::make_unique<EnemyManager>();
 
 	// ---------------------------------------------
+	// ↓ UI
+	// ---------------------------------------------
+	playerUI_ = std::make_unique<PlayerUI>();
+
+	// ---------------------------------------------
 	// ↓ 初期化時に設定しておく処理をしておく
 	// ---------------------------------------------
 	railCamera_->SetControlPoints(trajectory_->GetPlayerTrajectoryVector());
@@ -119,6 +124,7 @@ void GameScene::Update() {
 
 	// bullet
 	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBulletList_) {
+		bullet->SetPlayer(player_.get());
 		bullet->Update();
 	}
 
@@ -140,6 +146,11 @@ void GameScene::Update() {
 	// ---------------------------------------------
 
 	CheckAllCollision();
+
+	// ---------------------------------------------
+	// ↓ UIの更新
+	// ---------------------------------------------
+	playerUI_->Update();
 
 	// ---------------------------------------------
 	// ↓ 次フレーム前に行っておきたい処理
@@ -224,6 +235,8 @@ void GameScene::Draw() {
 	/// </summary>
 
 	reticle_->Draw2DReticle();
+
+	playerUI_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

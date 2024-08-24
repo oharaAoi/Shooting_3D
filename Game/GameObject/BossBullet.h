@@ -1,14 +1,12 @@
 #pragma once
 #include "GameObject/BaseBullet.h"
-#include "GameObject/Player.h"
 
-class EnemyBullet
-	: public BaseBullet {
+class BossBullet :
+    public BaseBullet {
 public:
 
-	EnemyBullet(Model* model, const Vector3& pos, const Vector3& velocity,
-				const Vector3& rotation, const WorldTransform* parent, const bool& isHoming);
-	~EnemyBullet();
+    BossBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent);
+    ~BossBullet();
 
 	/// <summary>
 	/// 初期化関数
@@ -50,16 +48,10 @@ public:
 // accessor
 ///////////////////////////////////////////////////////////
 
-	// ------------ ポインタ ------------ // 
-	void SetPlayer(Player* player) { player_ = player; }
 
 private:
 
 	const float kBulletSpeed_ = 0.6f;
-
-	Player* player_ = nullptr;
-
-	bool isHomig_ = false;
 
 };
 

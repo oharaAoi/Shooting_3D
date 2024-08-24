@@ -27,6 +27,8 @@
 // Manager
 #include "Collision/CollisionManager.h"
 #include "Manager/EnemyManager.h"
+// UI
+#include "UI/PlayerUI.h"
 
 /// <summary>
 /// ゲームシーン
@@ -142,6 +144,9 @@ private: // メンバ変数
 
 	// ------------ Manager ------------ // 
 	std::unique_ptr<EnemyManager> enemyManager_ = nullptr;
+
+	// ------------ UI ------------ // 
+	std::unique_ptr<PlayerUI> playerUI_ = nullptr;
 
 	// ------------ メンバ変数 ------------ // 
 	bool isBossBattle_ = false;

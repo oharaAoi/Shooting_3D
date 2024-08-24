@@ -72,7 +72,7 @@ void MobEnemy::Attack() {
 
 void MobEnemy::Shot() {
 	gameScene_->AddEnemyBullet(std::move(std::make_unique<EnemyBullet>(
-		bulletModel_, worldTransform_.translation_, playerPosition_, worldTransform_.rotation_, worldTransform_.parent_
+		bulletModel_, worldTransform_.translation_, playerPosition_, worldTransform_.rotation_, worldTransform_.parent_, false
 	)));
 }
 

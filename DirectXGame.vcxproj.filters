@@ -97,6 +97,9 @@
     <Filter Include="Game\GameObject\Bullet">
       <UniqueIdentifier>{0dd56311-0e69-48a8-818f-3e228f50616f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\UI">
+      <UniqueIdentifier>{a7257ef7-5ee4-46db-aa15-9275df1916ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -206,6 +209,12 @@
     </ClCompile>
     <ClCompile Include="Game\GameObject\MidMobEnemy.cpp">
       <Filter>Game\GameObject\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\BossBullet.cpp">
+      <Filter>Game\GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\PlayerUI.cpp">
+      <Filter>Game\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -391,6 +400,12 @@
     </ClInclude>
     <ClInclude Include="Game\GameObject\MidMobEnemy.h">
       <Filter>Game\GameObject\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\BossBullet.h">
+      <Filter>Game\GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\PlayerUI.h">
+      <Filter>Game\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
