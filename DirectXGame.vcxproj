@@ -121,6 +121,7 @@
     <ClCompile Include="Game\GameObject\BaseEnemy.cpp" />
     <ClCompile Include="Game\GameObject\BossEnemy.cpp" />
     <ClCompile Include="Game\GameObject\EnemyBullet.cpp" />
+    <ClCompile Include="Game\GameObject\MidMobEnemy.cpp" />
     <ClCompile Include="Game\GameObject\MobEnemy.cpp" />
     <ClCompile Include="Game\GameObject\Player.cpp" />
     <ClCompile Include="Game\GameObject\PlayerBullet.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Game\GameObject\BaseEnemy.h" />
     <ClInclude Include="Game\GameObject\BossEnemy.h" />
     <ClInclude Include="Game\GameObject\EnemyBullet.h" />
+    <ClInclude Include="Game\GameObject\MidMobEnemy.h" />
     <ClInclude Include="Game\GameObject\MobEnemy.h" />
     <ClInclude Include="Game\GameObject\Player.h" />
     <ClInclude Include="Game\GameObject\PlayerBullet.h" />

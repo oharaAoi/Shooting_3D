@@ -204,6 +204,9 @@
     <ClCompile Include="Game\GameObject\BossEnemy.cpp">
       <Filter>Game\GameObject\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GameObject\MidMobEnemy.cpp">
+      <Filter>Game\GameObject\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -384,6 +387,9 @@
       <Filter>Game\GameObject\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameObject\BossEnemy.h">
+      <Filter>Game\GameObject\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\MidMobEnemy.h">
       <Filter>Game\GameObject\Enemy</Filter>
     </ClInclude>
   </ItemGroup>

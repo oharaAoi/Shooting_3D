@@ -3,7 +3,7 @@
 
 enum EnemyType {
 	Type_Mob = 0,
-	Type_MidBoss,
+	Type_MidEnemy,
 	Type_Boss
 };
 

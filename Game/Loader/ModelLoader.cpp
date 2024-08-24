@@ -20,6 +20,7 @@ void ModelLoader::Init() {
 	Load("player_rightArm", true);
 	// enemy
 	Load("mobEnemy", true);
+	Load("midEnemy", true);
 	// bullet
 	Load("cube", true);
 }

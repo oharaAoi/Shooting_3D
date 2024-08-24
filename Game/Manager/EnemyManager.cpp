@@ -11,6 +11,7 @@ EnemyManager::~EnemyManager() {}
 void EnemyManager::Init() {
 	ModelLoader* modelLoader = ModelLoader::GetInstacne();
 	mobEnemyPartsModels_.emplace_back(modelLoader->GetModel("mobEnemy"));
+	midEnemyPartsModels_.emplace_back(modelLoader->GetModel("midEnemy"));
 	bossEnemyPartsModels_.emplace_back(modelLoader->GetModel("mobEnemy"));
 
 	currentIndex_ = 0;
@@ -104,8 +105,8 @@ void EnemyManager::LoadFile() {
 			enemysList_.push_back(std::make_unique<MobEnemy>(mobEnemyPartsModels_, pos));
 			break;
 
-		case EnemyType::Type_MidBoss:
-
+		case EnemyType::Type_MidEnemy:
+			enemysList_.push_back(std::make_unique<MidMobEnemy>(midEnemyPartsModels_, pos));
 			break;
 
 		case EnemyType::Type_Boss:
@@ -199,8 +200,8 @@ void EnemyManager::EditEnemyPos() {
 			createEnemysList_.push_back(std::make_unique<MobEnemy>(mobEnemyPartsModels_, createEnemyPos_));
 			break;
 
-		case EnemyType::Type_MidBoss:
-
+		case EnemyType::Type_MidEnemy:
+			createEnemysList_.push_back(std::make_unique<MidMobEnemy>(midEnemyPartsModels_, createEnemyPos_));
 			break;
 
 		case EnemyType::Type_Boss:
