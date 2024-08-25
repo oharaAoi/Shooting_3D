@@ -3,8 +3,17 @@
 
 class MidMobEnemy;
 
+
+
 class MidEnemyRootState :
     public BaseEnemyState {
+
+public:
+
+	struct WorkRoot {
+		uint32_t moveTime;	// 動いている時間
+		uint32_t attackTime;// 攻撃するまでの時間
+	};
 
 public:
 
@@ -27,7 +36,7 @@ public:
 
 private:
 
-
+	WorkRoot work_;
 
 };
 

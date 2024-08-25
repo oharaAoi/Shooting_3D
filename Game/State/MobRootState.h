@@ -7,6 +7,13 @@ class MobRootState :
     public BaseEnemyState {
 public:
 
+	struct WorkRoot {
+		uint32_t moveTime;	// 動いている時間
+		uint32_t attackTime;// 攻撃するまでの時間
+	};
+
+public:
+
     MobRootState(MobEnemy* baseEnemy);
     ~MobRootState();
 
@@ -26,6 +33,7 @@ public:
 
 private:
 
+	WorkRoot work_;
 
 };
 

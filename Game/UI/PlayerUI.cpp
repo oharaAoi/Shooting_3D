@@ -11,7 +11,7 @@ void PlayerUI::Init() {
 	hp_outsideTextureHandle_ = TextureManager::Load("./Resources/UI/Player/HP_outside.png");
 	hp_barTextureHandle_ = TextureManager::Load("./Resources/UI/Player/HP_bar.png");
 
-	uiPosition_ = { 100, 630 };
+	uiPosition_ = { 185, 630 };
 
 	Sprite* outside = Sprite::Create(hp_outsideTextureHandle_, uiPosition_, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f });
 	Sprite* bar = Sprite::Create(hp_barTextureHandle_, uiPosition_, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f });

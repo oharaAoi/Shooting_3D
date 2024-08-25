@@ -21,7 +21,7 @@ void MobEnemy::Init(std::vector<Model*> models) {
 
 	bulletModel_ = ModelLoader::GetInstacne()->GetModel("cube");
 
-	behaviorRequest_ = MobEnemyBehavior::kAttack;
+	behaviorRequest_ = EnemyBehavior::kRoot;
 	ChangeBehavior(std::make_unique<MobRootState>(this));
 
 	hp_ = 3;
@@ -76,12 +76,6 @@ void MobEnemy::Shot() {
 	)));
 }
 
-// ------------------- 状態を遷移させる ------------------- //
-
-void MobEnemy::ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior) {
-	behaviorState_ = std::move(behavior);
-}
-
 // ------------------- 状態遷移のリクエストがあるかを確認する ------------------- //
 
 void MobEnemy::CheckBehaviorRequest() {
@@ -91,11 +85,11 @@ void MobEnemy::CheckBehaviorRequest() {
 		behavior_ = behaviorRequest_.value();
 
 		switch (behavior_) {
-		case MobEnemyBehavior::kRoot:
+		case EnemyBehavior::kRoot:
 			ChangeBehavior(std::make_unique<MobRootState>(this));
 			break;
 
-		case MobEnemyBehavior::kAttack:
+		case EnemyBehavior::kAttack:
 			ChangeBehavior(std::make_unique<MobAttackState>(this));
 			break;
 		}

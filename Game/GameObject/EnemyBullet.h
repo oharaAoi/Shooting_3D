@@ -55,7 +55,7 @@ public:
 
 private:
 
-	const float kBulletSpeed_ = 0.6f;
+	const float kBulletSpeed_ = 0.5f;
 
 	Player* player_ = nullptr;
 

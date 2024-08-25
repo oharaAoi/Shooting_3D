@@ -19,6 +19,9 @@ void MidMobEnemy::Init(std::vector<Model*> models) {
 	enemyType_ = EnemyType::Type_MidEnemy;
 	worldTransforms_[MidEnemyParts::MidMob_Body].parent_ = &worldTransform_;
 
+	behaviorRequest_ = EnemyBehavior::kRoot;
+	ChangeBehavior(std::make_unique<MidEnemyRootState>(this));
+
 	hp_ = 10;
 	radius_ = 2.0f;
 	isDead_ = false;
@@ -66,12 +69,6 @@ void MidMobEnemy::Shot() {
 	)));
 }
 
-// ------------------- 状態遷移を実際に行う ------------------- //
-
-void MidMobEnemy::ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior) {
-	behaviorState_ = std::move(behavior);
-}
-
 // ------------------- 状態遷移のリクエストがあるかを確認する ------------------- //
 
 void MidMobEnemy::CheckBehaviorRequest() {
@@ -81,11 +78,11 @@ void MidMobEnemy::CheckBehaviorRequest() {
 		behavior_ = behaviorRequest_.value();
 
 		switch (behavior_) {
-		case MidEnemyBehavior::kRoot:
+		case EnemyBehavior::kRoot:
 			ChangeBehavior(std::make_unique<MidEnemyRootState>(this));
 			break;
 
-		case MidEnemyBehavior::kAttack:
+		case EnemyBehavior::kAttack:
 			ChangeBehavior(std::make_unique<MidEnemyAttackState>(this));
 			break;
 		}

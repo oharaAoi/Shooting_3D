@@ -11,11 +11,6 @@ enum BossParts {
 	Boss_Body = 0,
 };
 
-enum class BossEnemyBehavior {
-	kRoot,		// 通常攻撃
-	kAttack,	// 攻撃中,
-};
-
 class BossEnemy :
 	public BaseEnemy {
 
@@ -49,12 +44,6 @@ public:
 	void Attack() override;
 
 	/// <summary>
-	///	状態を変更する
-	/// </summary>
-	/// <param name="behavior"></param>
-	void ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior);
-
-	/// <summary>
 	/// 状態を変化させるリクエストがあるかを確認する
 	/// </summary>
 	void CheckBehaviorRequest();
@@ -86,10 +75,5 @@ private:
 
 	// ------------  ------------ // 
 	uint32_t enemyId_;
-
-	// ------------ Enemyの状態に関する変数 ------------ // 
-	BossEnemyBehavior behavior_ = BossEnemyBehavior::kRoot;
-	std::unique_ptr<BaseCharacterState> behaviorState_ = nullptr;
-	std::optional<BossEnemyBehavior> behaviorRequest_ = std::nullopt;
 };
 

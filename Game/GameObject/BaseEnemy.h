@@ -1,10 +1,16 @@
 #pragma once
 #include "GameObject/BaseCharacter.h"
+#include "State/BaseCharacterState.h"
 
 enum EnemyType {
 	Type_Mob = 0,
 	Type_MidEnemy,
 	Type_Boss
+};
+
+enum class EnemyBehavior {
+	kRoot,		// 通常攻撃
+	kAttack,	// 攻撃中,
 };
 
 class GameScene;
@@ -50,6 +56,12 @@ public:
 	/// </summary>
 	virtual void Attack() {};
 
+	/// <summary>
+	///	状態を変更する
+	/// </summary>
+	/// <param name="behavior"></param>
+	void ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior);
+
 	void ImGuiSetTranslation();
 
 ///////////////////////////////////////////////////////////
@@ -90,6 +102,9 @@ public:
 	const bool GetIsDead() const { return isDead_; }
 	void SetIsDead(const bool& isDead) { isDead_ = isDead; }
 
+	// ------------ 状態遷移の要求 ------------ // 
+	void SetBehaviorRequest(const EnemyBehavior& request) { behaviorRequest_ = request; }
+
 protected:
 
 	GameScene* gameScene_ = nullptr;
@@ -103,5 +118,10 @@ protected:
 	// ------------ Bulletに必要な変数 ------------ // 
 
 	Vector3 playerPosition_;
+
+	// ------------ 状態 ------------ // 
+	EnemyBehavior behavior_ = EnemyBehavior::kRoot;
+	std::unique_ptr<BaseCharacterState> behaviorState_ = nullptr;
+	std::optional<EnemyBehavior> behaviorRequest_ = std::nullopt;
 };
 

@@ -62,6 +62,10 @@ void BaseEnemy::SetParent(const WorldTransform* parent) {
 	worldTransform_.parent_ = parent;
 }
 
+void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior) {
+	behaviorState_ = std::move(behavior);
+}
+
 void BaseEnemy::ImGuiSetTranslation() {
 	ImGui::DragFloat3("Enemy", &worldTransform_.translation_.x, 0.01f);
 }

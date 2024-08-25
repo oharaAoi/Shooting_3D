@@ -97,6 +97,8 @@ void GameScene::Initialize() {
 
 	enemyManager_->SetParent(&railCamera_->GetWorldTransform());
 	enemyManager_->SetGameScene(this);
+
+	isBossBattle_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

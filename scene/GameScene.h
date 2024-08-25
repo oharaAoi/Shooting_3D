@@ -149,5 +149,5 @@ private: // メンバ変数
 	std::unique_ptr<PlayerUI> playerUI_ = nullptr;
 
 	// ------------ メンバ変数 ------------ // 
-	bool isBossBattle_ = false;
+	bool isBossBattle_;
 };

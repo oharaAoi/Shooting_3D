@@ -21,10 +21,11 @@ void BossEnemy::Init(std::vector<Model*> models) {
 	worldTransform_.translation_ = { 0.0f,0.0f,50.0f };
 	worldTransform_.rotation_ = { 0.0f,3.1f,0.0f };
 
+	behaviorRequest_ = EnemyBehavior::kRoot;
+	ChangeBehavior(std::make_unique<BossRootState>(this));
+
 	hp_ = 50;
-
 	radius_ = 2.0f;
-
 	isDead_ = false;
 }
 
@@ -60,12 +61,6 @@ void BossEnemy::Draw(const ViewProjection& viewProjection) const {
 void BossEnemy::Attack() {
 }
 
-// ------------------- 状態遷移を行う関数 ------------------- //
-
-void BossEnemy::ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior) {
-	behaviorState_ = std::move(behavior);
-}
-
 // ------------------- 状態遷移のリクエストがあるかを確認する ------------------- //
 
 void BossEnemy::CheckBehaviorRequest() {
@@ -75,11 +70,11 @@ void BossEnemy::CheckBehaviorRequest() {
 		behavior_ = behaviorRequest_.value();
 
 		switch (behavior_) {
-		case BossEnemyBehavior::kRoot:
+		case EnemyBehavior::kRoot:
 			ChangeBehavior(std::make_unique<BossRootState>(this));
 			break;
 
-		case BossEnemyBehavior::kAttack:
+		case EnemyBehavior::kAttack:
 			ChangeBehavior(std::make_unique<BossAttackState>(this));
 			break;
 		}

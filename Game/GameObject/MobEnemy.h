@@ -14,11 +14,6 @@ enum EnmeyParts {
 	Enmey_Body = 0,
 };
 
-enum class MobEnemyBehavior {
-	kRoot,		// 通常攻撃
-	kAttack,	// 攻撃中,
-};
-
 class GameScene;
 
 class MobEnemy :
@@ -63,12 +58,6 @@ public:
 	void Shot();
 
 	/// <summary>
-	///	状態を変更する
-	/// </summary>
-	/// <param name="behavior"></param>
-	void ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior);
-
-	/// <summary>
 	/// 状態を変化させるリクエストがあるかを確認する
 	/// </summary>
 	void CheckBehaviorRequest();
@@ -101,11 +90,5 @@ private:
 
 	// ------------  ------------ // 
 	uint32_t enemyId_;
-
-	// ------------ Enemyの状態に関する変数 ------------ // 
-	MobEnemyBehavior behavior_ = MobEnemyBehavior::kRoot;
-	std::unique_ptr<BaseCharacterState> behaviorState_ = nullptr;
-	std::optional<MobEnemyBehavior> behaviorRequest_ = std::nullopt;
-
 };
 
