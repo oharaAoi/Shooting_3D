@@ -1,4 +1,5 @@
 #include "BossEnemy.h"
+#include "GameScene.h"
 
 BossEnemy::BossEnemy(std::vector<Model*> models, const Vector3& pos) {
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kBoss));
@@ -58,7 +59,14 @@ void BossEnemy::Draw(const ViewProjection& viewProjection) const {
 
 // ------------------- 攻撃を行う関数 ------------------- //
 
+void BossEnemy::Move() {
+}
+
 void BossEnemy::Attack() {
+}
+
+void BossEnemy::ShotBullet() {
+
 }
 
 // ------------------- 状態遷移のリクエストがあるかを確認する ------------------- //

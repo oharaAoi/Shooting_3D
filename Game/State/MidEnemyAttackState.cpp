@@ -21,4 +21,5 @@ void MidEnemyAttackState::Init() {
 ///////////////////////////////////////////////////////////
 
 void MidEnemyAttackState::Update() {
+	enemy_->Move();
 }

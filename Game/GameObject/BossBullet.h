@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject/BaseBullet.h"
+#include "GameObject/Player.h"
 
 class BossBullet :
     public BaseBullet {
@@ -48,8 +49,13 @@ public:
 // accessor
 ///////////////////////////////////////////////////////////
 
+	// ------------ ポインタ ------------ // 
+	void SetPlayer(Player* player) { player_ = player; }
 
 private:
+
+	// ------------ ポインタ(所有権がない物) ------------ // 
+	Player* player_ = nullptr;
 
 	const float kBulletSpeed_ = 0.6f;
 

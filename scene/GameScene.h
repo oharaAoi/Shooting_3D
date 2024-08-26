@@ -23,6 +23,7 @@
 #include "GameObject/Player.h"
 #include "GameObject/MobEnemy.h"
 #include "GameObject/EnemyBullet.h"
+#include "GameObject/BossBullet.h"
 #include "GameObject/Reticle.h"
 // Manager
 #include "Collision/CollisionManager.h"
@@ -71,6 +72,11 @@ public: // メンバ関数
 	void UpdateViewProjection();
 
 	/// <summary>
+	/// 弾の更新を行う
+	/// </summary>
+	void UpdateBullet();
+
+	/// <summary>
 	/// すべての当たり判定を実行する
 	/// </summary>
 	void CheckAllCollision();
@@ -85,6 +91,12 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="enemyBullet"></param>
 	void AddEnemyBullet(std::unique_ptr<EnemyBullet> enemyBullet);
+
+	/// <summary>
+	/// ボスの弾をリストに追加する
+	/// </summary>
+	/// <param name="bossBullet"></param>
+	void AddBossBullet(std::unique_ptr<BossBullet> bossBullet);
 
 	/// <summary>
 	/// reticleと敵の当たり判定を行う
@@ -134,6 +146,7 @@ private: // メンバ変数
 
 	// enemy
 	std::list<std::unique_ptr<EnemyBullet>> enemyBulletList_;
+	std::list<std::unique_ptr<BossBullet>> bossBulletList_;
 
 	// ------------ WorldEnvironment ------------ // 
 	std::unique_ptr<Skydome> skydome_ = nullptr;

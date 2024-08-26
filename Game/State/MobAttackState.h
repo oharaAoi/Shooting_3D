@@ -5,6 +5,13 @@ class MobEnemy;
 
 class MobAttackState :
     public BaseEnemyState {
+
+public:
+
+	struct Work {
+		uint32_t attackTime;
+	};
+
 public:
 
     MobAttackState(MobEnemy* baseEnemy);
@@ -35,6 +42,8 @@ private:
 	/// 攻撃のクールタイム
 	/// </summary>
 	uint32_t attackCoolTime_ = 0;
+
+	Work work_;
 
 };
 

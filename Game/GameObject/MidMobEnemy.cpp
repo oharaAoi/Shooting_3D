@@ -25,6 +25,10 @@ void MidMobEnemy::Init(std::vector<Model*> models) {
 	hp_ = 10;
 	radius_ = 2.0f;
 	isDead_ = false;
+
+	animation_.t = 0.0f;
+	animation_.amplitudeX = 0.05f;
+	animation_.amplitudeY = 0.02f;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,6 +60,26 @@ void MidMobEnemy::Draw(const ViewProjection& viewProjection) const {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 // ------------------- 攻撃する ------------------- //
+
+void MidMobEnemy::AnimationGimmick() {
+	if (animation_.t > 4 * std::numbers::pi_v<float>) {
+		SetBehaviorRequest(EnemyBehavior::kAttack);
+		animation_.t = 0.0f;
+	}
+
+	Vector2 point;
+	Vector3 enemyPos = worldTransform_.translation_;
+	animation_.t += 0.1f;
+	point.x = (animation_.amplitudeX * std::cos(animation_.t)) + enemyPos.x;
+	point.y = (animation_.amplitudeY * std::sin(2 * animation_.t)) + enemyPos.y;
+
+	enemyPos = { point.x, point.y, enemyPos.z };
+	worldTransform_.translation_ = enemyPos;
+}
+
+void MidMobEnemy::Move() {
+	AnimationGimmick();
+}
 
 void MidMobEnemy::Attack() {
 	Shot();

@@ -226,7 +226,7 @@
       <Filter>Game\State\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Game\State\BossAttackState.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\State\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -429,7 +429,7 @@
       <Filter>Game\State\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Game\State\BossAttackState.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\State\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

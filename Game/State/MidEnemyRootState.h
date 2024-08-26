@@ -3,8 +3,6 @@
 
 class MidMobEnemy;
 
-
-
 class MidEnemyRootState :
     public BaseEnemyState {
 
@@ -30,6 +28,8 @@ public:
 	/// </summary>
 	void Update() override;
 
+	void AnimationGimmick();
+
 ///////////////////////////////////////////////////////////
 // メンバ関数
 ///////////////////////////////////////////////////////////
@@ -37,6 +37,5 @@ public:
 private:
 
 	WorkRoot work_;
-
 };
 

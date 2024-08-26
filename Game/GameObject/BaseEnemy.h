@@ -52,6 +52,11 @@ public:
 	virtual void EditImGui() {};
 
 	/// <summary>
+	/// 普段の挙動の関数
+	/// </summary>
+	virtual void Move() {};
+
+	/// <summary>
 	/// 攻撃に関する関数
 	/// </summary>
 	virtual void Attack() {};

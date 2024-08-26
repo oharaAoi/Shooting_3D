@@ -1,6 +1,7 @@
 #pragma once
 // GameObject
 #include "GameObject/BaseEnemy.h"
+#include "GameObject/BossBullet.h"
 // Adjustment
 #include "Adjustment/AdjustmentItem.h"
 // State
@@ -10,6 +11,8 @@
 enum BossParts {
 	Boss_Body = 0,
 };
+
+class GameScene;
 
 class BossEnemy :
 	public BaseEnemy {
@@ -39,9 +42,19 @@ public:
 ///////////////////////////////////////////////////////////
 
 	/// <summary>
+	/// Enmeyを動かす
+	/// </summary>
+	void Move() override;
+
+	/// <summary>
 	/// 攻撃をまとめた関数
 	/// </summary>
 	void Attack() override;
+
+	/// <summary>
+	/// 弾をリストに追加する処理
+	/// </summary>
+	void ShotBullet();
 
 	/// <summary>
 	/// 状態を変化させるリクエストがあるかを確認する

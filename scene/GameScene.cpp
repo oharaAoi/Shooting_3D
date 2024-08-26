@@ -125,17 +125,7 @@ void GameScene::Update() {
 	player_->Update();
 
 	// bullet
-	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBulletList_) {
-		bullet->SetPlayer(player_.get());
-		bullet->Update();
-	}
-
-	enemyBulletList_.remove_if([](const std::unique_ptr<EnemyBullet>& bullet) {
-		if (bullet->GetIsDead()) {
-			return true;
-		}
-		return false;
-	});
+	UpdateBullet();
 
 	// ---------------------------------------------
 	// ↓ WorldObjectの処理
@@ -213,6 +203,10 @@ void GameScene::Draw() {
 	enemyManager_->Draw(viewProjection_);
 
 	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBulletList_) {
+		bullet->Draw(viewProjection_);
+	}
+
+	for (const std::unique_ptr<BossBullet>& bullet : bossBulletList_) {
 		bullet->Draw(viewProjection_);
 	}
 
@@ -296,6 +290,36 @@ void GameScene::UpdateViewProjection() {
 	PrimitiveDrawer::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
+// ------------------- 弾の更新を行う ------------------- //
+
+void GameScene::UpdateBullet() {
+	// 通常弾
+	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBulletList_) {
+		bullet->SetPlayer(player_.get());
+		bullet->Update();
+	}
+
+	enemyBulletList_.remove_if([](const std::unique_ptr<EnemyBullet>& bullet) {
+		if (bullet->GetIsDead()) {
+			return true;
+		}
+		return false;
+							   });
+
+	// Bossの弾
+	for (const std::unique_ptr<BossBullet>& bullet : bossBulletList_) {
+		bullet->SetPlayer(player_.get());
+		bullet->Update();
+	}
+
+	bossBulletList_.remove_if([](const std::unique_ptr<BossBullet>& bullet) {
+		if (bullet->GetIsDead()) {
+			return true;
+		}
+		return false;
+							  });
+}
+
 // ------------------- すべての当たり判定を実行する ------------------- //
 
 void GameScene::CheckAllCollision() {
@@ -332,6 +356,10 @@ void GameScene::AddEnemyBullet(std::unique_ptr<EnemyBullet> enemyBullet) {
 }
 
 // ------------------- LockOnできるEnemyを探索する ------------------- //
+
+void GameScene::AddBossBullet(std::unique_ptr<BossBullet> bossBullet) {
+	bossBulletList_.push_back(std::move(bossBullet));
+}
 
 void GameScene::CheckCanLockOnEnemy() {
 	const float canLockOnDistance = 30;

@@ -14,6 +14,14 @@ class MidMobEnemy :
 	public BaseEnemy {
 public:
 
+	struct Animation {
+		float t;
+		float amplitudeX;
+		float amplitudeY;
+	};
+
+public:
+
 	MidMobEnemy(std::vector<Model*> models, const Vector3& pos);
 	~MidMobEnemy();
 
@@ -35,6 +43,16 @@ public:
 ///////////////////////////////////////////////////////////
 // メンバ関数
 ///////////////////////////////////////////////////////////
+
+	/// <summary>
+	/// 普段の動きを行う関数
+	/// </summary>
+	void AnimationGimmick();
+
+	/// <summary>
+	/// Enmeyを動かす
+	/// </summary>
+	void Move() override;
 
 	/// <summary>
 	/// 攻撃をまとめた関数
@@ -75,5 +93,9 @@ private:
 
 	// ------------  ------------ // 
 	uint32_t enemyId_;
+
+	// ------------ 挙動の変数 ------------ // 
+	Animation animation_;
+
 };
 

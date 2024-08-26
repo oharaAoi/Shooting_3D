@@ -12,6 +12,12 @@ public:
 		uint32_t attackTime;// 攻撃するまでの時間
 	};
 
+	struct Floating {
+		float parameter;
+		float amplitude;
+		uint32_t period;
+	};
+
 public:
 
     MobRootState(MobEnemy* baseEnemy);
@@ -31,9 +37,15 @@ public:
 // メンバ関数
 ///////////////////////////////////////////////////////////
 
+	/// <summary>
+	/// 浮遊の更新
+	/// </summary>
+	void FloatingGimmick();
+
 private:
 
 	WorkRoot work_;
 
+	Floating floating_;
 };
 

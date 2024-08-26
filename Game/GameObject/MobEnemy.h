@@ -45,7 +45,7 @@ public:
 	/// <summary>
 	/// Enmeyを動かす
 	/// </summary>
-	void Move();
+	void Move() override;
 
 	/// <summary>
 	/// 攻撃をまとめた関数
