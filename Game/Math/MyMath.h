@@ -75,8 +75,10 @@ float Dot(const Vector3& v1, const Vector3& v2);
 Vector3 Cross(const Vector3& v1, const Vector3& v2);
 
 float Length(const Vector3& vec3);
+float Length(const Vector2& vec2);
 
 Vector3 Normalize(const Vector3& vec3);
+Vector2 Normalize(const Vector2& vec2);
 
 /// <summary>
 /// ベクトル変換

@@ -6,6 +6,10 @@ float Length(const Vector3& vec3) {
 	return std::sqrt(vec3.x * vec3.x + vec3.y * vec3.y + vec3.z * vec3.z);
 }
 
+float Length(const Vector2& vec2) {
+	return std::sqrt(vec2.x * vec2.x + vec2.y * vec2.y);
+}
+
 // 加算
 Vector3 Add(const Vector3& v1, const Vector3& v2) {
 	Vector3 result{};
@@ -82,6 +86,18 @@ Vector3 Normalize(const Vector3& vec3) {
 		result.x /= len;
 		result.y /= len;
 		result.z /= len;
+	}
+
+	return result;
+}
+
+Vector2 Normalize(const Vector2& vec2) {
+	Vector2 result = vec2;
+
+	float len = Length(vec2);
+	if (len != 0) {
+		result.x /= len;
+		result.y /= len;
 	}
 
 	return result;

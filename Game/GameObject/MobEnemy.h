@@ -68,11 +68,6 @@ public:
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
 	/// <summary>
-	/// 登場する関数
-	/// </summary>
-	void Appearance() override;
-
-	/// <summary>
 	/// ImGuiの編集
 	/// </summary>
 	void EditImGui() override;

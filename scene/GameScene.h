@@ -30,6 +30,7 @@
 #include "Manager/EnemyManager.h"
 // UI
 #include "UI/PlayerUI.h"
+#include "UI/Rader.h"
 
 /// <summary>
 /// ゲームシーン
@@ -160,6 +161,7 @@ private: // メンバ変数
 
 	// ------------ UI ------------ // 
 	std::unique_ptr<PlayerUI> playerUI_ = nullptr;
+	std::unique_ptr<Rader> rader_ = nullptr;
 
 	// ------------ メンバ変数 ------------ // 
 	uint32_t playerAimCount_;

@@ -62,11 +62,6 @@ public:
 	virtual void Attack() {};
 
 	/// <summary>
-	/// 敵が登場する関数
-	/// </summary>
-	virtual void Appearance() {};
-
-	/// <summary>
 	/// 再登場させる関数
 	/// </summary>
 	void AppearanceReset();
@@ -117,6 +112,10 @@ public:
 	const bool GetIsDead() const { return isDead_; }
 	void SetIsDead(const bool& isDead) { isDead_ = isDead; }
 
+	// ------------ isDiscovery ------------ // 
+	const bool GetIsDiscovery() const { return isDiscovery_; }
+	void SetIsDiscovery(const bool& isDiscovery) { isDiscovery_ = isDiscovery; }
+
 	// ------------ 状態遷移の要求 ------------ // 
 	void SetBehaviorRequest(const EnemyBehavior& request) { behaviorRequest_ = request; }
 
@@ -143,6 +142,8 @@ protected:
 	bool isDead_;
 
 	int enemyType_;
+
+	bool isDiscovery_;
 
 	// ------------ Enemyが登場する際に必要な変数 ------------ // 
 	std::vector<Vector3> appearanceControlPoint_;

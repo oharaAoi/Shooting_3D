@@ -111,18 +111,6 @@ void MobEnemy::OnCollision(Collider* other) {
 	}
 }
 
-// ------------------- 登場をする関数 ------------------- //
-
-void MobEnemy::Appearance() {
-	if (controlIndex_ < division_) {
-		controlIndex_++;
-		nowControlPoint_ = static_cast<float>(controlIndex_) / division_;
-		worldTransform_.translation_ = Bezier(appearanceControlPoint_, nowControlPoint_);
-	} else {
-		isAppearance_ = false;
-	}
-}
-
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　ImGui
 //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -82,11 +82,12 @@ void GameScene::Initialize() {
 	// ↓ UI
 	// ---------------------------------------------
 	playerUI_ = std::make_unique<PlayerUI>();
+	rader_ = std::make_unique<Rader>();
 
 	// ---------------------------------------------
 	// ↓ 初期化時に設定しておく処理をしておく
 	// ---------------------------------------------
-	
+
 	//player_->SetReticleParent(&railCamera_->GetWorldTransform());
 	player_->SetGameScene(this);
 	player_->SetReticle(reticle_.get());
@@ -140,6 +141,12 @@ void GameScene::Update() {
 	// ↓ UIの更新
 	// ---------------------------------------------
 	playerUI_->Update();
+	rader_->ClearList();
+	rader_->SetPlayerPosition(player_->GetTranslation());
+	for (const std::unique_ptr<BaseEnemy>& enemy : enemyManager_->GetEnemysList()) {
+		rader_->AddEnemiesPos(enemy->GetWorldTransform().translation_);
+	}
+	rader_->Update(0);
 
 	// ---------------------------------------------
 	// ↓ 次フレーム前に行っておきたい処理
@@ -242,6 +249,8 @@ void GameScene::Draw() {
 	reticle_->Draw2DReticle();
 
 	playerUI_->Draw();
+
+	rader_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -358,6 +367,13 @@ void GameScene::CheckAllCollision() {
 	playerAimCount_ = 0;
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemyManager_->GetEnemysList()) {
 		playerAimCount_ += collisionManager_->CountEnemiesPlayerRange(player_.get(), enemy.get());
+	}
+
+	// ---------------------------------------------
+	// ↓ PlayerがEnemyの近くにいるかを判定する
+	// ---------------------------------------------
+	for (const std::unique_ptr<BaseEnemy>& enemy : enemyManager_->GetEnemysList()) {
+		enemy->SetIsDiscovery(collisionManager_->IsDiscoveryEnemy(player_.get(), enemy.get()));
 	}
 }
 

@@ -30,7 +30,7 @@ void MobRootState::Update() {
 	// フレームをカウントし、一定時間過ぎたら攻撃フェーズに移動する
 	work_.moveTime++;
 	if (work_.moveTime > work_.attackTime) {
-		enemy_->SetBehaviorRequest(EnemyBehavior::kAttack);
+		/*enemy_->SetBehaviorRequest(EnemyBehavior::kAttack);*/
 		work_.moveTime = 0;
 	}
 }

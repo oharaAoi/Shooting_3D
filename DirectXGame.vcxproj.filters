@@ -228,6 +228,9 @@
     <ClCompile Include="Game\State\BossAttackState.cpp">
       <Filter>Game\State\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Game\UI\Rader.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -430,6 +433,9 @@
     </ClInclude>
     <ClInclude Include="Game\State\BossAttackState.h">
       <Filter>Game\State\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\Rader.h">
+      <Filter>Game\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

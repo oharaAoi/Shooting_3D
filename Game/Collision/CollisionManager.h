@@ -49,6 +49,12 @@ public:
 	uint32_t CountEnemiesPlayerRange(Collider* colliderA, Collider* colliderB);
 
 	/// <summary>
+	/// Enemyが敵を発見したか
+	/// </summary>
+	/// <returns></returns>
+	bool IsDiscoveryEnemy(Collider* colliderA, Collider* colliderB);
+
+	/// <summary>
 	/// コライダーの追加
 	/// </summary>
 	/// <param name="collider"></param>

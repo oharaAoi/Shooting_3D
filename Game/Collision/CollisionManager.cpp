@@ -68,6 +68,21 @@ uint32_t CollisionManager::CountEnemiesPlayerRange(Collider* colliderA, Collider
 	return result;
 }
 
+// ------------------- 敵の発見する範囲にプレイヤーがいるか ------------------- //
+
+bool CollisionManager::IsDiscoveryEnemy(Collider* colliderA, Collider* colliderB) {
+	Vector3 posA = colliderA->GetWorldPosition();
+	Vector3 posB = colliderB->GetWorldPosition();
+	// 差分ベクトル
+	Vector3 subtract = posB - posA;
+	// 座標AとBの距離を求める
+	float distance = Length(subtract);
+	if (5.0f > distance) {
+		return true;
+	}
+	return false;
+}
+
 bool CollisionManager::IsCollision(const OBB& obb1, const OBB& obb2) {
 	// 分離軸の組み合わせを取得
 	std::vector<Vector3> crossSeparatingAxises;

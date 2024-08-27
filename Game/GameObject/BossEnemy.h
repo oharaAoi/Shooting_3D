@@ -75,11 +75,6 @@ public:
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
 	/// <summary>
-	/// 登場する関数
-	/// </summary>
-	void Appearance() override {};
-
-	/// <summary>
 	/// 浮遊の更新
 	/// </summary>
 	void FloatingGimmick();
