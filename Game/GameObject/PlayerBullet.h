@@ -5,7 +5,7 @@ class PlayerBullet :
 	public BaseBullet {
 public:
 
-	PlayerBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent);
+	PlayerBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent, const uint32_t& collisionCount);
 	~PlayerBullet();
 
 	/// <summary>
@@ -43,9 +43,13 @@ public:
 	/// <returns></returns>
 	Vector3 GetWorldPosition() const override;
 
-private:
+	/// <summary>
+	/// 当たった回数を決定する
+	/// </summary>
+	/// <param name="collisionCount"></param>
+	void SetCollisionCount(const uint32_t& collisionCount) { collisionCount_ = collisionCount; }
 
-	
+private:
 
 };
 

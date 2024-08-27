@@ -19,6 +19,9 @@ void EnemyManager::Init() {
 
 	// ファイルを読み込む
 	AllLoadFilesName();
+
+	nowWaveEnemyPos_ = 0;
+	LoadFile();
 }
 
 ///////////////////////////////////////////////////////////
@@ -64,6 +67,16 @@ void EnemyManager::Draw(const ViewProjection& viewProjection) const {
 	}
 }
 
+void EnemyManager::DrawCollisions() {
+	for (const std::unique_ptr<BaseEnemy>& enemy : enemysList_) {
+		enemy->DrawCollision();
+	}
+
+	for (const std::unique_ptr<BaseEnemy>& enemy : createEnemysList_) {
+		enemy->DrawCollision();
+	}
+}
+
 ///////////////////////////////////////////////////////////
 // メンバ関数
 ///////////////////////////////////////////////////////////
@@ -99,18 +112,31 @@ void EnemyManager::LoadFile() {
 		// タイプデータを取得
 		int type = enemyData["type"][0];
 
+		// 登場に必要な座標を取得
+		Vector3 firstPos = { enemyData["firstPos"].at(0), enemyData["firstPos"].at(1),enemyData["firstPos"].at(2), };
+		Vector3 midPos = { enemyData["midPos"].at(0), enemyData["midPos"].at(1),enemyData["midPos"].at(2), };
+
+
+		// 登場する速さ(分割数)
+		float division = enemyData["division"][0];
+
+		std::vector<Vector3> appearancePos;
+		appearancePos.push_back(firstPos);
+		appearancePos.push_back(midPos);
+		appearancePos.push_back(pos);
+
 		// 
 		switch (type) {
 		case EnemyType::Type_Mob:
-			enemysList_.push_back(std::make_unique<MobEnemy>(mobEnemyPartsModels_, pos));
+			enemysList_.push_back(std::make_unique<MobEnemy>(mobEnemyPartsModels_, appearancePos, division));
 			break;
 
 		case EnemyType::Type_MidEnemy:
-			enemysList_.push_back(std::make_unique<MidMobEnemy>(midEnemyPartsModels_, pos));
+			enemysList_.push_back(std::make_unique<MidMobEnemy>(midEnemyPartsModels_, appearancePos, division));
 			break;
 
 		case EnemyType::Type_Boss:
-			enemysList_.push_back(std::make_unique<BossEnemy>(bossEnemyPartsModels_, pos));
+			enemysList_.push_back(std::make_unique<BossEnemy>(bossEnemyPartsModels_, appearancePos, division));
 			break;
 		}
 	}
@@ -149,9 +175,14 @@ void EnemyManager::SaveEnemyPos() {
 		std::string enemyNum = "Enemy" + std::to_string(createListIndex);
 		Vector3 enemyPos = enemy->GetWorldTransform().translation_;
 		uint32_t enemyType = enemy->GetEnemyType();
+		std::vector<Vector3> appearacePos = enemy->GetAppearancePoint();
+		float division = enemy->GetAppearaceSpeed();
 
-		data[enemyNum]["pos"] = { enemyPos.x, enemyPos.y, enemyPos.z};
+		data[enemyNum]["pos"] = { appearacePos[2].x, appearacePos[2].y, appearacePos[2].z };
 		data[enemyNum]["type"] = { enemyType };
+		data[enemyNum]["firstPos"] = { appearacePos[0].x, appearacePos[0].y, appearacePos[0].z};
+		data[enemyNum]["midPos"] = { appearacePos[1].x,appearacePos[1].y, appearacePos[1].z };
+		data[enemyNum]["division"] = { division };
 
 		createListIndex++;
 	}
@@ -193,19 +224,27 @@ void EnemyManager::EditEnemyPos() {
 	// 敵の座標を指定する
 	ImGui::DragFloat3("position", &createEnemyPos_.x, 0.01f);
 
+	// 登場のベジエ曲線の位置を編集する
+	ImGui::DragFloat3("first", &appearancePos_[0].x, 0.01f);
+	ImGui::DragFloat3("mid", &appearancePos_[1].x, 0.01f);
+	ImGui::DragFloat3("end", &appearancePos_[2].x, 0.01f);
+	ImGui::DragFloat("appearaceSpeed", &appearaceSpeed_, 1);
+
+	std::vector<Vector3> appearace(appearancePos_, appearancePos_ + 3);
+
 	// 敵をリストに追加する
 	if (ImGui::Button("Create")) {
 		switch (createEnemyType_) {
 		case EnemyType::Type_Mob:
-			createEnemysList_.push_back(std::make_unique<MobEnemy>(mobEnemyPartsModels_, createEnemyPos_));
+			createEnemysList_.push_back(std::make_unique<MobEnemy>(mobEnemyPartsModels_, appearace, appearaceSpeed_));
 			break;
 
 		case EnemyType::Type_MidEnemy:
-			createEnemysList_.push_back(std::make_unique<MidMobEnemy>(midEnemyPartsModels_, createEnemyPos_));
+			createEnemysList_.push_back(std::make_unique<MidMobEnemy>(midEnemyPartsModels_, appearace, appearaceSpeed_));
 			break;
 
 		case EnemyType::Type_Boss:
-			createEnemysList_.push_back(std::make_unique<BossEnemy>(bossEnemyPartsModels_, createEnemyPos_));
+			createEnemysList_.push_back(std::make_unique<BossEnemy>(bossEnemyPartsModels_, appearace, appearaceSpeed_));
 			break;
 		}
 	}
@@ -214,14 +253,33 @@ void EnemyManager::EditEnemyPos() {
 
 	// リストの中を表示
 	uint32_t createListIndex = 0;
-	for (const std::unique_ptr<BaseEnemy>& enemy : createEnemysList_) {
+	for (auto it = createEnemysList_.begin(); it != createEnemysList_.end(); /* no increment here */) {
 		std::string label = "Enemy " + std::to_string(createListIndex);
 		if (ImGui::BeginMenu(label.c_str())) {
-			enemy->ImGuiSetTranslation();
+			(*it)->ImGuiSetTranslation();
+			if (ImGui::Button("Delete")) {
+				it = createEnemysList_.erase(it);  // 要素を削除し、イテレーターを更新
+				ImGui::EndMenu(); // メニューを閉じる
+				continue; // 次の要素に進む
+			}
 			ImGui::EndMenu();
 		}
-		enemy->SetParent(parentWorldTransform_);
+		(*it)->SetParent(parentWorldTransform_);
+		++it; // イテレーターを次に進める
 		createListIndex++;
+	}
+
+	ImGui::Spacing();
+
+	// 再登場
+	if (ImGui::Button("Appearance")) {
+		for (const std::unique_ptr<BaseEnemy>& enemy : createEnemysList_) {
+			std::string label = "Enemy " + std::to_string(createListIndex);
+			enemy->AppearanceReset();
+			enemy->SetAppearancePoint(appearancePos_[0], appearancePos_[1], appearancePos_[2]);
+			enemy->SetAppearaceSpeed(appearaceSpeed_);
+			createListIndex++;
+		}
 	}
 
 	// リストの中身をファイルに保存する
@@ -270,7 +328,7 @@ void EnemyManager::ImGuiEdit() {
 	// --------------------------------------
 	if (ImGui::Button("Load")) {
 		nowWaveEnemyPos_ = currentIndex_;
-		enemysList_.clear();
+		//enemysList_.clear();
 		LoadFile();
 	}
 

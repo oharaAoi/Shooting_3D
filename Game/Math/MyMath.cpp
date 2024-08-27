@@ -1,4 +1,5 @@
 #include "MyMath.h"
+#include "PrimitiveDrawer.h"
 
 // ノルムを求める
 float Length(const Vector3& vec3) {
@@ -58,6 +59,17 @@ float Dot(const Vector3& v1, const Vector3& v2) {
 	float result{};
 
 	result = (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
+
+	return result;
+}
+
+// クロス積
+Vector3 Cross(const Vector3& v1, const Vector3& v2) {
+	Vector3 result{};
+
+	result.x = v1.y * v2.z - v1.z * v2.y;
+	result.y = v1.z * v2.x - v1.x * v2.z;
+	result.z = v1.x * v2.y - v1.y * v2.x;
 
 	return result;
 }
@@ -240,4 +252,107 @@ Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t) {
 	const Vector3& p3 = points[index3];
 
 	return CatmullRomInterpolation(p0, p1, p2, p3, t2);
+}
+
+/// <summary>
+/// ベジエ曲線を書く
+/// </summary>
+/// <param name="controlPoint">制御点がまとまった配列</param>
+/// <returns></returns>
+Vector3 Bezier(const std::vector<Vector3>& controlPoint, const float& t) {
+	if (controlPoint.size() == 1) {
+		return controlPoint[0];
+	}
+
+	std::vector<Vector3> lerpVec;
+	for (size_t i = 0; i < controlPoint.size() - 1; ++i) {
+		lerpVec.push_back(Lerp(controlPoint[i], controlPoint[i + 1], t));
+	}
+
+	return Bezier(lerpVec, t);
+}
+
+void DrawOBB(const OBB& obb, const Vector4& color) {
+	// 回転行列を作成する
+	Matrix4x4 rotateMatrix = obb.matRotate;
+	// 平行移動分を作成
+	Matrix4x4 matTranslate = MakeTranslateMatrix(obb.center);
+	// 拡縮分
+	Matrix4x4 matScale = MakeScaleMatrix({ 1.0f,1.0f, 1.0f });
+
+	// ワールド行列を求める
+	Matrix4x4 worldMat = matScale * rotateMatrix * matTranslate;
+
+	// ローカルの頂点を求める
+	Vector3 localVertex[8];
+	Vector3 min = obb.size * -1;
+	Vector3 max = obb.size;
+	// 手前の面
+	localVertex[0] = min;
+	localVertex[1] = Vector3{ min.x, max.y, min.z };
+	localVertex[2] = Vector3{ max.x, max.y , min.z };
+	localVertex[3] = Vector3{ max.x, min.y , min.z };
+	// 奥の面
+	localVertex[4] = Vector3{ min.x, min.y, max.z };
+	localVertex[5] = Vector3{ min.x, max.y, max.z };
+	localVertex[6] = Vector3{ max.x, min.y, max.z };
+	localVertex[7] = max;
+
+	// スクリーンの頂点を求める
+	Vector3 worldVertex[8];
+	for (size_t index = 0; index < 8; index++) {
+		worldVertex[index] = Transform(localVertex[index], worldMat);
+	}
+
+	PrimitiveDrawer::GetInstance()->DrawLine3d(worldVertex[0], worldVertex[1], color);
+	PrimitiveDrawer::GetInstance()->DrawLine3d(worldVertex[0], worldVertex[3], color);
+	PrimitiveDrawer::GetInstance()->DrawLine3d(worldVertex[0], worldVertex[4], color);
+	PrimitiveDrawer::GetInstance()->DrawLine3d(worldVertex[1], worldVertex[2], color);
+	PrimitiveDrawer::GetInstance()->DrawLine3d(worldVertex[1], worldVertex[5], color);
+	PrimitiveDrawer::GetInstance()->DrawLine3d(worldVertex[2], worldVertex[3], color);
+	PrimitiveDrawer::GetInstance()->DrawLine3d(worldVertex[2], worldVertex[7], color);
+	PrimitiveDrawer::GetInstance()->DrawLine3d(worldVertex[3], worldVertex[6], color);
+	PrimitiveDrawer::GetInstance()->DrawLine3d(worldVertex[4], worldVertex[5], color);
+	PrimitiveDrawer::GetInstance()->DrawLine3d(worldVertex[4], worldVertex[6], color);
+	PrimitiveDrawer::GetInstance()->DrawLine3d(worldVertex[5], worldVertex[7], color);
+	PrimitiveDrawer::GetInstance()->DrawLine3d(worldVertex[6], worldVertex[7], color);
+}
+
+void OBB::MakeOBBAxis(const Vector3& rotate) {
+	Matrix4x4 rotateMatrix = Multiply(MakeRotateXMatrix(rotate.x), Multiply(MakeRotateYMatrix(rotate.y), MakeRotateZMatrix(rotate.z)));
+
+	// 回転行列から軸を抽出
+	orientations[0].x = rotateMatrix.m[0][0];
+	orientations[0].y = rotateMatrix.m[0][1];
+	orientations[0].z = rotateMatrix.m[0][2];
+
+	orientations[1].x = rotateMatrix.m[1][0];
+	orientations[1].y = rotateMatrix.m[1][1];
+	orientations[1].z = rotateMatrix.m[1][2];
+
+	orientations[2].x = rotateMatrix.m[2][0];
+	orientations[2].y = rotateMatrix.m[2][1];
+	orientations[2].z = rotateMatrix.m[2][2];
+
+	matRotate = rotateMatrix;
+}
+
+std::vector<Vector3> OBB::MakeIndex() const {
+	std::vector<Vector3> vertices;
+	for (uint8_t x = 0; x < 2; ++x) {
+		for (uint8_t y = 0; y < 2; ++y) {
+			for (uint8_t z = 0; z < 2; ++z) {
+				Vector3 localVertex = {
+					(x ? size.x : -size.x),
+					(y ? size.y : -size.y),
+					(z ? size.z : -size.z),
+				};
+
+				Vector3 worldVertex = Transform(localVertex, matRotate);
+				vertices.push_back(worldVertex + center);
+			}
+		}
+	}
+
+	return vertices;
 }

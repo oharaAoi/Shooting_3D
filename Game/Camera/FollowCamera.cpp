@@ -30,6 +30,13 @@ void FollowCamera::Update() {
 
 	viewProjection_.matView = Inverse(worldTransform_.matWorld_);
 	viewProjection_.UpdateMatrix();
+
+	ImGui::Begin("Camera");
+	ImGui::DragFloat3("view.rotate", &viewProjection_.rotation_.x, 0.01f);
+	ImGui::DragFloat("destinationAngleY", &destinationAngleY_, 0.01f);
+	ImGui::DragFloat("destinationAngleX", &destinationAngleX_, 0.01f);
+	ImGui::End();
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,14 +54,24 @@ void FollowCamera::Rotate() {
 		viewProjection_.rotation_.y = std::atan2f(diff.x, diff.z);
 	
 	} else if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-		const float speed = 0.1f;
+		const float speed = 0.05f;
 		destinationAngleY_ += (float)static_cast<float>(joyState.Gamepad.sThumbRX) / SHRT_MAX * speed;
-		// 
-		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) {
-			destinationAngleY_ = 0;
+		destinationAngleX_ += (float)static_cast<float>(joyState.Gamepad.sThumbRY) / SHRT_MAX * speed;
+
+		if (destinationAngleX_ > 1.0f) {
+			destinationAngleX_ = 1.0f;
+		}
+		if (destinationAngleX_ < -1.0f) {
+			destinationAngleX_ = -1.0f;
 		}
 
+		//// 
+		//if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) {
+		//	destinationAngleY_ = 0;
+		//}
+
 		viewProjection_.rotation_.y = LerpShortAngle(viewProjection_.rotation_.y, destinationAngleY_, 0.1f);
+		viewProjection_.rotation_.x = LerpShortAngle(viewProjection_.rotation_.x, destinationAngleX_, 0.1f);
 	}
 }
 

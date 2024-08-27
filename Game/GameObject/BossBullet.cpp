@@ -1,6 +1,7 @@
 #include "BossBullet.h"
 
-BossBullet::BossBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent) {
+BossBullet::BossBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent, const BossAttackType& attackType) {
+	attackType_ = attackType;
 	Init(model, pos, velocity, rotation, parent);
 }
 

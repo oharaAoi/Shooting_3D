@@ -14,6 +14,7 @@ void BaseCharacter::Init(std::vector<Model*> models) {
 		worldTransforms_.emplace_back(std::move(WorldTransform{}));
 		worldTransforms_[oi].Initialize();
 	}
+	obb_.size = { 1,1,1 };
 
 	//Collider::Inti();
 }
@@ -23,6 +24,8 @@ void BaseCharacter::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void BaseCharacter::Update() {
+	obb_.center = worldTransform_.translation_;
+	obb_.MakeOBBAxis(worldTransform_.rotation_);
 	worldTransform_.UpdateMatrix();
 	for (uint32_t oi = 0; oi < models_.size(); oi++) {
 		worldTransforms_[oi].UpdateMatrix();
@@ -37,6 +40,10 @@ void BaseCharacter::Draw(const ViewProjection& viewProjection) const {
 	for (uint32_t oi = 0; oi < models_.size(); oi++) {
 		models_[oi]->Draw(worldTransforms_[oi], viewProjection);
 	}
+}
+
+void BaseCharacter::DrawCollision() {
+	DrawOBB(obb_, { 1,1,1,1 });
 }
 
 Vector3 BaseCharacter::GetWorldPosition() const {

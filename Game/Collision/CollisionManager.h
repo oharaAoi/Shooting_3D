@@ -49,6 +49,14 @@ public:
 	// リストを空にする
 	void Rest() { colliders_.clear(); }
 
+	/// <summary>
+	/// OBBとOBBで当たり判定を取る
+	/// </summary>
+	/// <param name="obb1"></param>
+	/// <param name="obb2"></param>
+	/// <returns></returns>
+	bool IsCollision(const OBB& obb1, const OBB& obb2);
+
 private:
 
 	// コライダーのリスト

@@ -2,11 +2,17 @@
 #include "GameObject/BaseBullet.h"
 #include "GameObject/Player.h"
 
+enum BossAttackType {
+	Normal_Attack,
+	Homing_Attack,
+	TripleHoming_Attack
+};
+
 class BossBullet :
     public BaseBullet {
 public:
 
-    BossBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent);
+    BossBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent, const BossAttackType& attackType);
     ~BossBullet();
 
 	/// <summary>
@@ -59,5 +65,6 @@ private:
 
 	const float kBulletSpeed_ = 0.6f;
 
+	BossAttackType attackType_;
 };
 

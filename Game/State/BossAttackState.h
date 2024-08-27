@@ -8,6 +8,12 @@ class BossAttackState :
 
 public:
 
+	struct Work {
+		uint32_t attackTime;
+	};
+
+public:
+
     BossAttackState(BossEnemy* baseEnemy);
     ~BossAttackState();
 
@@ -26,6 +32,8 @@ public:
 ///////////////////////////////////////////////////////////
 
 private:
+
+	Work work_;
 
 };
 

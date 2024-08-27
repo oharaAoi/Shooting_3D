@@ -12,6 +12,21 @@
 #include <numbers>
 
 /// <summary>
+/// OBB(有向境界箱)
+/// </summary>
+struct OBB {
+	Vector3 center; // 中心点
+	Vector3 orientations[3]; // 座標軸、正規化、直交必須
+	Vector3 size; // 座標軸方向の長さの半分
+
+	// 回転軸
+	Matrix4x4 matRotate;
+
+	void MakeOBBAxis(const Vector3& rotate);
+	std::vector<Vector3> MakeIndex() const;
+};
+
+/// <summary>
 /// 加算
 /// </summary>
 /// <param name="v1"></param>
@@ -50,6 +65,14 @@ float Distance(const Vector3& v1, const Vector3& v2);
 /// <param name="v2"></param>
 /// <returns></returns>
 float Dot(const Vector3& v1, const Vector3& v2);
+
+/// <summary>
+/// クロス積
+/// </summary>
+/// <param name="v1"></param>
+/// <param name="v2"></param>
+/// <returns></returns>
+Vector3 Cross(const Vector3& v1, const Vector3& v2);
 
 float Length(const Vector3& vec3);
 
@@ -120,3 +143,23 @@ Vector3 CatmullRomInterpolation(const Vector3& p0, const Vector3& p1, const Vect
 /// <param name="t">スプライン全区間の中で割合指定</param>/// 
 /// <returns>座標</returns>
 Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t);
+
+/// <summary>
+/// ベジエ曲線を書く
+/// </summary>
+///  <param name="controlPoint">制御点がまとまった配列</param>
+///  <returns></returns>
+Vector3 Bezier(const std::vector<Vector3>& controlPoint, const float& t);
+
+////////////////////////////////////////////////////////////////////////////////////
+// 描画
+////////////////////////////////////////////////////////////////////////////////////
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="obb"></param>
+/// <param name="viewProjection"></param>
+/// <param name="viewportMatrix"></param>
+/// <param name="color"></param>
+void DrawOBB(const OBB& obb, const Vector4& color);

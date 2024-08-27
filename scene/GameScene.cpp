@@ -98,7 +98,7 @@ void GameScene::Initialize() {
 	enemyManager_->SetParent(&railCamera_->GetWorldTransform());
 	enemyManager_->SetGameScene(this);
 
-	isBossBattle_ = false;
+	isBossBattle_ = true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,6 +122,14 @@ void GameScene::Update() {
 		reticle_->Update(enemyManager_->GetEnemysList(), isBossBattle_, player_->GetWorldTransform(), followCamera_->GetViewProjection());
 	}
 
+	if (reticle_->GetIsLockOn()) {
+		player_->SetIsLockOnMode(true);
+	} else {
+		player_->SetIsLockOnMode(false);
+	}
+
+	player_->SetRotationX(followCamera_->GetCameraRotation().x);
+	
 	player_->Update();
 
 	// bullet
@@ -147,7 +155,13 @@ void GameScene::Update() {
 	// ---------------------------------------------
 	// ↓ 次フレーム前に行っておきたい処理
 	// ---------------------------------------------
-	reticle_->CheckTargerAlive(enemyManager_->GetEnemysList(), viewProjection_);
+	reticle_->CheckTargerAlive();
+	
+	if (!reticle_->GetIsTargetAlive()) {
+		followCamera_->SetReticle(nullptr);
+		reticle_->SetTarget(nullptr);
+		player_->SetIsLockOnMode(false);
+	}
 
 	// ---------------------------------------------
 	// ↓ ImGuiの処理
@@ -210,12 +224,18 @@ void GameScene::Draw() {
 		bullet->Draw(viewProjection_);
 	}
 
-	reticle_->Draw(viewProjection_);
+	//reticle_->Draw(viewProjection_);
 
 	// ---------------------------------------------
 	// ↓ 線の描画
 	// ---------------------------------------------
 	trajectory_->Draw();
+
+	DrawGrid();
+
+	player_->DrawCollision();
+
+	enemyManager_->DrawCollisions();
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -230,7 +250,7 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
-	reticle_->Draw2DReticle();
+	//reticle_->Draw2DReticle();
 
 	playerUI_->Draw();
 
@@ -383,4 +403,32 @@ void GameScene::EditImGui() {
 	ImGui::Checkbox("BossBattle", &isBossBattle_);
 	ImGui::End();
 #endif // _DEBUG
+}
+
+void GameScene::DrawGrid() {
+	const uint32_t kSubdivision_ = 10;
+
+	// x軸方面の描画
+	for (uint32_t xIndex = 0; xIndex <= kSubdivision_; ++xIndex) {
+		Vector3 stPos = { -50.0f, 0.0f, -50.0f + (float(xIndex) * 10.0f) };
+		Vector3 endPos = { 50.0f, 0.0f, -50.0f + (float(xIndex) * 10.0f) };
+
+		if (xIndex == 5) {
+			PrimitiveDrawer::GetInstance()->DrawLine3d(stPos, endPos, { 0.0f, 0.0f, 0.0f, 1.0f });
+		} else {
+			PrimitiveDrawer::GetInstance()->DrawLine3d(stPos, endPos, { 1.0f, 1.0f, 1.0f, 1.0f });
+		}
+	}
+
+	// Z軸方面の描画
+	for (uint32_t zIndex = 0; zIndex <= kSubdivision_; ++zIndex) {
+		Vector3 stPos = { -50.0f + (float(zIndex) * 10.0f), 0.0f, 50.0f };
+		Vector3 endPos = { -50.0f + (float(zIndex) * 10.0f), 0.0f, -50.0f };
+
+		if (zIndex == 5) {
+			PrimitiveDrawer::GetInstance()->DrawLine3d(stPos, endPos, { 0.0f, 0.0f, 0.0f, 1.0f });
+		} else {
+			PrimitiveDrawer::GetInstance()->DrawLine3d(stPos, endPos, { 1.0f, 1.0f, 1.0f, 1.0f });
+		}
+	}
 }

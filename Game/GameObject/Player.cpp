@@ -1,9 +1,9 @@
 #include "Player.h"
 #include "GameScene.h"
 
-Player::Player(std::vector<Model*> models) { 
+Player::Player(std::vector<Model*> models) {
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kPlayer));
-	Init(models); 
+	Init(models);
 }
 Player::~Player() {}
 
@@ -22,7 +22,7 @@ void Player::Init(std::vector<Model*> models) {
 	worldTransforms_[PlayerParts::Parts_LeftArm].parent_ = &worldTransforms_[PlayerParts::Parts_Body];
 	worldTransforms_[PlayerParts::Parts_RightArm].parent_ = &worldTransforms_[PlayerParts::Parts_Body];
 
-	worldTransform_.translation_.z = 20;
+	worldTransform_.translation_.z = -20;
 
 	// ---------------------------------------------
 	// ↓ 基本となる変数の初期化
@@ -33,6 +33,8 @@ void Player::Init(std::vector<Model*> models) {
 	isBossBattle_ = false;
 
 	isLockOnMode_ = false;
+
+	obb_.size = { 1,1,50 };
 
 	// ---------------------------------------------
 	// ↓ 調整項目
@@ -60,7 +62,6 @@ void Player::Update() {
 	// ---------------------------------------------
 	// ↓ Reticleの更新を行う
 	// ---------------------------------------------
-	
 	for (auto it = canLockOnList_.begin(); it != canLockOnList_.end(); ) {
 		if ((*it)->GetIsDead()) {
 			it = canLockOnList_.erase(it);
@@ -77,14 +78,10 @@ void Player::Update() {
 		}
 	}
 
-	if (canLockOnList_.size() == 0) {
-		isLockOnMode_ = false;
-	}
-
 	// ---------------------------------------------
 	// ↓ Playerの状態に関する処理を行う
 	// ---------------------------------------------
-	
+
 	// 状態のリクエストをチェックする
 	CheckBehaviorRequest();
 
@@ -93,6 +90,11 @@ void Player::Update() {
 
 	// 弾の更新を行う
 	BulletsUpdate();
+
+	// ---------------------------------------------
+	// ↓ Playerの向きを調整する
+	// ---------------------------------------------
+
 
 	// ---------------------------------------------
 	// ↓ 基本となる処理を行う
@@ -165,7 +167,12 @@ void Player::Move() {
 			direction_ = velocity_;
 			// 目標角度の算出
 			targetAngle = std::atan2f(velocity_.x, velocity_.z);
-		} 
+		}
+		if (reticle_->GetIsLockOn()) {
+			Vector3 diff = reticle_->GetTargetWorldPos() - worldTransform_.translation_;
+			// y軸周り角度
+			worldTransform_.rotation_.y = std::atan2f(diff.x, diff.z);
+		}
 
 		// --------------------------------------
 		// プレイヤーの向きを移動方向に合わせる
@@ -174,11 +181,12 @@ void Player::Move() {
 		// y軸まわり(z軸方向とy軸方向のベクトルで求まる)
 		if (isBossBattle_) {
 			if (isMoving) {
-				worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngle, 0.1f);
+				worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngle, 0.05f);
 			} else {
 				worldTransform_.rotation_.y = std::atan2f(direction_.x, direction_.z);
 			}
 		}
+
 	}
 }
 
@@ -196,15 +204,15 @@ void Player::BulletsUpdate() {
 			return true;
 		}
 		return false;
-	});
+								});
 }
 
 // ------------------- 弾をリストに追加する ------------------- //
 
 void Player::AddBulletList(const Vector3& velocity) {
 	playerBulletList_.push_back(
-		std::make_unique<PlayerBullet>(bullerModel_, worldTransform_.translation_, velocity, worldTransform_.rotation_, worldTransform_.parent_
-	));
+		std::make_unique<PlayerBullet>(bullerModel_, worldTransform_.translation_, velocity, worldTransform_.rotation_, worldTransform_.parent_, 5
+		));
 }
 
 void Player::AddCanLockOnList(BaseEnemy* baseEnemy) {
@@ -248,7 +256,7 @@ void Player::CheckBehaviorRequest() {
 void Player::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
 	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kEnemy)) {
-		
+
 	}
 }
 

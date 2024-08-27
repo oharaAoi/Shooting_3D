@@ -20,7 +20,7 @@ class MobEnemy :
     public BaseEnemy {
 public:
 
-    MobEnemy(std::vector<Model*> models, const Vector3& pos);
+    MobEnemy(std::vector<Model*> models, const std::vector<Vector3>& controlPoint, const float& division);
     ~MobEnemy();
 
 	/// <summary>
@@ -66,6 +66,11 @@ public:
 	/// 衝突時に呼ばれる関数
 	/// </summary>
 	void OnCollision([[maybe_unused]] Collider* other) override;
+
+	/// <summary>
+	/// 登場する関数
+	/// </summary>
+	void Appearance() override;
 
 	/// <summary>
 	/// ImGuiの編集

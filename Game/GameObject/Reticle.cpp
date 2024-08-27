@@ -27,6 +27,8 @@ void Reticle::Init() {
 	unLockReticle_ = std::unique_ptr<Sprite>(unLockSprite);
 
 	cameraToReticle_ = 50;
+
+	target_ = nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,10 +170,11 @@ void Reticle::ChangetLockOnTarget(const ViewProjection& viewProjection) {
 	}
 }
 
-void Reticle::CheckTargerAlive(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, const ViewProjection& viewProjection) {
+void Reticle::CheckTargerAlive() {
 	if (isLockOn_) {
 		if (target_->GetIsDead()) {
-			Search(enemyList, viewProjection);
+			target_ = nullptr;
+			isLockOn_ = false;
 		}
 	}
 }

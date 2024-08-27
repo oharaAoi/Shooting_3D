@@ -5,6 +5,12 @@ class BossEnemy;
 
 class BossRootState :
     public BaseEnemyState {
+public:
+
+	struct WorkRoot {
+		uint32_t moveTime;	// 動いている時間
+		uint32_t attackTime;// 攻撃するまでの時間
+	};
 
 public:
 
@@ -25,8 +31,11 @@ public:
 // メンバ関数
 ///////////////////////////////////////////////////////////
 
+
+
 private:
 
+	WorkRoot work_;
 
 };
 

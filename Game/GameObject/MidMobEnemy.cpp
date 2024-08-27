@@ -1,9 +1,11 @@
 #include "MidMobEnemy.h"
 #include "GameScene.h"
 
-MidMobEnemy::MidMobEnemy(std::vector<Model*> models, const Vector3& pos) {
+MidMobEnemy::MidMobEnemy(std::vector<Model*> models, const std::vector<Vector3>& controlPoint, const float& division) {
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kBoss));
-	worldTransform_.translation_ = pos;
+	appearanceControlPoint_ = controlPoint;
+	worldTransform_.translation_ = appearanceControlPoint_[2];
+	division_ = division;
 	Init(models);
 }
 
@@ -39,7 +41,7 @@ void MidMobEnemy::Update() {
 	// 状態の変更のリクエストがあるかを確認する
 	CheckBehaviorRequest();
 	// 現在の状態を更新する
-	behaviorState_->Update();
+	//behaviorState_->Update();
 
 	BaseEnemy::Update();
 

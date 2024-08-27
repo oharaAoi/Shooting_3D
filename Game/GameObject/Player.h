@@ -149,6 +149,11 @@ public:
 	void SetParent(const WorldTransform* parent);
 	void SetWorldTransform(const WorldTransform& worldTransform);
 	void SetReticleParent(const WorldTransform* parent);
+
+	Vector3 GetRotation() const { return worldTransform_.rotation_; }
+	void SetRotation(const Vector3& rotation) { worldTransform_.rotation_ = rotation; }
+
+	void SetRotationX(const float& rotationX) { worldTransform_.rotation_.x = rotationX; }
 	
 	// ------------ bulletList ------------ // 
 	std::list<std::unique_ptr<PlayerBullet>>& GetPlayerBulletList() { return playerBulletList_; }
@@ -157,10 +162,10 @@ public:
 	Reticle* GetReticle() { return reticle_; }
 	void SetReticle(Reticle* reticle) { reticle_ = reticle; }
 	const bool GetIsLockOnMode() const { return isLockOnMode_; }
+	void SetIsLockOnMode(const bool& isLockOn) { isLockOnMode_ = isLockOn; }
 
 	// ------------ gameScene ------------ // 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
-
 	const bool GetIsBossBattle() const { return isBossBattle_; }
 
 private:

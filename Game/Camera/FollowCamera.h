@@ -7,6 +7,10 @@
 // GameObject
 #include "GameObject/Reticle.h"
 
+#ifdef _DEBUG
+#include "ImGuiManager.h"
+#endif
+
 class FollowCamera {
 public:
 
@@ -38,6 +42,21 @@ public:
 	void Rotate();
 
 	/// <summary>
+	/// 追従対象のリセット
+	/// </summary>
+	void ResetTarget();
+
+	/// <summary>
+	/// カメラのオフセット位置を計算する
+	/// </summary>
+	/// <returns></returns>
+	Vector3 CalculationOffset();
+
+///////////////////////////////////////////////////////////
+// メンバ関数
+///////////////////////////////////////////////////////////
+
+	/// <summary>
 	/// ViewProjectionを追加する
 	/// </summary>
 	/// <returns></returns>
@@ -50,17 +69,18 @@ public:
 	void SetTarget(const WorldTransform* target);
 
 	/// <summary>
-	/// 追従対象のリセット
+	/// 
 	/// </summary>
-	void ResetTarget();
+	/// <param name="reticle"></param>
+	void SetReticle(const Reticle* reticle) { reticle_ = reticle; }
 
 	/// <summary>
-	/// カメラのオフセット位置を計算する
+	/// カメラの向きを取得する
 	/// </summary>
 	/// <returns></returns>
-	Vector3 CalculationOffset();
+	Vector3 GetCameraRotation() const { return viewProjection_.rotation_; }
 
-	void SetReticle(const Reticle* reticle) { reticle_ = reticle; }
+	void SetCameraRotation(const Vector3& rotation) { viewProjection_.rotation_ = rotation; }
 
 private:
 
@@ -76,5 +96,6 @@ private:
 	// 追従対象の残像座標
 	Vector3 interTarget_ = {};
 	float destinationAngleY_ = 0;
+	float destinationAngleX_ = 0;
 };
 

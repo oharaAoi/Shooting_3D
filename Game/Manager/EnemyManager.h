@@ -42,6 +42,11 @@ public:
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection) const;
 
+	/// <summary>
+	/// 当たり判定の可視か
+	/// </summary>
+	void DrawCollisions();
+
 ///////////////////////////////////////////////////////////
 // メンバ関数
 ///////////////////////////////////////////////////////////
@@ -116,6 +121,10 @@ private:
 	int createEnemyType_ = 0;
 	// 生成する敵の配置
 	Vector3 createEnemyPos_;
+	// 生成する敵の初期位置/中間の位置
+	Vector3 appearancePos_[3];
+	// 登場の速さ
+	float appearaceSpeed_ = 100;
 	// 生成する敵の配列
 	std::list<std::unique_ptr<BaseEnemy>> createEnemysList_;
 

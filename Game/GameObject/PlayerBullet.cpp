@@ -1,7 +1,8 @@
 #include "PlayerBullet.h"
 
-PlayerBullet::PlayerBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent) {
+PlayerBullet::PlayerBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent, const uint32_t& collisionCount) {
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kPlayerBullet));
+	collisionCount_ = collisionCount;
 	Init(model, pos, velocity, rotation, parent);
 }
 PlayerBullet::~PlayerBullet() {}
@@ -12,6 +13,7 @@ PlayerBullet::~PlayerBullet() {}
 
 void PlayerBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent) {
 	BaseBullet::Init(model, pos, velocity, rotation, parent);
+	collisionCount_ = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,6 +21,8 @@ void PlayerBullet::Init(Model* model, const Vector3& pos, const Vector3& velocit
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerBullet::Update() {
+	float scaleUp = 1.0f + (0.1f * collisionCount_);
+	worldTransform_.scale_ = { scaleUp, scaleUp , scaleUp };
 	BaseBullet::Update();
 }
 
@@ -40,13 +44,13 @@ void PlayerBullet::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
 	switch (typeID) {
 	case static_cast<uint32_t>(CollisionTypeIdDef::kEnemy):
-		isDead_ = true;
+		collisionCount_++;
 		break;
 	case static_cast<uint32_t>(CollisionTypeIdDef::kBoss):
 		isDead_ = true;
 		break;
 	case static_cast<uint32_t>(CollisionTypeIdDef::kEnemyBullet):
-		isDead_;
+		collisionCount_++;
 		break;
 	}
 }

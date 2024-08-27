@@ -14,11 +14,11 @@ MobRootState::~MobRootState() {}
 
 void MobRootState::Init() {
 	work_.moveTime = 0;
-	work_.attackTime = 120;
+	work_.attackTime = 180;
 
 	floating_.parameter = 0;
 	floating_.period = 90;
-	floating_.amplitude = 0.2f;
+	floating_.amplitude = 0.1f;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ void MobRootState::FloatingGimmick() {
 	floating_.parameter = std::fmod(floating_.parameter, 2.0f * std::numbers::pi_v<float>);
 	// 座標に反映
 	Vector3 translate = enemy_->GetWorldTransform().translation_;
-	translate.y = std::sin(floating_.parameter) * floating_.amplitude;
+	translate.y += std::sin(floating_.parameter) * floating_.amplitude;
 	enemy_->SetTranslation(translate);
 }
 

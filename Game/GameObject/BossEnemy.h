@@ -19,7 +19,15 @@ class BossEnemy :
 
 public:
 
-	BossEnemy(std::vector<Model*> models, const Vector3& pos);
+	struct Floating {
+		float parameter;
+		float amplitude;
+		uint32_t period;
+	};
+
+public:
+
+	BossEnemy(std::vector<Model*> models, const std::vector<Vector3>& controlPoint, const float& division);
 	~BossEnemy();
 
 	/// <summary>
@@ -67,6 +75,16 @@ public:
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
 	/// <summary>
+	/// 登場する関数
+	/// </summary>
+	void Appearance() override {};
+
+	/// <summary>
+	/// 浮遊の更新
+	/// </summary>
+	void FloatingGimmick();
+
+	/// <summary>
 	/// ImGuiの編集
 	/// </summary>
 	void EditImGui() override;
@@ -75,10 +93,7 @@ public:
 // accessor
 ///////////////////////////////////////////////////////////
 
-	/// <summary>
-	/// world空間での座標を取得する
-	/// </summary>
-	/// <returns></returns>
+	// ------------ world空間での座標を取得する ------------ // 
 	Vector3 GetWorldPosition() const override;
 
 private:
@@ -88,5 +103,12 @@ private:
 
 	// ------------  ------------ // 
 	uint32_t enemyId_;
+
+	// ------------ 挙動に関する変数 ------------ // 
+	Floating floating_;
+
+	// ------------ 攻撃に関する変数 ------------ // 
+	// なんの攻撃を行うか
+	BossAttackType attackType_;
 };
 

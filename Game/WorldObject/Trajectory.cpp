@@ -16,14 +16,22 @@ void Trajectory::Init() {
 	// --------------------------------------
 	// 円を描く点を設定する
 	// --------------------------------------
-	float angle = 0.0f;
+	//float angle = 0.0f;
 	Vector3 pos{};
-	for (uint32_t oi = 0; oi < 121; ++oi) {
+	/*for (uint32_t oi = 0; oi < 121; ++oi) {
 		pos.x = pos.x + std::cos(angle) * 3.0f;
-		pos.y = 0.0f;
+		pos.y = pos.y + std::sin(angle) * 3.0f;
 		pos.z = pos.z + std::sin(angle) * 3.0f;
 
 		angle += std::numbers::pi_v<float> * kDeltaTime_;
+
+		testArray.push_back(pos);
+	}*/
+
+	for (uint32_t oi = 0; oi < 121; ++oi) {
+		pos.x = 0;
+		pos.y = 0;
+		pos.z += oi * 0.2f;
 
 		testArray.push_back(pos);
 	}

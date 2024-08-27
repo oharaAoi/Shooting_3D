@@ -14,6 +14,7 @@ BossAttackState::~BossAttackState() {
 ///////////////////////////////////////////////////////////
 
 void BossAttackState::Init() {
+	work_.attackTime = 180;
 }
 
 ///////////////////////////////////////////////////////////
@@ -21,4 +22,8 @@ void BossAttackState::Init() {
 ///////////////////////////////////////////////////////////
 
 void BossAttackState::Update() {
+	enemy_->Move();
+	if (--work_.attackTime <= 0) {
+		enemy_->SetBehaviorRequest(EnemyBehavior::kRoot);
+	}
 }

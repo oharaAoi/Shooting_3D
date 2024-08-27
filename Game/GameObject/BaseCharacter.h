@@ -38,6 +38,8 @@ public:
 	/// </summary>
 	virtual void Draw(const ViewProjection& viewProjection) const;
 
+	void DrawCollision();
+
 	/// <summary>
 	/// 衝突時に呼ばれる関数
 	/// </summary>

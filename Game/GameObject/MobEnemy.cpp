@@ -1,11 +1,13 @@
 #include "MobEnemy.h"
 #include "GameScene.h"
 
-MobEnemy::MobEnemy(std::vector<Model*> models, const Vector3& pos) {
+MobEnemy::MobEnemy(std::vector<Model*> models, const std::vector<Vector3>& controlPoint, const float& division) {
 	enemyId_ = mobEnemyNum;
 	mobEnemyNum++;
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kEnemy));
-	worldTransform_.translation_ = pos;
+	appearanceControlPoint_ = controlPoint;
+	worldTransform_.translation_ = appearanceControlPoint_[2];
+	division_ = division;
 	Init(models);
 }
 MobEnemy::~MobEnemy() {}
@@ -24,8 +26,7 @@ void MobEnemy::Init(std::vector<Model*> models) {
 	behaviorRequest_ = EnemyBehavior::kRoot;
 	ChangeBehavior(std::make_unique<MobRootState>(this));
 
-	hp_ = 3;
-
+	hp_ = 1;
 	radius_ = 2.0f;
 }
 
@@ -34,10 +35,13 @@ void MobEnemy::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void MobEnemy::Update() {
+	/*if (isAppearance_) {
+		Appearance();
+	}*/
 	// 状態の変更のリクエストがあるかを確認する
 	CheckBehaviorRequest();
 	// 現在の状態を更新する
-	behaviorState_->Update();
+	//behaviorState_->Update();
 
 	BaseEnemy::Update();
 
@@ -104,6 +108,18 @@ void MobEnemy::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
 	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kPlayerBullet)) {
 		hp_--;
+	}
+}
+
+// ------------------- 登場をする関数 ------------------- //
+
+void MobEnemy::Appearance() {
+	if (controlIndex_ < division_) {
+		controlIndex_++;
+		nowControlPoint_ = static_cast<float>(controlIndex_) / division_;
+		worldTransform_.translation_ = Bezier(appearanceControlPoint_, nowControlPoint_);
+	} else {
+		isAppearance_ = false;
 	}
 }
 

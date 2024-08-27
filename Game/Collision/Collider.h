@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector3.h"
 #include "stdint.h"
+#include "Math/MyMath.h"
 #include "Collision/CollisionTypeIdDef.h"
 
 const uint32_t kCollisionAttributePlayer = 0b1;
@@ -52,6 +53,9 @@ public:
 	uint32_t GetTypeID() const { return typeID_; }
 	void SetTypeID(const uint32_t& typeID) { typeID_ = typeID; }
 
+	// ------------ OBB ------------ // 
+	OBB GetOBB() { return obb_; }
+
 protected:
 
 	// 半径
@@ -63,5 +67,8 @@ protected:
 	// 種別ID
 	uint32_t typeID_ = 0u;
 
+	uint32_t collisionCount_;
+
+	OBB obb_;
 };
 
