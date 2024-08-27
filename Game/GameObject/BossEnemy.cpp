@@ -36,6 +36,8 @@ void BossEnemy::Init(std::vector<Model*> models) {
 	floating_.parameter = 0;
 	floating_.period = 90;
 	floating_.amplitude = 0.2f;
+
+	obb_.size = { 5,5,5 };
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

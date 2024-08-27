@@ -239,7 +239,7 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
-	//reticle_->Draw2DReticle();
+	reticle_->Draw2DReticle();
 
 	playerUI_->Draw();
 
@@ -351,6 +351,14 @@ void GameScene::CheckAllCollision() {
 	// ↓ 当たり判定を取る
 	// ---------------------------------------------
 	collisionManager_->CheckAllCollision();
+
+	// ---------------------------------------------
+	// ↓ playerの前にいる敵の数を数える
+	// ---------------------------------------------
+	playerAimCount_ = 0;
+	for (const std::unique_ptr<BaseEnemy>& enemy : enemyManager_->GetEnemysList()) {
+		playerAimCount_ += collisionManager_->CountEnemiesPlayerRange(player_.get(), enemy.get());
+	}
 }
 
 // ------------------- 敵の弾をリストに追加する ------------------- //

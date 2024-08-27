@@ -58,6 +58,16 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 	}
 }
 
+// ------------------- 敵がプレイヤーの前にいるか ------------------- //
+
+uint32_t CollisionManager::CountEnemiesPlayerRange(Collider* colliderA, Collider* colliderB) {
+	uint32_t result = 0;
+	if (IsCollision(colliderA->GetOBB(), colliderB->GetOBB())) {
+		result++;
+	}
+	return result;
+}
+
 bool CollisionManager::IsCollision(const OBB& obb1, const OBB& obb2) {
 	// 分離軸の組み合わせを取得
 	std::vector<Vector3> crossSeparatingAxises;

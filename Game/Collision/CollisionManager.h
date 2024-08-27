@@ -41,6 +41,14 @@ public:
 	void CheckCollisionPair(Collider* colliderA, Collider* colliderB);
 
 	/// <summary>
+	/// 敵がプレイヤーの前にいるか
+	/// </summary>
+	/// <param name="colliderA">: player</param>
+	/// <param name="colliderB">: enemies</param>
+	/// <returns></returns>
+	uint32_t CountEnemiesPlayerRange(Collider* colliderA, Collider* colliderB);
+
+	/// <summary>
 	/// コライダーの追加
 	/// </summary>
 	/// <param name="collider"></param>

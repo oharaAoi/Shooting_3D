@@ -162,4 +162,5 @@ private: // メンバ変数
 	std::unique_ptr<PlayerUI> playerUI_ = nullptr;
 
 	// ------------ メンバ変数 ------------ // 
+	uint32_t playerAimCount_;
 };
