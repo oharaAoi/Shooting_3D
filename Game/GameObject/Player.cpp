@@ -30,8 +30,6 @@ void Player::Init(std::vector<Model*> models) {
 	behaviorRequest_ = PlayerBehavior::kRoot;
 	ChangeBehavior(std::make_unique<PlayerRootState>(this));
 
-	isBossBattle_ = false;
-
 	isLockOnMode_ = false;
 
 	obb_.size = { 1,1,50 };
@@ -57,7 +55,6 @@ void Player::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Update() {
-	isBossBattle_ = gameScene_->GetIsBossBattle();
 
 	// ---------------------------------------------
 	// ↓ Reticleの更新を行う
@@ -135,19 +132,11 @@ void Player::Move() {
 		const float speed = 0.3f;
 		float targetAngle = 0;
 
-		if (isBossBattle_) {
-			velocity_ = {
-				static_cast<float>(joyState.Gamepad.sThumbLX) / SHRT_MAX,
-				0.0f,
-				static_cast<float>(joyState.Gamepad.sThumbLY) / SHRT_MAX,
-			};
-		} else {
-			velocity_ = {
-				static_cast<float>(joyState.Gamepad.sThumbLX) / SHRT_MAX,
-				static_cast<float>(joyState.Gamepad.sThumbLY) / SHRT_MAX,
-				0.0f
-			};
-		}
+		velocity_ = {
+			static_cast<float>(joyState.Gamepad.sThumbLX) / SHRT_MAX,
+			0.0f,
+			static_cast<float>(joyState.Gamepad.sThumbLY) / SHRT_MAX,
+		};
 
 		// スティックの押し込みが閾値を超えていたら移動可能にする
 		if (Length(velocity_) > threshold) {
@@ -179,14 +168,11 @@ void Player::Move() {
 		// --------------------------------------
 		// 回転させる
 		// y軸まわり(z軸方向とy軸方向のベクトルで求まる)
-		if (isBossBattle_) {
-			if (isMoving) {
-				worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngle, 0.05f);
-			} else {
-				worldTransform_.rotation_.y = std::atan2f(direction_.x, direction_.z);
-			}
+		if (isMoving) {
+			worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngle, 0.05f);
+		} else {
+			worldTransform_.rotation_.y = std::atan2f(direction_.x, direction_.z);
 		}
-
 	}
 }
 
@@ -204,7 +190,7 @@ void Player::BulletsUpdate() {
 			return true;
 		}
 		return false;
-								});
+	});
 }
 
 // ------------------- 弾をリストに追加する ------------------- //

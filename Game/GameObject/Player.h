@@ -166,7 +166,6 @@ public:
 
 	// ------------ gameScene ------------ // 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
-	const bool GetIsBossBattle() const { return isBossBattle_; }
 
 private:
 
@@ -199,8 +198,6 @@ private:
 	std::list<BaseEnemy*> canLockOnList_;
 
 	// ------------ 単体で機能させる変数 ------------ // 
-	bool isBossBattle_;
-
 	bool isLockOnMode_;
 
 	uint32_t hp_;

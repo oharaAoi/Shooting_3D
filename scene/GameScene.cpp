@@ -40,7 +40,6 @@ void GameScene::Initialize() {
 
 	Vector3 translation = { 0.0f, 5.0f, -30.0f };
 	Vector3 rotation = { 0.0f, 0.0f, 0.0f };
-	railCamera_ = std::make_unique<RailCamera>(translation, rotation);
 
 	AxisIndicator::GetInstance()->SetVisible(true);
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
@@ -65,7 +64,7 @@ void GameScene::Initialize() {
 	reticle_ = std::make_unique<Reticle>();
 
 	// enemy ---------------------------------------------------------
-	
+
 
 	// ---------------------------------------------
 	// ↓ WorldObjectの初期化
@@ -87,18 +86,11 @@ void GameScene::Initialize() {
 	// ---------------------------------------------
 	// ↓ 初期化時に設定しておく処理をしておく
 	// ---------------------------------------------
-	railCamera_->SetControlPoints(trajectory_->GetPlayerTrajectoryVector());
-
-	player_->SetParent(&railCamera_->GetWorldTransform());
+	
 	//player_->SetReticleParent(&railCamera_->GetWorldTransform());
-	player_->SetViewProjection(&railCamera_->GetViewProjection());
 	player_->SetGameScene(this);
 	player_->SetReticle(reticle_.get());
-
-	enemyManager_->SetParent(&railCamera_->GetWorldTransform());
 	enemyManager_->SetGameScene(this);
-
-	isBossBattle_ = true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,11 +108,8 @@ void GameScene::Update() {
 	enemyManager_->SetPlayerPosition(player_->GetTranslation());
 	enemyManager_->Update();
 
-	if (isBossBattle_) {
-		reticle_->Update(enemyManager_->GetEnemysList(), isBossBattle_, player_->GetWorldTransform(), railCamera_->GetViewProjection());
-	} else {
-		reticle_->Update(enemyManager_->GetEnemysList(), isBossBattle_, player_->GetWorldTransform(), followCamera_->GetViewProjection());
-	}
+	reticle_->Update(enemyManager_->GetEnemysList(), player_->GetWorldTransform(), followCamera_->GetViewProjection());
+
 
 	if (reticle_->GetIsLockOn()) {
 		player_->SetIsLockOnMode(true);
@@ -129,7 +118,7 @@ void GameScene::Update() {
 	}
 
 	player_->SetRotationX(followCamera_->GetCameraRotation().x);
-	
+
 	player_->Update();
 
 	// bullet
@@ -156,7 +145,7 @@ void GameScene::Update() {
 	// ↓ 次フレーム前に行っておきたい処理
 	// ---------------------------------------------
 	reticle_->CheckTargerAlive();
-	
+
 	if (!reticle_->GetIsTargetAlive()) {
 		followCamera_->SetReticle(nullptr);
 		reticle_->SetTarget(nullptr);
@@ -203,7 +192,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	
+
 	// ---------------------------------------------
 	// ↓ WorldObjectの描画
 	// ---------------------------------------------
@@ -280,28 +269,23 @@ void GameScene::UpdateViewProjection() {
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
 		AxisIndicator::GetInstance()->SetVisible(true);
 	} else {
-		if (isBossBattle_) {
-			// 苦肉の策 -----------------------------------
-			player_->SetParent(nullptr);
-			enemyManager_->SetParent(nullptr);
-			reticle_->SetParent(nullptr);
-			player_->SetViewProjection(&followCamera_->GetViewProjection());
+		// 苦肉の策 -----------------------------------
+		player_->SetParent(nullptr);
+		enemyManager_->SetParent(nullptr);
+		reticle_->SetParent(nullptr);
+		player_->SetViewProjection(&followCamera_->GetViewProjection());
 
-			if (player_->GetIsLockOnMode()) {
-				followCamera_->SetReticle(player_->GetReticle());
-			} else {
-				followCamera_->SetReticle(nullptr);
-			}
-			// -------------------------------------------
-
-			followCamera_->Update();
-			viewProjection_.matView = followCamera_->GetViewProjection().matView;
-			viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
+		if (player_->GetIsLockOnMode()) {
+			followCamera_->SetReticle(player_->GetReticle());
 		} else {
-			railCamera_->Update();
-			viewProjection_.matView = railCamera_->GetViewProjection().matView;
-			viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
+			followCamera_->SetReticle(nullptr);
 		}
+		// -------------------------------------------
+
+		followCamera_->Update();
+		viewProjection_.matView = followCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
+
 		//player_->SetViewProjection(&viewProjection_);
 		AxisIndicator::GetInstance()->SetVisible(false);
 	}
@@ -383,7 +367,7 @@ void GameScene::AddBossBullet(std::unique_ptr<BossBullet> bossBullet) {
 
 void GameScene::CheckCanLockOnEnemy() {
 	const float canLockOnDistance = 30;
-	
+
 	// ---------------------------------------------
 	// ↓ LockOnできる範囲の敵をリストに追加する
 	// ---------------------------------------------
@@ -400,7 +384,6 @@ void GameScene::CheckCanLockOnEnemy() {
 void GameScene::EditImGui() {
 #ifdef _DEBUG
 	ImGui::Begin("GameScene");
-	ImGui::Checkbox("BossBattle", &isBossBattle_);
 	ImGui::End();
 #endif // _DEBUG
 }

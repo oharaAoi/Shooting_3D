@@ -35,8 +35,7 @@ void Reticle::Init() {
 // ↓　更新関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Reticle::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, const bool& isBossBattle,
-					 const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
+void Reticle::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
 
 	// レティクルを移動させる
 	if (target_ == nullptr) {
@@ -49,11 +48,7 @@ void Reticle::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, con
 	ChangetLockOnTarget(viewProjection);
 
 	// 3Dレティクルの座標を計算する
-	if (!isBossBattle) {
-		ScreenToWorldOf3DReticle(viewProjection);
-	} else {
-		Calculate3DReticleWorldPos(worldTransform);
-	}
+	Calculate3DReticleWorldPos(worldTransform);
 
 	// ロックオン状態なら
 	if (target_ != nullptr) {
@@ -67,11 +62,7 @@ void Reticle::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, con
 		lockOnReticle_->SetPosition(spritePos);
 
 		// 3Dレティクルの位置も調整する
-		if (isBossBattle) {
-			worldTransform3D_.translation_ = target_->GetWorldTransform().translation_;
-		} else {
-			worldTransform3D_.translation_ = target_->GetWorldPosition();
-		}
+		worldTransform3D_.translation_ = target_->GetWorldTransform().translation_;
 	}
 
 	// unLockOn用の座標の設定しておく

@@ -114,7 +114,6 @@ public: // メンバ関数
 // accessor
 ///////////////////////////////////////////////////////////
 
-	const bool GetIsBossBattle() const { return isBossBattle_; }
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -133,7 +132,6 @@ private: // メンバ変数
 	bool isDebugCamera = false;
 
 	std::unique_ptr<FollowCamera> followCamera_ = nullptr;
-	std::unique_ptr<RailCamera> railCamera_ = nullptr;
 
 	// ------------ Loader ------------ // 
 	std::unique_ptr<ModelLoader> modelLoader_ = nullptr;
@@ -164,5 +162,4 @@ private: // メンバ変数
 	std::unique_ptr<PlayerUI> playerUI_ = nullptr;
 
 	// ------------ メンバ変数 ------------ // 
-	bool isBossBattle_;
 };

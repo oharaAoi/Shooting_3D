@@ -42,7 +42,7 @@ public:
 	/// <summary>
 	/// 更新関数
 	/// </summary>
-	void Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, const bool& isBossBattle, const WorldTransform& worldTransform, const ViewProjection& viewProjection);
+	void Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, const WorldTransform& worldTransform, const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 描画関数
@@ -58,9 +58,9 @@ public:
 	// ↓　メンバ関数
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
-		/// <summary>
-		/// Reticleの移動
-		/// </summary>
+	/// <summary>
+	/// Reticleの移動
+	/// </summary>
 	void Move();
 
 	/// <summary>
