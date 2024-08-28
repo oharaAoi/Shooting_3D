@@ -19,6 +19,8 @@ public:
 	/// <returns></returns>
 	static ModelLoader* GetInstacne();
 
+	void Finalize();
+
 	void Init();
 
 	/// <summary>

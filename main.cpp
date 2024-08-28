@@ -7,6 +7,7 @@
 #include "WinApp.h"
 // Scene
 #include "Manager/SceneManager.h"
+#include "Loader/ModelLoader.h"
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -95,6 +96,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 
 	// 各種解放
+	sceneManager->Finalize();
+	ModelLoader::GetInstacne()->Finalize();
 	// 3Dモデル解放
 	Model::StaticFinalize();
 	audio->Finalize();

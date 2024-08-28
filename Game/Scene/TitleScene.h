@@ -15,7 +15,7 @@ class TitleScene
 public:
 
 	TitleScene();
-	~TitleScene();
+	~TitleScene() override;
 
 	/// <summary>
 	/// 初期化関数

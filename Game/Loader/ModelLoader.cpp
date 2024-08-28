@@ -5,7 +5,13 @@ ModelLoader* ModelLoader::GetInstacne() {
 	return &instance;
 }
 
-ModelLoader::~ModelLoader() {}
+void ModelLoader::Finalize() {
+	modelMap_.clear();
+}
+
+ModelLoader::~ModelLoader() {
+	Finalize();
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　初期化処理

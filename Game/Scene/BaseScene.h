@@ -4,7 +4,7 @@ class BaseScene {
 public:
 
 	BaseScene() = default;
-	~BaseScene() = default;
+	virtual ~BaseScene() = default;
 
 	virtual void Initialize() {};
 

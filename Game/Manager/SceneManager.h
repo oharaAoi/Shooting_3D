@@ -21,6 +21,8 @@ public:
 	SceneManager();
 	~SceneManager();
 
+	void Finalize();
+
 	/// <summary>
 	/// 初期化関数
 	/// </summary>
@@ -38,7 +40,7 @@ public:
 
 private:
 
-	std::unique_ptr<BaseScene> scene_;
+	std::unique_ptr<BaseScene> scene_ = nullptr;
 
 };
 

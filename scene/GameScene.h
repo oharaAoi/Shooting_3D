@@ -49,7 +49,7 @@ public: // メンバ関数
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~GameScene();
+	~GameScene() override;
 
 	/// <summary>
 	/// 初期化
