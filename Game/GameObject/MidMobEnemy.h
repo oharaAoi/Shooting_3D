@@ -22,7 +22,7 @@ public:
 
 public:
 
-	MidMobEnemy(std::vector<Model*> models, const std::vector<Vector3>& controlPoint, const float& division);
+	MidMobEnemy(std::vector<Model*> models, const Vector3& pos, const Vector3& velocity);
 	~MidMobEnemy();
 
 	/// <summary>

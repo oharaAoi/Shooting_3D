@@ -1,13 +1,12 @@
 #include "MobEnemy.h"
 #include "GameScene.h"
 
-MobEnemy::MobEnemy(std::vector<Model*> models, const std::vector<Vector3>& controlPoint, const float& division) {
+MobEnemy::MobEnemy(std::vector<Model*> models, const Vector3& pos, const Vector3& velocity) {
 	enemyId_ = mobEnemyNum;
 	mobEnemyNum++;
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kEnemy));
-	appearanceControlPoint_ = controlPoint;
-	worldTransform_.translation_ = appearanceControlPoint_[2];
-	division_ = division;
+	worldTransform_.translation_ = pos;
+	velocity_ = velocity;
 	Init(models);
 }
 MobEnemy::~MobEnemy() {}

@@ -8,9 +8,6 @@
 void BaseEnemy::Init(std::vector<Model*> models) {
 	BaseCharacter::Init(models);
 	isDead_ = false;
-	controlIndex_ = 0;
-	nowControlPoint_ = 0;
-	isAppearance_ = true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,12 +61,6 @@ Vector3 BaseEnemy::GetScreenPosition(const Vector3& posWorld, const ViewProjecti
 void BaseEnemy::SetParent(const WorldTransform* parent) {
 	// 親子関係を結ぶ
 	worldTransform_.parent_ = parent;
-}
-
-void BaseEnemy::AppearanceReset() {
-	controlIndex_ = 0;
-	nowControlPoint_ = 0;
-	isAppearance_ = true;
 }
 
 void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior) {

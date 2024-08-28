@@ -1,11 +1,10 @@
 #include "MidMobEnemy.h"
 #include "GameScene.h"
 
-MidMobEnemy::MidMobEnemy(std::vector<Model*> models, const std::vector<Vector3>& controlPoint, const float& division) {
+MidMobEnemy::MidMobEnemy(std::vector<Model*> models, const Vector3& pos, const Vector3& velocity) {
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kBoss));
-	appearanceControlPoint_ = controlPoint;
-	worldTransform_.translation_ = appearanceControlPoint_[2];
-	division_ = division;
+	worldTransform_.translation_ = pos;
+	velocity_ = velocity;
 	Init(models);
 }
 

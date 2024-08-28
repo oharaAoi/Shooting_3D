@@ -20,7 +20,7 @@ class MobEnemy :
     public BaseEnemy {
 public:
 
-    MobEnemy(std::vector<Model*> models, const std::vector<Vector3>& controlPoint, const float& division);
+    MobEnemy(std::vector<Model*> models, const Vector3& pos, const Vector3& velocity);
     ~MobEnemy();
 
 	/// <summary>

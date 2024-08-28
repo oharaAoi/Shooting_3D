@@ -27,7 +27,7 @@ public:
 
 public:
 
-	BossEnemy(std::vector<Model*> models, const std::vector<Vector3>& controlPoint, const float& division);
+	BossEnemy(std::vector<Model*> models, const Vector3& pos, const Vector3& velocity);
 	~BossEnemy();
 
 	/// <summary>

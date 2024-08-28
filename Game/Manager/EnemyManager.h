@@ -72,6 +72,11 @@ public:
 	void EditEnemyPos();
 
 	/// <summary>
+	/// 敵を出現させる
+	/// </summary>
+	void EnemyPop();
+
+	/// <summary>
 	/// ImGuiを編集する
 	/// </summary>
 	void ImGuiEdit();
@@ -98,6 +103,9 @@ private:
 
 	GameScene* gameScene_ = nullptr;
 
+	uint32_t popTime_ = 0;
+	const uint32_t popTimeLimit_ = 240;
+
 	// ------------ ファイル読み込みに関する変数 ------------ // 
 	// グローバル変数の保存先ファイルパス
 	const std::string kDirectorPath_ = "./Resources/EnemyPos/";
@@ -121,10 +129,8 @@ private:
 	int createEnemyType_ = 0;
 	// 生成する敵の配置
 	Vector3 createEnemyPos_;
-	// 生成する敵の初期位置/中間の位置
-	Vector3 appearancePos_[3];
-	// 登場の速さ
-	float appearaceSpeed_ = 100;
+	// 生成する敵の速さ
+	Vector3 createEnemyVelocity_;
 	// 生成する敵の配列
 	std::list<std::unique_ptr<BaseEnemy>> createEnemysList_;
 

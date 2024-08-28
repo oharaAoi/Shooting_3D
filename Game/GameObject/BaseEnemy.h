@@ -62,11 +62,6 @@ public:
 	virtual void Attack() {};
 
 	/// <summary>
-	/// 再登場させる関数
-	/// </summary>
-	void AppearanceReset();
-
-	/// <summary>
 	///	状態を変更する
 	/// </summary>
 	/// <param name="behavior"></param>
@@ -123,20 +118,6 @@ public:
 	// ------------ 状態遷移の要求 ------------ // 
 	void SetBehaviorRequest(const EnemyBehavior& request) { behaviorRequest_ = request; }
 
-	// ------------ 登場時に用いる座標 ------------ // 
-	void SetAppearancePoint(const Vector3& pos1, const Vector3& pos2, const Vector3& pos3) {
-		appearanceControlPoint_.clear();
-		appearanceControlPoint_.push_back(pos1);
-		appearanceControlPoint_.push_back(pos2);
-		appearanceControlPoint_.push_back(pos3);
-	}
-
-	std::vector<Vector3> GetAppearancePoint() { return appearanceControlPoint_; }
-
-	// ------------ 登場の速さ ------------ // 
-	float GetAppearaceSpeed() const { return division_; }
-	void SetAppearaceSpeed(const float& division) { division_ = division; }
-
 protected:
 
 	GameScene* gameScene_ = nullptr;
@@ -150,13 +131,6 @@ protected:
 	bool isPreDiscovery_;
 
 	Vector3 velocity_;
-
-	// ------------ Enemyが登場する際に必要な変数 ------------ // 
-	std::vector<Vector3> appearanceControlPoint_;
-	float nowControlPoint_;
-	uint32_t controlIndex_;
-	float division_;
-	bool isAppearance_;
 
 	// ------------ Bulletに必要な変数 ------------ // 
 	Vector3 playerPosition_;
