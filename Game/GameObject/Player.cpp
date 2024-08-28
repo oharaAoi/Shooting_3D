@@ -302,6 +302,10 @@ void Player::ApplyAdjustItems() {
 // ↓　accessor
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
+Vector3 Player::GetForward() {
+	return TransformNormal({0,0,1.0f}, worldTransform_.matWorld_);
+}
+
 void Player::SetParent(const WorldTransform* parent) {
 	// 親子関係を結ぶ
 	worldTransform_.parent_ = parent;

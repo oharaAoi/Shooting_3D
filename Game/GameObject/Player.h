@@ -138,6 +138,9 @@ public:
 		behaviorRequest_ = request;
 	}
 
+	// ------------ playerの向きを取得 ------------ // 
+	Vector3 GetForward();
+
 	// ------------ Translation ------------ // 
 	const Vector3 GetTranslation() const { return worldTransform_.translation_; }
 	void SetTranslation(const Vector3& traslation) { worldTransform_.translation_ = traslation; }

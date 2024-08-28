@@ -38,10 +38,13 @@ void MidMobEnemy::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void MidMobEnemy::Update() {
+	if (!isPreDiscovery_ && isDiscovery_) {
+		behaviorRequest_ = EnemyBehavior::kAttack;
+	}
 	// 状態の変更のリクエストがあるかを確認する
 	CheckBehaviorRequest();
 	// 現在の状態を更新する
-	//behaviorState_->Update();
+	behaviorState_->Update();
 
 	BaseEnemy::Update();
 
@@ -61,7 +64,7 @@ void MidMobEnemy::Draw(const ViewProjection& viewProjection) const {
 // ↓　メンバ関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-// ------------------- 攻撃する ------------------- //
+// ------------------- 通常時の挙動をする ------------------- //
 
 void MidMobEnemy::AnimationGimmick() {
 	if (animation_.t > 4 * std::numbers::pi_v<float>) {
@@ -79,15 +82,22 @@ void MidMobEnemy::AnimationGimmick() {
 	worldTransform_.translation_ = enemyPos;
 }
 
+// ------------------- 移動を行う関数 ------------------- //
+
 void MidMobEnemy::Move() {
 	AnimationGimmick();
+	const float speed = 0.05f;
+	velocity_ = playerPosition_ - worldTransform_.translation_;
+	worldTransform_.translation_ += Normalize(velocity_) * speed;
 }
+
+// ------------------- 攻撃する ------------------- //
 
 void MidMobEnemy::Attack() {
 	Shot();
 }
 
-// ------------------- 攻撃する ------------------- //
+// ------------------- リストに弾を追加する ------------------- //
 
 void MidMobEnemy::Shot() {
 	gameScene_->AddEnemyBullet(std::move(std::make_unique<EnemyBullet>(

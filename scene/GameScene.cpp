@@ -317,7 +317,7 @@ void GameScene::UpdateBullet() {
 			return true;
 		}
 		return false;
-							   });
+	});
 
 	// Bossの弾
 	for (const std::unique_ptr<BossBullet>& bullet : bossBulletList_) {
@@ -330,7 +330,7 @@ void GameScene::UpdateBullet() {
 			return true;
 		}
 		return false;
-							  });
+	});
 }
 
 // ------------------- すべての当たり判定を実行する ------------------- //
@@ -366,7 +366,13 @@ void GameScene::CheckAllCollision() {
 	// ---------------------------------------------
 	playerAimCount_ = 0;
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemyManager_->GetEnemysList()) {
-		playerAimCount_ += collisionManager_->CountEnemiesPlayerRange(player_.get(), enemy.get());
+		// プレイヤーの前方にいる敵のみを判定する
+		Vector3 playerForward = player_->GetForward();
+		Vector3 distance = Normalize(enemy->GetWorldTransform().translation_ - player_->GetWorldTransform().translation_);
+		float dot = Dot(playerForward, distance);
+		if (dot > 0.8f) {
+			playerAimCount_ += collisionManager_->CountEnemiesPlayerRange(player_.get(), enemy.get());
+		}
 	}
 
 	// ---------------------------------------------
@@ -408,6 +414,7 @@ void GameScene::CheckCanLockOnEnemy() {
 void GameScene::EditImGui() {
 #ifdef _DEBUG
 	ImGui::Begin("GameScene");
+	ImGui::Text("playerAimCoun: %d", playerAimCount_);
 	ImGui::End();
 #endif // _DEBUG
 }

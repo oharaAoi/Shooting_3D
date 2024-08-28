@@ -21,6 +21,7 @@ void BaseEnemy::Update() {
 	if (hp_ <= 0) {
 		isDead_ = true;
 	}
+	isPreDiscovery_ = isDiscovery_;
 	BaseCharacter::Update();
 }
 

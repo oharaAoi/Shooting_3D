@@ -35,16 +35,15 @@ void MobEnemy::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void MobEnemy::Update() {
-	/*if (isAppearance_) {
-		Appearance();
-	}*/
+	if (!isPreDiscovery_ && isDiscovery_) {
+		behaviorRequest_ = EnemyBehavior::kAttack;
+	}
 	// 状態の変更のリクエストがあるかを確認する
 	CheckBehaviorRequest();
 	// 現在の状態を更新する
-	//behaviorState_->Update();
+	behaviorState_->Update();
 
 	BaseEnemy::Update();
-
 	// ImGuiの編集
 	EditImGui();
 }
@@ -64,6 +63,9 @@ void MobEnemy::Draw(const ViewProjection& viewProjection) const {
 // ------------------- 移動させる関数 ------------------- //
 
 void MobEnemy::Move() {
+	const float speed = 0.05f;
+	velocity_ = playerPosition_ - worldTransform_.translation_;
+	worldTransform_.translation_ += Normalize(velocity_) * speed;
 }
 
 // ------------------- 攻撃に関する関数 ------------------- //

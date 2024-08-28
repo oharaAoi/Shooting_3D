@@ -14,7 +14,7 @@ MobAttackState::~MobAttackState() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void MobAttackState::Init() {
-	work_.attackTime = 240;
+	work_.attackTime = 120;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,9 +22,11 @@ void MobAttackState::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void MobAttackState::Update() {
-	/*if (--work_.attackTime <= 0) {
+	enemy_->Move();
+
+	if (!enemy_->GetIsDiscovery()) {
 		enemy_->SetBehaviorRequest(EnemyBehavior::kRoot);
-	}*/
+	}
 
 	if (attackCoolTime_ > 0) {
 		attackCoolTime_--;
@@ -42,5 +44,5 @@ void MobAttackState::Update() {
 
 void MobAttackState::Attack() {
 	enemy_->Attack();
-	attackCoolTime_ = 60;
+	attackCoolTime_ = 180;
 }

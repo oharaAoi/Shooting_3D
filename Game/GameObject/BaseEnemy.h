@@ -116,6 +116,10 @@ public:
 	const bool GetIsDiscovery() const { return isDiscovery_; }
 	void SetIsDiscovery(const bool& isDiscovery) { isDiscovery_ = isDiscovery; }
 
+	// ------------ velocity ------------ // 
+	const Vector3& GetVelocity() const { return velocity_; }
+	void SetVelocity(const Vector3& velocity) { velocity_ = velocity; }
+
 	// ------------ 状態遷移の要求 ------------ // 
 	void SetBehaviorRequest(const EnemyBehavior& request) { behaviorRequest_ = request; }
 
@@ -139,11 +143,13 @@ protected:
 
 	// ------------ キャラクターの情報に関する変数 ------------ // 
 	uint32_t hp_ = 0;
-	bool isDead_;
-
 	int enemyType_;
 
+	bool isDead_;
 	bool isDiscovery_;
+	bool isPreDiscovery_;
+
+	Vector3 velocity_;
 
 	// ------------ Enemyが登場する際に必要な変数 ------------ // 
 	std::vector<Vector3> appearanceControlPoint_;
