@@ -231,6 +231,12 @@
     <ClCompile Include="Game\UI\Rader.cpp">
       <Filter>Game\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Scene\BaseScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Manager\SceneManager.cpp">
+      <Filter>Game\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -436,6 +442,12 @@
     </ClInclude>
     <ClInclude Include="Game\UI\Rader.h">
       <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\BaseScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Manager\SceneManager.h">
+      <Filter>Game\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

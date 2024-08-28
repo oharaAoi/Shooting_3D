@@ -129,8 +129,10 @@
     <ClCompile Include="Game\GameObject\Reticle.cpp" />
     <ClCompile Include="Game\Loader\ModelLoader.cpp" />
     <ClCompile Include="Game\Manager\EnemyManager.cpp" />
+    <ClCompile Include="Game\Manager\SceneManager.cpp" />
     <ClCompile Include="Game\Math\MyMath.cpp" />
     <ClCompile Include="Game\Math\MyMatrix4x4.cpp" />
+    <ClCompile Include="Game\Scene\BaseScene.cpp" />
     <ClCompile Include="Game\Scene\TitleScene.cpp" />
     <ClCompile Include="Game\State\BaseCharacterState.cpp" />
     <ClCompile Include="Game\State\BaseEnemyState.cpp" />
@@ -195,8 +197,10 @@
     <ClInclude Include="Game\GameObject\Reticle.h" />
     <ClInclude Include="Game\Loader\ModelLoader.h" />
     <ClInclude Include="Game\Manager\EnemyManager.h" />
+    <ClInclude Include="Game\Manager\SceneManager.h" />
     <ClInclude Include="Game\Math\MyMath.h" />
     <ClInclude Include="Game\Math\MyMatrix4x4.h" />
+    <ClInclude Include="Game\Scene\BaseScene.h" />
     <ClInclude Include="Game\Scene\TitleScene.h" />
     <ClInclude Include="Game\State\BaseCharacterState.h" />
     <ClInclude Include="Game\State\BaseEnemyState.h" />

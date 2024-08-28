@@ -6,6 +6,8 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+// Scene
+#include "Scene/BaseScene.h"
 // Camera
 #include "DebugCamera.h"
 #include "Camera/FollowCamera.h"
@@ -35,7 +37,8 @@
 /// <summary>
 /// ゲームシーン
 /// </summary>
-class GameScene {
+class GameScene
+ : public BaseScene {
 
 public: // メンバ関数
 	/// <summary>
@@ -51,17 +54,17 @@ public: // メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize() override;
 
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
-	void Update();
+	void Update() override;
 
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void Draw() override;
 
 ///////////////////////////////////////////////////////////
 // メンバ関数
