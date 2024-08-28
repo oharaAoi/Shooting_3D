@@ -22,6 +22,8 @@ void EnemyManager::Init() {
 
 	nowWaveEnemyPos_ = 0;
 	LoadFile();
+
+	bossEnemy_ = enemysList_.front().get();
 }
 
 ///////////////////////////////////////////////////////////

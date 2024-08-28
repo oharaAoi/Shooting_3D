@@ -36,7 +36,7 @@ public:
 	/// 更新関数
 	/// </summary>
 	/// <param name="playerNearEnemyCount"></param>
-	void Update(const uint32_t& playerNearEnemyCount);
+	void Update(const uint32_t& playerNearEnemyCount, const uint32_t& playerAimCount);
 
 	/// <summary>
 	/// 描画関数
@@ -85,6 +85,9 @@ private:
 
 	// 基盤
 	SpriteData base_;
+	// 基盤の光
+	SpriteData baseLight_;
+	Vector4 baseLightColor_;
 	// player
 	SpriteData player_;
 	// Enemies

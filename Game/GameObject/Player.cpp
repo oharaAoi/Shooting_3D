@@ -48,6 +48,8 @@ void Player::Init(std::vector<Model*> models) {
 	adjustItem->AddItem(groupName, "Hp", hp_);
 
 	ApplyAdjustItems();
+
+	firstHp_ = hp_;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

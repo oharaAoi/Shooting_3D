@@ -97,6 +97,9 @@ public:
 	// ------------ gameScene ------------ // 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
+	// ------------ bossHp ------------ // 
+	const float GetBossHp() const { return bossEnemy_->GetHpRaito(); }
+
 private:
 
 	const WorldTransform* parentWorldTransform_;
@@ -135,7 +138,9 @@ private:
 	std::list<std::unique_ptr<BaseEnemy>> createEnemysList_;
 
 	// ------------ playerに関する変数 ------------ // 
-
 	Vector3 playerPosition_;
+
+	// ------------ bossに関する変数 ------------ // 
+	const BaseEnemy* bossEnemy_ = nullptr;
 };
 

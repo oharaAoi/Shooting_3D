@@ -11,11 +11,11 @@
 #include "ImGuiManager.h"
 #endif
 
-class PlayerUI {
+class BossUI {
 public:
 
-	PlayerUI();
-	~PlayerUI();
+	BossUI();
+	~BossUI();
 
 	/// <summary>
 	/// 初期化関数
@@ -25,7 +25,7 @@ public:
 	/// <summary>
 	/// 更新関数
 	/// </summary>
-	void Update(const float& playerHpRaito);
+	void Update(const float& bossHpRaito);
 
 	/// <summary>
 	/// 描画関数
@@ -33,13 +33,12 @@ public:
 	void Draw() const;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　初期化処理
+// ↓　メンバ関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void EditImGui();
 
 private:
-
 
 	std::unique_ptr<Sprite> hp_outside_;
 	std::unique_ptr<Sprite> hp_bar_;
@@ -50,5 +49,6 @@ private:
 	Vector2 uiPosition_;
 	Vector2 barSize_;
 	float raito_ = 1;
+
 };
 

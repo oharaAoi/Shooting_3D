@@ -141,6 +141,9 @@ public:
 	// ------------ playerの向きを取得 ------------ // 
 	Vector3 GetForward();
 
+	// ------------ hp ------------ //
+	float GetHpRaito() const { return static_cast<float>(hp_) / static_cast<float>(firstHp_); }
+
 	// ------------ Translation ------------ // 
 	const Vector3 GetTranslation() const { return worldTransform_.translation_; }
 	void SetTranslation(const Vector3& traslation) { worldTransform_.translation_ = traslation; }
@@ -204,4 +207,5 @@ private:
 	bool isLockOnMode_;
 
 	uint32_t hp_;
+	uint32_t firstHp_;
 };

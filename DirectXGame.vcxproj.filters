@@ -237,6 +237,9 @@
     <ClCompile Include="Game\Manager\SceneManager.cpp">
       <Filter>Game\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="Game\UI\BossUI.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -448,6 +451,9 @@
     </ClInclude>
     <ClInclude Include="Game\Manager\SceneManager.h">
       <Filter>Game\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\BossUI.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

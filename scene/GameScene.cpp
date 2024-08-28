@@ -83,6 +83,7 @@ void GameScene::Initialize() {
 	// ---------------------------------------------
 	playerUI_ = std::make_unique<PlayerUI>();
 	rader_ = std::make_unique<Rader>();
+	bossUI_ = std::make_unique<BossUI>();
 
 	// ---------------------------------------------
 	// ↓ 初期化時に設定しておく処理をしておく
@@ -140,13 +141,14 @@ void GameScene::Update() {
 	// ---------------------------------------------
 	// ↓ UIの更新
 	// ---------------------------------------------
-	playerUI_->Update();
+	playerUI_->Update(player_->GetHpRaito());
+	bossUI_->Update(enemyManager_->GetBossHp());
 	rader_->ClearList();
 	rader_->SetPlayerPosition(player_->GetTranslation());
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemyManager_->GetEnemysList()) {
 		rader_->AddEnemiesPos(enemy->GetWorldTransform().translation_);
 	}
-	rader_->Update(0);
+	rader_->Update(0, playerAimCount_);
 
 	// ---------------------------------------------
 	// ↓ 次フレーム前に行っておきたい処理
@@ -249,8 +251,8 @@ void GameScene::Draw() {
 	reticle_->Draw2DReticle();
 
 	playerUI_->Draw();
-
 	rader_->Draw();
+	bossUI_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
