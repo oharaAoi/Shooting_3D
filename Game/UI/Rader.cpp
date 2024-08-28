@@ -36,7 +36,8 @@ void Rader::Init() {
 // ↓　更新関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Rader::Update(const uint32_t& playerNearEnemyCount, const uint32_t& playerAimCount) {
+void Rader::Update(const uint32_t& playerNearEnemyCount, const uint32_t& playerAimCount,
+				   std::list<std::unique_ptr<BaseEnemy>>& enemyList) {
 	playerNearEnemyCount_ = playerNearEnemyCount;
 
 	baseLightColor_.w = static_cast<float>(playerAimCount) / 10.0f;
@@ -51,7 +52,7 @@ void Rader::Update(const uint32_t& playerNearEnemyCount, const uint32_t& playerA
 	// -------------------------------------------------
 	// ↓ 敵の位置を計算する
 	// -------------------------------------------------
-	CalculationEnemiesPos();
+	CalculationEnemiesPos(enemyList);
 
 	EditImGui();
 }
@@ -65,8 +66,9 @@ void Rader::Draw() {
 	baseLight_.sprite->Draw();
 	player_.sprite->Draw();
 
-	for (std::list<SpriteData>::iterator it = enemies_.begin(); it != enemies_.end(); ++it) {
-		it->sprite->Draw();
+	for (std::map<BaseEnemy*, SpriteData>::iterator it = enemiesMap_.begin(); it != enemiesMap_.end(); ++it) {
+		SpriteData& spriteData = it->second;
+		spriteData.sprite->Draw();
 	}
 }
 
@@ -76,6 +78,7 @@ void Rader::Draw() {
 
 void Rader::EditImGui() {
 #ifdef _DEBUG
+
 	ImGui::Begin("Rader");
 	ImGui::DragFloat2("base", &base_.pos.x, 2.0f);
 	ImGui::DragFloat4("baseLight", &baseLightColor_.x, 0.1f);
@@ -113,37 +116,55 @@ void Rader::CalculationPlayerPos() {
 
 // ------------------- 敵の位置を計算する ------------------- //
 
-void Rader::CalculationEnemiesPos() {
-	for (std::list<Vector3>::iterator it_pos = enemiesPos_.begin(); it_pos != enemiesPos_.end(); ++it_pos) {
-		// -------------------------------------------------
-		// ↓ 敵の生成を行う
-		// -------------------------------------------------
-		Vector3 vec = *it_pos;
-		Vector2 pos = Vector2{ vec.x, vec.z };
+void Rader::CalculationEnemiesPos(std::list<std::unique_ptr<BaseEnemy>>& enemyList) {
+	for (const std::unique_ptr<BaseEnemy>& enemy : enemyList) {
+		// キーが存在する場合
+		if (enemiesMap_.find(enemy.get()) != enemiesMap_.end()) {
+			Vector3 pos = Vector3(enemy->GetWorldTransform().translation_);
+			Vector2 basePos = Vector2(pos.x, pos.z);
+			// -------------------------------------------------
+			// ↓ 座標の計算を行う
+			// -------------------------------------------------
+			// 基盤上の位置を計算する
+			Vector2 worldRaito = { basePos.x / (kWorldSize.x / 2.0f), basePos.y / (kWorldSize.z / 2.0f) };
+			worldRaito.x = std::clamp(worldRaito.x, -1.0f, 1.0f);
+			worldRaito.y = std::clamp(worldRaito.y, -1.0f, 1.0f);
+			// 基盤のsizeから左上座標から足す分を求める
+			Vector2 baseRaito = { (baseTextureSize_.x / 2.0f) * worldRaito.x, (baseTextureSize_.y / 2.0f) * worldRaito.y };
+			// 基盤上から出ないように
+			float distance = Length(baseRaito);
+			if (distance > (baseTextureSize_.x / 2.0f)) {
+				baseRaito = Normalize(baseRaito) * (baseTextureSize_.x / 2.0f);
+			}
+			// 座標の更新を行う
+			enemiesMap_[enemy.get()].pos = { base_.pos.x + baseRaito.x, base_.pos.y - baseRaito.y };
+			enemiesMap_[enemy.get()].sprite->SetPosition(enemiesMap_[enemy.get()].pos);
 		
-		SpriteData data;
-		data.pos = pos;
-		
-		// -------------------------------------------------
-		// ↓ 座標の計算を行う
-		// -------------------------------------------------
-		// p基盤上の位置を計算する
-		Vector2 worldRaito = { pos.x / (kWorldSize.x / 2.0f), pos.y / (kWorldSize.z / 2.0f) };
-		worldRaito.x = std::clamp(worldRaito.x, -1.0f, 1.0f);
-		worldRaito.y = std::clamp(worldRaito.y, -1.0f, 1.0f);
-		// 基盤のsizeから左上座標から足す分を求める
-		Vector2 baseRaito = { (baseTextureSize_.x / 2.0f) * worldRaito.x, (baseTextureSize_.y / 2.0f) * worldRaito.y };
-		// 基盤上から出ないように
-		float distance = Length(baseRaito);
-		if (distance > (baseTextureSize_.x / 2.0f)) {
-			baseRaito = Normalize(baseRaito) * (baseTextureSize_.x / 2.0f);
+			// キーが存在しない場合
+		}else {
+			Vector3 pos = Vector3(enemy->GetWorldTransform().translation_);
+			Vector2 basePos = Vector2(pos.x, pos.y);
+			// -------------------------------------------------
+			// ↓ 座標の計算を行う
+			// -------------------------------------------------
+			// 基盤上の位置を計算する
+			Vector2 worldRaito = { basePos.x / (kWorldSize.x / 2.0f), basePos.y / (kWorldSize.z / 2.0f) };
+			worldRaito.x = std::clamp(worldRaito.x, -1.0f, 1.0f);
+			worldRaito.y = std::clamp(worldRaito.y, -1.0f, 1.0f);
+			// 基盤のsizeから左上座標から足す分を求める
+			Vector2 baseRaito = { (baseTextureSize_.x / 2.0f) * worldRaito.x, (baseTextureSize_.y / 2.0f) * worldRaito.y };
+			// 基盤上から出ないように
+			float distance = Length(baseRaito);
+			if (distance > (baseTextureSize_.x / 2.0f)) {
+				baseRaito = Normalize(baseRaito) * (baseTextureSize_.x / 2.0f);
+			}
+			// 新しくデータを作成
+			SpriteData data;
+			data.pos = { base_.pos.x + baseRaito.x, base_.pos.y - baseRaito.y };
+			Sprite* sprite = Sprite::Create(enemyTextureHandle_, data.pos, { 1,1,1,1 }, { 0.5f, 0.5f });
+			data.sprite = std::unique_ptr<Sprite>(sprite);
+			enemiesMap_.emplace(enemy.get(), std::move(data));
 		}
-		// 基盤の中心から足す分を追加してScreen座標を求める
-		data.pos = { base_.pos.x + baseRaito.x, base_.pos.y - baseRaito.y };
-		Sprite* enemy = Sprite::Create(enemyTextureHandle_, data.pos, { 1,1,1,1 }, { 0.5f, 0.5f });
-		data.sprite = std::unique_ptr<Sprite>(enemy);
-
-		enemies_.push_back(std::move(data));
 	}
 }
 

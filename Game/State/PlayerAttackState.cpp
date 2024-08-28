@@ -43,7 +43,7 @@ void PlayerAttackState::Shot() {
 	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
 	
 	if (joyState.Gamepad.bRightTrigger > 50) {
-		const float kBulletSpeed = 0.6f;
+		const float kBulletSpeed = 0.8f;
 		// parentが登録されていたら
 		Vector3 velocity;
 		Reticle* reticle = player_->GetReticle();

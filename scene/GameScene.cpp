@@ -143,12 +143,8 @@ void GameScene::Update() {
 	// ---------------------------------------------
 	playerUI_->Update(player_->GetHpRaito());
 	bossUI_->Update(enemyManager_->GetBossHp());
-	rader_->ClearList();
 	rader_->SetPlayerPosition(player_->GetTranslation());
-	for (const std::unique_ptr<BaseEnemy>& enemy : enemyManager_->GetEnemysList()) {
-		rader_->AddEnemiesPos(enemy->GetWorldTransform().translation_);
-	}
-	rader_->Update(0, playerAimCount_);
+	rader_->Update(0, playerAimCount_, enemyManager_->GetEnemysList());
 
 	// ---------------------------------------------
 	// ↓ 次フレーム前に行っておきたい処理
@@ -221,8 +217,6 @@ void GameScene::Draw() {
 	for (const std::unique_ptr<BossBullet>& bullet : bossBulletList_) {
 		bullet->Draw(viewProjection_);
 	}
-
-	//reticle_->Draw(viewProjection_);
 
 	// ---------------------------------------------
 	// ↓ 線の描画

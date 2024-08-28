@@ -3,11 +3,14 @@
 // STL
 #include <vector>
 #include <list>
+#include <map>
 // KamataEngine
 #include <Sprite.h>
 #include <TextureManager.h>
 // Math
 #include "Math/MyMath.h"
+// GameObject
+#include "GameObject/BaseEnemy.h"
 
 #ifdef _DEBUG
 #include "ImGuiManager.h"
@@ -36,7 +39,7 @@ public:
 	/// 更新関数
 	/// </summary>
 	/// <param name="playerNearEnemyCount"></param>
-	void Update(const uint32_t& playerNearEnemyCount, const uint32_t& playerAimCount);
+	void Update(const uint32_t& playerNearEnemyCount, const uint32_t& playerAimCount, std::list<std::unique_ptr<BaseEnemy>>& enemyList);
 
 	/// <summary>
 	/// 描画関数
@@ -60,7 +63,7 @@ public:
 	/// <summary>
 	/// 敵の位置を計算する
 	/// </summary>
-	void CalculationEnemiesPos();
+	void CalculationEnemiesPos(std::list<std::unique_ptr<BaseEnemy>>& enemyList);
 
 	/// <summary>
 	/// 敵の座標を追加する
@@ -91,8 +94,7 @@ private:
 	// player
 	SpriteData player_;
 	// Enemies
-	std::list<SpriteData> enemies_;
-	std::list<Vector3> enemiesPos_;
+	std::map<BaseEnemy*, SpriteData> enemiesMap_;
 	uint32_t enemyTextureHandle_;
 
 	// ゲーム上の位置
