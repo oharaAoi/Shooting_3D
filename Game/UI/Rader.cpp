@@ -167,8 +167,3 @@ void Rader::CalculationEnemiesPos(std::list<std::unique_ptr<BaseEnemy>>& enemyLi
 		}
 	}
 }
-
-void Rader::ClearList() {
-	enemiesPos_.clear();
-	enemies_.clear();
-}

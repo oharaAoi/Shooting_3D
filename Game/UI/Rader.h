@@ -65,16 +65,6 @@ public:
 	/// </summary>
 	void CalculationEnemiesPos(std::list<std::unique_ptr<BaseEnemy>>& enemyList);
 
-	/// <summary>
-	/// 敵の座標を追加する
-	/// </summary>
-	/// <param name="enemyPos"></param>
-	void AddEnemiesPos(const Vector3& enemyPos) {
-		enemiesPos_.push_back(enemyPos);
-	}
-
-	void ClearList();
-
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　accessor
 //////////////////////////////////////////////////////////////////////////////////////////////////
