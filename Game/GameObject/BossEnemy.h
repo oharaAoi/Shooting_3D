@@ -62,7 +62,17 @@ public:
 	/// <summary>
 	/// 弾をリストに追加する処理
 	/// </summary>
-	void ShotBullet();
+	void NormalShot();
+
+	/// <summary>
+	/// 追従する弾を発射
+	/// </summary>
+	void HomingShot();
+
+	/// <summary>
+	/// 3つの追従する弾
+	/// </summary>
+	void TripleHomingShot();
 
 	/// <summary>
 	/// 状態を変化させるリクエストがあるかを確認する

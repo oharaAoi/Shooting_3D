@@ -46,10 +46,9 @@ public:
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
 	/// <summary>
-	/// world空間での座標を取得する
+	/// 拡大を行う関数
 	/// </summary>
-	/// <returns></returns>
-	Vector3 GetWorldPosition() const override;
+	void ScaleUp();
 
 ///////////////////////////////////////////////////////////
 // accessor
@@ -58,13 +57,33 @@ public:
 	// ------------ ポインタ ------------ // 
 	void SetPlayer(Player* player) { player_ = player; }
 
+	// ------------ world座標 ------------ // 
+	Vector3 GetWorldPosition() const override;
+
+	// ------------ isFire ------------ // 
+	void SetIsFire(const bool& isFire) { isFire_ = isFire; }
+
+	// ------------ waitTime ------------ // 
+	void SetWaitTime(const uint32_t& waitTime) { waitTime_ = waitTime; }
+
 private:
 
 	// ------------ ポインタ(所有権がない物) ------------ // 
 	Player* player_ = nullptr;
 
+	// ------------ 弾の状態に関する変数 ------------ // 
 	const float kBulletSpeed_ = 0.6f;
-
 	BossAttackType attackType_;
+
+	// ------------ Homigに関わる変数 ------------ // 
+	uint32_t homigAttackTime_;
+	bool isFire_;
+	uint32_t waitTime_;
+
+	// ------------ 拡大に関する変数 ------------ // 
+	uint32_t scaleUpFrameCount_;
+	uint32_t scaleUpFrame_ = 60;
+	float scaleUpT_;
+
 };
 

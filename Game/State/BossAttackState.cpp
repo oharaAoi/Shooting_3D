@@ -14,7 +14,8 @@ BossAttackState::~BossAttackState() {
 ///////////////////////////////////////////////////////////
 
 void BossAttackState::Init() {
-	work_.attackTime = 180;
+	work_.attackTime = 240;
+	work_.attackCoolTime = 60;
 }
 
 ///////////////////////////////////////////////////////////
@@ -23,7 +24,13 @@ void BossAttackState::Init() {
 
 void BossAttackState::Update() {
 	enemy_->Move();
+	if (--work_.attackCoolTime <= 0) {
+		enemy_->Attack();
+		work_.attackCoolTime = 60;
+	}
+	
 	if (--work_.attackTime <= 0) {
 		enemy_->SetBehaviorRequest(EnemyBehavior::kRoot);
+		work_.attackTime = 240;
 	}
 }

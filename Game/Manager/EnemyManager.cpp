@@ -32,7 +32,7 @@ void EnemyManager::Init() {
 
 void EnemyManager::Update() {
 
-	EnemyPop();
+	//EnemyPop();
 	
 	ImGuiEdit();
 

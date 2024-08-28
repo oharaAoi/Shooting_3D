@@ -19,6 +19,8 @@ void BossEnemy::Init(std::vector<Model*> models) {
 	enemyType_ = EnemyType::Type_Mob;
 	worldTransforms_[BossParts::Boss_Body].parent_ = &worldTransform_;
 
+	bulletModel_ = ModelLoader::GetInstacne()->GetModel("bossBullet");
+
 	worldTransform_.scale_ = { 6.0f, 6.0f, 6.0f };
 	worldTransform_.translation_ = { 0.0f,0.0f,0.0f };
 	worldTransform_.rotation_ = { 0.0f,3.1f,0.0f };
@@ -30,7 +32,7 @@ void BossEnemy::Init(std::vector<Model*> models) {
 	radius_ = 2.0f;
 	isDead_ = false;
 
-	attackType_ = BossAttackType::Normal_Attack;
+	attackType_ = BossAttackType::TripleHoming_Attack;
 
 	floating_.parameter = 0;
 	floating_.period = 90;
@@ -79,23 +81,55 @@ void BossEnemy::Move() {
 void BossEnemy::Attack() {
 	switch (attackType_) {
 	case Normal_Attack:
-		ShotBullet();
+		NormalShot();
 		break;
 	case Homing_Attack:
+		HomingShot();
 		break;
 	case TripleHoming_Attack:
+		TripleHomingShot();
 		break;
 	}
 }
 
-void BossEnemy::ShotBullet() {
+// ------------------- 通常の弾を発射する ------------------- //
+
+void BossEnemy::NormalShot() {
 	gameScene_->AddBossBullet(
 		std::move(std::make_unique<BossBullet>(
 			bulletModel_, worldTransform_.translation_, playerPosition_, worldTransform_.rotation_, worldTransform_.parent_, BossAttackType::Normal_Attack
 	)));
 }
 
-// ------------------- 状態遷移のリクエストがあるかを確認する ------------------- //
+// ------------------- 追従する弾を発射する ------------------- //
+
+void BossEnemy::HomingShot() {
+	gameScene_->AddBossBullet(
+		std::move(std::make_unique<BossBullet>(
+			bulletModel_, worldTransform_.translation_, playerPosition_, worldTransform_.rotation_, worldTransform_.parent_, BossAttackType::Homing_Attack
+	)));
+}
+
+// ------------------- 3つの追従する弾 ------------------- //
+
+void BossEnemy::TripleHomingShot() {
+	Vector3 firstPos[3] = { Vector3{-2.5f, 1, 0.3f} * 5.0f, Vector3{0, 1, 0.3f} * 5.0f, Vector3{2.5f, 1, 0.3f} * 5.0f };
+	Vector3 forward = TransformNormal({ 0,0,1 }, worldTransform_.matWorld_);
+
+	for (uint32_t oi = 0; oi < 3; ++oi) {
+		firstPos[oi] = worldTransform_.translation_ + (forward * firstPos[oi]);
+		std::unique_ptr<BossBullet> bossBullet;
+		bossBullet = std::make_unique<BossBullet>(
+			bulletModel_, firstPos[oi], playerPosition_, worldTransform_.rotation_, worldTransform_.parent_, BossAttackType::TripleHoming_Attack
+		);
+		bossBullet->SetWaitTime(10 * (oi + 1));
+		bossBullet->SetIsFire(false);
+
+		gameScene_->AddBossBullet(std::move(bossBullet));
+	}
+}
+
+// ------------------- 状態を変更する関数 ------------------- //
 
 void BossEnemy::CheckBehaviorRequest() {
 	// リクエストがあったら

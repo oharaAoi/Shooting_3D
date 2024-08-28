@@ -238,7 +238,7 @@
       <Filter>Game\Manager</Filter>
     </ClCompile>
     <ClCompile Include="Game\UI\BossUI.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -453,7 +453,7 @@
       <Filter>Game\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\BossUI.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -112,7 +112,6 @@ void GameScene::Update() {
 
 	reticle_->Update(enemyManager_->GetEnemysList(), player_->GetWorldTransform(), followCamera_->GetViewProjection());
 
-
 	if (reticle_->GetIsLockOn()) {
 		player_->SetIsLockOnMode(true);
 	} else {
@@ -120,7 +119,6 @@ void GameScene::Update() {
 	}
 
 	player_->SetRotationX(followCamera_->GetCameraRotation().x);
-
 	player_->Update();
 
 	// bullet
@@ -147,7 +145,7 @@ void GameScene::Update() {
 	rader_->Update(0, playerAimCount_, enemyManager_->GetEnemysList());
 
 	// ---------------------------------------------
-	// ↓ 次フレーム前に行っておきたい処理
+	// ↓ 次フレームの前に行っておきたい処理
 	// ---------------------------------------------
 	reticle_->CheckTargerAlive();
 

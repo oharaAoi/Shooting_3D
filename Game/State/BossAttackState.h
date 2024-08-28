@@ -10,6 +10,7 @@ public:
 
 	struct Work {
 		uint32_t attackTime;
+		uint32_t attackCoolTime;
 	};
 
 public:
