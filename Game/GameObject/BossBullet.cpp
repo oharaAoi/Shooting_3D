@@ -21,7 +21,7 @@ void BossBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity,
 	Vector3 direction = velocity_ - worldTransform_.translation_;
 	velocity_ = Normalize(direction) * kBulletSpeed_;
 
-	homigAttackTime_ = 60;
+	homigAttackTime_ = 40;
 	isFire_ = false;
 }
 

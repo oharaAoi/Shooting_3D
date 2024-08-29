@@ -71,6 +71,8 @@ public:
 
 	void SetPlayerPosition(const Vector3& pos) { (playerPosition_.x = pos.x, playerPosition_.y = pos.z); }
 
+	void SetPlayerRotation(const Vector3& rotation) { playerRotation_ = rotation; }
+
 private:
 
 	// playerの近くにいる敵の数(レーダーの範囲内の敵の数)
@@ -83,12 +85,14 @@ private:
 	Vector4 baseLightColor_;
 	// player
 	SpriteData player_;
+	SpriteData playerDire_;
 	// Enemies
 	std::map<BaseEnemy*, SpriteData> enemiesMap_;
 	uint32_t enemyTextureHandle_;
 
 	// ゲーム上の位置
 	Vector2 playerPosition_;
+	Vector3 playerRotation_;
 
 	Vector2 baseTextureSize_;
 

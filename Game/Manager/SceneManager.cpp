@@ -20,6 +20,9 @@ void SceneManager::Init() {
 		scene_->Initialize();
 		break;
 	}
+
+	audioManager_ = AudioManager::GetInstacne();
+	audioManager_->Init();
 }
 
 void SceneManager::Update() {
@@ -38,10 +41,12 @@ void SceneManager::Update() {
 		}
 	}
 
+	audioManager_->Update();
 	scene_->Update();
-
 }
 
 void SceneManager::Draw() {
 	scene_->Draw();
+
+	audioManager_->IsPlay();
 }

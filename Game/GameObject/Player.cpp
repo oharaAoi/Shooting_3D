@@ -14,8 +14,8 @@ Player::~Player() {}
 void Player::Init(std::vector<Model*> models) {
 	BaseCharacter::Init(models);
 
-	bullerModel_ = ModelLoader::GetInstacne()->GetModel("cube");
-
+	bullerModel_ = ModelLoader::GetInstacne()->GetModel("playerBullet");
+	
 	// partsの親の設定
 	worldTransforms_[PlayerParts::Parts_Body].parent_ = &worldTransform_;
 	worldTransforms_[PlayerParts::Parts_Face].parent_ = &worldTransforms_[PlayerParts::Parts_Body];
@@ -258,6 +258,7 @@ void Player::OnCollision(Collider* other) {
 void Player::KnockBack(const Vector3& collisionObjectPos) {
 	Vector3 knockBackDire = Normalize(GetWorldPosition() - collisionObjectPos);
 	worldTransform_.translation_ -= knockBackDire * -0.2f;
+	AudioManager::GetInstacne()->AddPlayList("Audio/hited.wav", false, 0.5f);
 	color_.SetColor({ 1,0,0,1 });
 	color_.TransferMatrix();
 }

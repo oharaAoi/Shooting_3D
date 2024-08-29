@@ -142,6 +142,7 @@ void GameScene::Update() {
 	playerUI_->Update(player_->GetHpRaito());
 	bossUI_->Update(enemyManager_->GetBossHp());
 	rader_->SetPlayerPosition(player_->GetTranslation());
+	rader_->SetPlayerRotation(player_->GetForward());
 	rader_->Update(0, playerAimCount_, enemyManager_->GetEnemysList());
 
 	// ---------------------------------------------

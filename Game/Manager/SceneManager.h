@@ -4,6 +4,8 @@
 // Scene
 #include "GameScene.h"
 #include "Scene/TitleScene.h"
+// Managet
+#include "Manager/AudioManager.h"
 
 enum class Scene {
 	kTitle,
@@ -41,6 +43,8 @@ public:
 private:
 
 	std::unique_ptr<BaseScene> scene_ = nullptr;
+
+	AudioManager* audioManager_ = nullptr;
 
 };
 

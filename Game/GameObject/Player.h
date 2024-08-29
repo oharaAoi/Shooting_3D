@@ -213,4 +213,5 @@ private:
 
 	uint32_t hp_;
 	uint32_t firstHp_;
+
 };

@@ -29,6 +29,11 @@ void Rader::Init() {
 	Sprite* player = Sprite::Create(player_.textureHandle, player_.pos, { 1,1,1,1 }, { 0.5f, 0.5f });
 	player_.sprite = std::unique_ptr<Sprite>(player);
 
+	// プレイヤーの光
+	playerDire_.textureHandle = TextureManager::Load("./Resources/UI/Rader/playerDire.png");
+	Sprite* playerDire = Sprite::Create(playerDire_.textureHandle, player_.pos, { 1,1,1,1 }, { 0.5f, 0.5f });
+	playerDire_.sprite = std::unique_ptr<Sprite>(playerDire);
+
 	enemyTextureHandle_ = TextureManager::Load("./Resources/UI/Rader/enemy.png");
 }
 
@@ -54,6 +59,13 @@ void Rader::Update(const uint32_t& playerNearEnemyCount, const uint32_t& playerA
 	// -------------------------------------------------
 	CalculationEnemiesPos(enemyList);
 
+	base_.sprite->SetPosition(base_.pos);
+	baseLight_.sprite->SetPosition(base_.pos);
+	baseLight_.sprite->SetColor(baseLightColor_);
+	player_.sprite->SetPosition(player_.pos);
+	playerDire_.sprite->SetPosition(player_.pos);
+	playerDire_.sprite->SetRotation(std::atan2f(playerRotation_.x, playerRotation_.z));
+
 	EditImGui();
 }
 
@@ -65,6 +77,7 @@ void Rader::Draw() {
 	base_.sprite->Draw();
 	baseLight_.sprite->Draw();
 	player_.sprite->Draw();
+	playerDire_.sprite->Draw();
 
 	for (std::map<BaseEnemy*, SpriteData>::iterator it = enemiesMap_.begin(); it != enemiesMap_.end(); ++it) {
 		SpriteData& spriteData = it->second;
@@ -83,12 +96,6 @@ void Rader::EditImGui() {
 	ImGui::DragFloat2("base", &base_.pos.x, 2.0f);
 	ImGui::DragFloat4("baseLight", &baseLightColor_.x, 0.1f);
 	ImGui::End();
-
-	base_.sprite->SetPosition(base_.pos);
-	baseLight_.sprite->SetPosition(base_.pos);
-	baseLight_.sprite->SetColor(baseLightColor_);
-	player_.sprite->SetPosition(player_.pos);
-
 #endif // _DEBUG
 }
 

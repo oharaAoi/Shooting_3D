@@ -13,6 +13,8 @@
 // collision
 #include "Collision/Collider.h"
 #include "Collision/CollisionTypeIdDef.h"
+// Manager
+#include "Manager/AudioManager.h"
 
 #ifdef _DEBUG
 #include "ImGuiManager.h"

@@ -43,6 +43,7 @@ void PlayerRootState::Dash() {
 		// 角度から方向にする
 		Vector3 velocity = TransformNormal({ 0,0,0.7f }, player_->GetWorldTransform().matWorld_);
 		dashCoolTime_ = 40;
+		//AudioManager::GetInstacne()->AddPlayList("Audio/playerDash.wav", false, 0.5f);
 	}
 }
 
