@@ -104,6 +104,16 @@ public:
 	void FloatingGimmick();
 
 	/// <summary>
+	/// Playerの方向を向く関数
+	/// </summary>
+	void TurnAroundPlayer();
+
+	/// <summary>
+	/// 攻撃の種類を選ぶ
+	/// </summary>
+	void ChangeAttackType();
+
+	/// <summary>
 	/// ImGuiの編集
 	/// </summary>
 	void EditImGui() override;
@@ -125,6 +135,7 @@ private:
 
 	// ------------ 挙動に関する変数 ------------ // 
 	Floating floating_;
+	float forwardDot_ = 0;
 
 	// ------------ 攻撃に関する変数 ------------ // 
 	// なんの攻撃を行うか
@@ -133,7 +144,9 @@ private:
 	uint32_t rushChargeTimeCount_;
 	uint32_t rushChargeTime_;
 	uint32_t rushTime_;
+	uint32_t stiffnessTime_;
 
 	bool isRushAttack_;
+	bool isRush_;
 };
 

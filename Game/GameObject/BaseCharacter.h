@@ -4,9 +4,11 @@
 #include <string>
 #include "Model.h"
 #include "Input.h"
+#include "Audio.h"
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 #include "Vector3.h"
+#include "ObjectColor.h"
 #include "Math/MyMath.h"
 // collision
 #include "Collision/Collider.h"
@@ -70,5 +72,7 @@ protected:
 	WorldTransform worldTransform_;
 	// キーとなる配列
 	std::vector<std::string> keys_;
+	// 色
+	ObjectColor color_;
 };
 

@@ -80,7 +80,7 @@ void Player::Update() {
 	// ---------------------------------------------
 	// ↓ Playerの状態に関する処理を行う
 	// ---------------------------------------------
-
+	color_.SetColor({ 1,1,1,1 });
 	// 状態のリクエストをチェックする
 	CheckBehaviorRequest();
 
@@ -244,8 +244,22 @@ void Player::CheckBehaviorRequest() {
 void Player::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
 	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kEnemy)) {
-
+		hp_--;
+		KnockBack(other->GetWorldPosition());
+	} else if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kBossBullet)) {
+		hp_--;
+		KnockBack(other->GetWorldPosition());
 	}
+
+}
+
+// ------------------- 当たった時の処理 ------------------- //
+
+void Player::KnockBack(const Vector3& collisionObjectPos) {
+	Vector3 knockBackDire = Normalize(GetWorldPosition() - collisionObjectPos);
+	worldTransform_.translation_ -= knockBackDire * -0.2f;
+	color_.SetColor({ 1,0,0,1 });
+	color_.TransferMatrix();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

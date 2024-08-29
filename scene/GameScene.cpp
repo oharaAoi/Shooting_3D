@@ -350,6 +350,10 @@ void GameScene::CheckAllCollision() {
 		collisionManager_->AddCollider(bullet.get());
 	}
 
+	for (const std::unique_ptr<BossBullet>& bullet : bossBulletList_) {
+		collisionManager_->AddCollider(bullet.get());
+	}
+
 	// ---------------------------------------------
 	// ↓ 当たり判定を取る
 	// ---------------------------------------------

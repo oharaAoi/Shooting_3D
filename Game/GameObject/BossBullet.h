@@ -87,5 +87,8 @@ private:
 	uint32_t scaleUpFrame_ = 60;
 	float scaleUpT_;
 
+	// ------------ 速度に関わる変数 ------------ // 
+	Vector3 firstPlayerPos_;
+
 };
 

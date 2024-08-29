@@ -36,14 +36,16 @@ void BossEnemy::Init(std::vector<Model*> models) {
 	hp_ = 500;
 	radius_ = 2.0f;
 	isDead_ = false;
+	forwardDot_ = 0;
 
 	floating_.parameter = 0;
-	floating_.period = 90;
-	floating_.amplitude = 0.2f;
+	floating_.period = 100;
+	floating_.amplitude = 0.1f;
 
 	rushChargeTimeCount_ = 0;
 	rushChargeTime_ = 80;
 	rushTime_ = 80;
+	stiffnessTime_ = 0;
 
 	firstHp_ = hp_;
 
@@ -55,6 +57,11 @@ void BossEnemy::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void BossEnemy::Update() {
+
+	if (!isRush_) {
+		TurnAroundPlayer();
+	}
+
 	// 状態の変更のリクエストがあるかを確認する
 	CheckBehaviorRequest();
 	
@@ -137,37 +144,29 @@ void BossEnemy::RushAttack() {
 		worldTransform_.translation_ += randomPos;
 		// playerまでの距離
 		velocity_ = playerPosition_ - worldTransform_.translation_;
-		// playerの方向を向く
-
-
+		
 		// 突進する処理
 	} else if(rushTime_ > 0){
 		rushTime_--;
 		velocity_ = Normalize(velocity_);
 		worldTransform_.translation_ += velocity_;
+		isRush_ = true;
 
 		// 突進後の処理
 	} else  {
+		isRush_ = false;
 		const float threshold = 0.99f;
 		velocity_ = { 0,0,0 };
+		stiffnessTime_++;
 
-		Vector3 targetAngleVector = playerPosition_ - worldTransform_.translation_;
-		// Y軸周りで回転させる角度を求める
-		float targetAngleY = std::atan2f(targetAngleVector.x, targetAngleVector.z);
-		// X軸周りで回転させる角度を求める
-		float xzLenght = Length({ targetAngleVector.x, 0, targetAngleVector.z });
-		float targetAngleX = std::atan2f(-targetAngleVector.y, xzLenght);
-		// 振り向かせる
-		worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngleY, 0.03f);
-		worldTransform_.rotation_.z = LerpShortAngle(worldTransform_.rotation_.x, targetAngleX, 0.03f);
 		// 向きが同じか判定する処理を追加
 		Vector3 forward = Normalize(TransformNormal({ 0,0,1 }, worldTransform_.matWorld_));
-		float forwardDot = Dot(forward, Normalize(targetAngleVector));
-
-		// 一定時間過ぎたら
-		if (forwardDot >= threshold) {
+		forwardDot_ = Dot(forward, Normalize(playerPosition_ - worldTransform_.translation_));
+		// ほぼplayerの方向を向いたら
+		if ((forwardDot_ >= threshold) || stiffnessTime_ > 140) {
 			isRushAttack_ = false;
 			rushTime_ = 80;
+			stiffnessTime_ = 0;
 			rushChargeTimeCount_ = 0;
 			ChangeBehavior(std::make_unique<BossRootState>(this));
 		}
@@ -207,6 +206,7 @@ void BossEnemy::CheckBehaviorRequest() {
 			break;
 
 		case EnemyBehavior::kAttack:
+			ChangeAttackType();
 			ChangeBehavior(std::make_unique<BossAttackState>(this));
 			break;
 		}
@@ -238,8 +238,29 @@ void BossEnemy::FloatingGimmick() {
 	floating_.parameter = std::fmod(floating_.parameter, 2.0f * std::numbers::pi_v<float>);
 	// 座標に反映
 	Vector3 translate = worldTransform_.translation_;
-	translate.y = std::sin(floating_.parameter) * floating_.amplitude;
+	translate.y += std::sin(floating_.parameter) * floating_.amplitude;
 	worldTransform_.translation_ = translate;
+}
+
+// ------------------- Playerの方向を向く関数 ------------------- //
+
+void BossEnemy::TurnAroundPlayer() {
+	Vector3 targetAngleVector = playerPosition_ - worldTransform_.translation_;
+	// Y軸周りで回転させる角度を求める
+	float targetAngleY = std::atan2f(targetAngleVector.x, targetAngleVector.z);
+	// X軸周りで回転させる角度を求める
+	float xzLenght = Length({ targetAngleVector.x, 0, targetAngleVector.z });
+	float targetAngleX = std::atan2f(-targetAngleVector.y, xzLenght);
+	// 振り向かせる
+	worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngleY, 0.03f);
+	worldTransform_.rotation_.x = LerpShortAngle(worldTransform_.rotation_.x, targetAngleX, 0.03f);
+}
+
+// ------------------- 攻撃の種類を選ぶ ------------------- //
+
+void BossEnemy::ChangeAttackType() {
+	uint32_t attackNumber = static_cast<uint32_t>(RandomFloat(0, 3));
+	attackType_ = static_cast<BossAttackType>(attackNumber);
 }
 
 // ------------------- ImGuiを編集する関数 ------------------- //
@@ -251,6 +272,7 @@ void BossEnemy::EditImGui() {
 	ImGui::Separator();
 	ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.1f);
 	ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.1f);
+	ImGui::Text("attackType: %d", attackType_);
 	ImGui::End();
 #endif // _DEBUG
 }

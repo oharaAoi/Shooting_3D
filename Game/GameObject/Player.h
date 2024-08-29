@@ -102,6 +102,11 @@ public:
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
 	/// <summary>
+	/// ノックバックする関数
+	/// </summary>
+	void KnockBack(const Vector3& collisionObjectPos);
+
+	/// <summary>
 	/// ImGui
 	/// </summary>
 	void EditImGui();

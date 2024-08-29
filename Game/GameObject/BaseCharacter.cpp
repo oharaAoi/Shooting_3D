@@ -17,6 +17,9 @@ void BaseCharacter::Init(std::vector<Model*> models) {
 	obb_.size = { 1,1,1 };
 
 	//Collider::Inti();
+
+	color_.Initialize();
+	color_.SetColor({ 1,1,1,1 });
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,6 +30,7 @@ void BaseCharacter::Update() {
 	obb_.center = worldTransform_.translation_;
 	obb_.MakeOBBAxis(worldTransform_.rotation_);
 	worldTransform_.UpdateMatrix();
+	color_.TransferMatrix();
 	for (uint32_t oi = 0; oi < models_.size(); oi++) {
 		worldTransforms_[oi].UpdateMatrix();
 	}
@@ -38,7 +42,7 @@ void BaseCharacter::Update() {
 
 void BaseCharacter::Draw(const ViewProjection& viewProjection) const {
 	for (uint32_t oi = 0; oi < models_.size(); oi++) {
-		models_[oi]->Draw(worldTransforms_[oi], viewProjection);
+		models_[oi]->Draw(worldTransforms_[oi], viewProjection, &color_);
 	}
 }
 

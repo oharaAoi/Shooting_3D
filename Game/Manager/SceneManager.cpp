@@ -23,20 +23,23 @@ void SceneManager::Init() {
 }
 
 void SceneManager::Update() {
-	scene_->Update();
-
 	if (scene_->GetIsFinish()) {
 		switch (nowScene_) {
 		case Scene::kTitle:
+			nowScene_ = Scene::kGame;
 			scene_.reset(new TitleScene);
 			scene_->Initialize();
 			break;
 		case Scene::kGame:
+			nowScene_ = Scene::kTitle;
 			scene_.reset(new GameScene);
 			scene_->Initialize();
 			break;
 		}
 	}
+
+	scene_->Update();
+
 }
 
 void SceneManager::Draw() {

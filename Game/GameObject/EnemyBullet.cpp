@@ -2,6 +2,7 @@
 
 EnemyBullet::EnemyBullet(Model* model, const Vector3& pos, const Vector3& velocity,
 						 const Vector3& rotation, const WorldTransform* parent, const bool& isHoming) {
+	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kEnemyBullet));
 	Init(model, pos, velocity, rotation, parent);
 	isHomig_ = isHoming;
 }

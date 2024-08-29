@@ -3,6 +3,7 @@
 
 BossBullet::BossBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent, const BulletType& attackType) {
 	attackType_ = attackType;
+	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kBossBullet));
 	Init(model, pos, velocity, rotation, parent);
 }
 
@@ -16,10 +17,11 @@ void BossBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity,
 	BaseBullet::Init(model, pos, velocity, rotation, parent);
 
 	// velocityにplayerの座標が入っているため,playerの方向へのVelocityに変更する
+	firstPlayerPos_ = velocity_;
 	Vector3 direction = velocity_ - worldTransform_.translation_;
 	velocity_ = Normalize(direction) * kBulletSpeed_;
 
-	homigAttackTime_ = 30;
+	homigAttackTime_ = 60;
 	isFire_ = false;
 }
 
@@ -31,8 +33,8 @@ void BossBullet::Update() {
 	// ↓ 発射前処理
 	// ---------------------------------------------
 	if (!isFire_) {
-		ScaleUp();
 		velocity_ = { 0,0,0 };
+		ScaleUp();
 		BaseBullet::Update();
 		return;
 	}
@@ -42,6 +44,7 @@ void BossBullet::Update() {
 	// ---------------------------------------------
 	switch (attackType_) {
 	case BulletType::Normal_Bullet:
+		
 		break;
 	case BulletType::Homing_Bullet:
 		if (--homigAttackTime_ > 0) {
@@ -93,6 +96,7 @@ void BossBullet::ScaleUp() {
 
 	if (scaleUpFrameCount_ >= scaleUpFrame_) {
 		isFire_ = true;
+		velocity_ = Normalize(firstPlayerPos_ - worldTransform_.translation_) * kBulletSpeed_;
 	}
 }
 
