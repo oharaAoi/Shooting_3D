@@ -12,6 +12,8 @@
 
 enum BossParts {
 	Boss_Body = 0,
+	Boss_LEye,
+	Boss_REye
 };
 
 enum BossAttackType {

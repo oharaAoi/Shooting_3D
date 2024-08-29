@@ -12,7 +12,9 @@ void EnemyManager::Init() {
 	ModelLoader* modelLoader = ModelLoader::GetInstacne();
 	mobEnemyPartsModels_.emplace_back(modelLoader->GetModel("mobEnemy"));
 	midEnemyPartsModels_.emplace_back(modelLoader->GetModel("midEnemy"));
-	bossEnemyPartsModels_.emplace_back(modelLoader->GetModel("mobEnemy"));
+	bossEnemyPartsModels_.emplace_back(modelLoader->GetModel("bossEnemy"));
+	bossEnemyPartsModels_.emplace_back(modelLoader->GetModel("bossEnemyLEye"));
+	bossEnemyPartsModels_.emplace_back(modelLoader->GetModel("bossEnemyREye"));
 
 	currentIndex_ = 0;
 	fileNum_ = 0;

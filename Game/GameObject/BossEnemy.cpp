@@ -18,11 +18,26 @@ void BossEnemy::Init(std::vector<Model*> models) {
 	BaseEnemy::Init(models);
 	enemyType_ = EnemyType::Type_Mob;
 	worldTransforms_[BossParts::Boss_Body].parent_ = &worldTransform_;
+	worldTransforms_[BossParts::Boss_LEye].parent_ = &worldTransform_;
+	worldTransforms_[BossParts::Boss_REye].parent_ = &worldTransform_;
+
+	// ---------------------------------------------
+	// ↓ 調整項目
+	// ---------------------------------------------
+	AdjustmentItem* adjustItem = AdjustmentItem::GetInstance();
+	const char* groupName = "Boss";
+	// グループを追加
+	adjustItem->CreateGroup(groupName);
+	adjustItem->AddItem(groupName, "body_Translation", worldTransforms_[BossParts::Boss_Body].translation_);
+	adjustItem->AddItem(groupName, "L_Eye_Translation", worldTransforms_[BossParts::Boss_LEye].translation_);
+	adjustItem->AddItem(groupName, "R_Eye_Translation", worldTransforms_[BossParts::Boss_REye].translation_);
+
+	worldTransforms_[BossParts::Boss_Body].translation_ = adjustItem->GetValue<Vector3>(groupName, "body_Translation");
+	worldTransforms_[BossParts::Boss_LEye].translation_ = adjustItem->GetValue<Vector3>(groupName, "L_Eye_Translation");
+	worldTransforms_[BossParts::Boss_REye].translation_ = adjustItem->GetValue<Vector3>(groupName, "R_Eye_Translation");
 
 	bulletModel_ = ModelLoader::GetInstacne()->GetModel("bossBullet");
-
-	worldTransform_.scale_ = { 6.0f, 6.0f, 6.0f };
-	worldTransform_.translation_ = { 0.0f,0.0f,0.0f };
+	
 	worldTransform_.rotation_ = { 0.0f,3.1f,0.0f };
 
 	behaviorRequest_ = EnemyBehavior::kRoot;
@@ -34,7 +49,7 @@ void BossEnemy::Init(std::vector<Model*> models) {
 	// パラメータの初期化
 	// --------------------------------------
 	hp_ = 500;
-	radius_ = 2.0f;
+	radius_ = 7.0f;
 	isDead_ = false;
 	forwardDot_ = 0;
 
@@ -49,7 +64,7 @@ void BossEnemy::Init(std::vector<Model*> models) {
 
 	firstHp_ = hp_;
 
-	obb_.size = { 5,5,5 };
+	obb_.size = { radius_,radius_,radius_ };
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,7 +85,7 @@ void BossEnemy::Update() {
 		RushAttack();
 	} else {
 		// 現在の状態を更新する
-		behaviorState_->Update();
+		//behaviorState_->Update();
 	}
 
 	BaseEnemy::Update();
@@ -272,7 +287,11 @@ void BossEnemy::EditImGui() {
 	ImGui::Separator();
 	ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.1f);
 	ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.1f);
+	ImGui::DragFloat3("body", &worldTransforms_[BossParts::Boss_Body].translation_.x, 0.1f);
+	ImGui::DragFloat3("leftEye", &worldTransforms_[BossParts::Boss_LEye].translation_.x, 0.1f);
+	ImGui::DragFloat3("rightEye", &worldTransforms_[BossParts::Boss_REye].translation_.x, 0.1f);
 	ImGui::Text("attackType: %d", attackType_);
+
 	ImGui::End();
 #endif // _DEBUG
 }
