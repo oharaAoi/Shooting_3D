@@ -7,9 +7,18 @@
 // State
 #include "State/BossRootState.h"
 #include "State/BossAttackState.h"
+// Math
+#include "Math/MyRandom.h"
 
 enum BossParts {
 	Boss_Body = 0,
+};
+
+enum BossAttackType {
+	Normal_Attack,
+	Homing_Attack,
+	TripleHoming_Attack,
+	Rush_Attack
 };
 
 class GameScene;
@@ -70,6 +79,11 @@ public:
 	void HomingShot();
 
 	/// <summary>
+	/// 突進攻撃を行う
+	/// </summary>
+	void RushAttack();
+
+	/// <summary>
 	/// 3つの追従する弾
 	/// </summary>
 	void TripleHomingShot();
@@ -115,5 +129,11 @@ private:
 	// ------------ 攻撃に関する変数 ------------ // 
 	// なんの攻撃を行うか
 	BossAttackType attackType_;
+
+	uint32_t rushChargeTimeCount_;
+	uint32_t rushChargeTime_;
+	uint32_t rushTime_;
+
+	bool isRushAttack_;
 };
 

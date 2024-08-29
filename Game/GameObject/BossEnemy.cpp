@@ -28,15 +28,22 @@ void BossEnemy::Init(std::vector<Model*> models) {
 	behaviorRequest_ = EnemyBehavior::kRoot;
 	ChangeBehavior(std::make_unique<BossRootState>(this));
 
+	attackType_ = BossAttackType::Rush_Attack;
+
+	// --------------------------------------
+	// パラメータの初期化
+	// --------------------------------------
 	hp_ = 500;
 	radius_ = 2.0f;
 	isDead_ = false;
 
-	attackType_ = BossAttackType::TripleHoming_Attack;
-
 	floating_.parameter = 0;
 	floating_.period = 90;
 	floating_.amplitude = 0.2f;
+
+	rushChargeTimeCount_ = 0;
+	rushChargeTime_ = 80;
+	rushTime_ = 80;
 
 	firstHp_ = hp_;
 
@@ -50,8 +57,14 @@ void BossEnemy::Init(std::vector<Model*> models) {
 void BossEnemy::Update() {
 	// 状態の変更のリクエストがあるかを確認する
 	CheckBehaviorRequest();
-	// 現在の状態を更新する
-	behaviorState_->Update();
+	
+	// 突進攻撃中であれば
+	if (isRushAttack_) {
+		RushAttack();
+	} else {
+		// 現在の状態を更新する
+		behaviorState_->Update();
+	}
 
 	BaseEnemy::Update();
 	// ImGuiの編集
@@ -89,6 +102,9 @@ void BossEnemy::Attack() {
 	case TripleHoming_Attack:
 		TripleHomingShot();
 		break;
+	case Rush_Attack:
+		isRushAttack_ = true;
+		break;
 	}
 }
 
@@ -97,7 +113,7 @@ void BossEnemy::Attack() {
 void BossEnemy::NormalShot() {
 	gameScene_->AddBossBullet(
 		std::move(std::make_unique<BossBullet>(
-			bulletModel_, worldTransform_.translation_, playerPosition_, worldTransform_.rotation_, worldTransform_.parent_, BossAttackType::Normal_Attack
+			bulletModel_, worldTransform_.translation_, playerPosition_, worldTransform_.rotation_, worldTransform_.parent_, BulletType::Normal_Bullet
 	)));
 }
 
@@ -106,8 +122,56 @@ void BossEnemy::NormalShot() {
 void BossEnemy::HomingShot() {
 	gameScene_->AddBossBullet(
 		std::move(std::make_unique<BossBullet>(
-			bulletModel_, worldTransform_.translation_, playerPosition_, worldTransform_.rotation_, worldTransform_.parent_, BossAttackType::Homing_Attack
+			bulletModel_, worldTransform_.translation_, playerPosition_, worldTransform_.rotation_, worldTransform_.parent_, BulletType::Homing_Bullet
 	)));
+}
+
+// ------------------- 突進攻撃を行う ------------------- //
+
+void BossEnemy::RushAttack() {
+	// 突進前の震え
+	if (rushChargeTimeCount_ < rushChargeTime_) {
+		rushChargeTimeCount_++;
+		// 震える演出
+		Vector3 randomPos = RandomVector3(-0.1f, 0.1f);
+		worldTransform_.translation_ += randomPos;
+		// playerまでの距離
+		velocity_ = playerPosition_ - worldTransform_.translation_;
+		// playerの方向を向く
+
+
+		// 突進する処理
+	} else if(rushTime_ > 0){
+		rushTime_--;
+		velocity_ = Normalize(velocity_);
+		worldTransform_.translation_ += velocity_;
+
+		// 突進後の処理
+	} else  {
+		const float threshold = 0.99f;
+		velocity_ = { 0,0,0 };
+
+		Vector3 targetAngleVector = playerPosition_ - worldTransform_.translation_;
+		// Y軸周りで回転させる角度を求める
+		float targetAngleY = std::atan2f(targetAngleVector.x, targetAngleVector.z);
+		// X軸周りで回転させる角度を求める
+		float xzLenght = Length({ targetAngleVector.x, 0, targetAngleVector.z });
+		float targetAngleX = std::atan2f(-targetAngleVector.y, xzLenght);
+		// 振り向かせる
+		worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngleY, 0.03f);
+		worldTransform_.rotation_.z = LerpShortAngle(worldTransform_.rotation_.x, targetAngleX, 0.03f);
+		// 向きが同じか判定する処理を追加
+		Vector3 forward = Normalize(TransformNormal({ 0,0,1 }, worldTransform_.matWorld_));
+		float forwardDot = Dot(forward, Normalize(targetAngleVector));
+
+		// 一定時間過ぎたら
+		if (forwardDot >= threshold) {
+			isRushAttack_ = false;
+			rushTime_ = 80;
+			rushChargeTimeCount_ = 0;
+			ChangeBehavior(std::make_unique<BossRootState>(this));
+		}
+	}
 }
 
 // ------------------- 3つの追従する弾 ------------------- //
@@ -120,7 +184,7 @@ void BossEnemy::TripleHomingShot() {
 		firstPos[oi] = worldTransform_.translation_ + (forward * firstPos[oi]);
 		std::unique_ptr<BossBullet> bossBullet;
 		bossBullet = std::make_unique<BossBullet>(
-			bulletModel_, firstPos[oi], playerPosition_, worldTransform_.rotation_, worldTransform_.parent_, BossAttackType::TripleHoming_Attack
+			bulletModel_, firstPos[oi], playerPosition_, worldTransform_.rotation_, worldTransform_.parent_, BulletType::TripleHoming_Bullet
 		);
 		bossBullet->SetWaitTime(10 * (oi + 1));
 		bossBullet->SetIsFire(false);

@@ -2,17 +2,19 @@
 #include "GameObject/BaseBullet.h"
 #include "GameObject/Player.h"
 
-enum BossAttackType {
-	Normal_Attack,
-	Homing_Attack,
-	TripleHoming_Attack
+class BossEnemy;
+
+enum class BulletType {
+	Normal_Bullet,
+	Homing_Bullet,
+	TripleHoming_Bullet
 };
 
 class BossBullet :
     public BaseBullet {
 public:
 
-    BossBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent, const BossAttackType& attackType);
+    BossBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent, const BulletType& attackType);
     ~BossBullet();
 
 	/// <summary>
@@ -73,7 +75,7 @@ private:
 
 	// ------------ 弾の状態に関する変数 ------------ // 
 	const float kBulletSpeed_ = 0.6f;
-	BossAttackType attackType_;
+	BulletType  attackType_;
 
 	// ------------ Homigに関わる変数 ------------ // 
 	uint32_t homigAttackTime_;

@@ -240,6 +240,9 @@
     <ClCompile Include="Game\UI\BossUI.cpp">
       <Filter>Game\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Math\MyRandom.cpp">
+      <Filter>Game\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -454,6 +457,9 @@
     </ClInclude>
     <ClInclude Include="Game\UI\BossUI.h">
       <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Math\MyRandom.h">
+      <Filter>Game\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

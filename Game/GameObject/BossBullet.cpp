@@ -1,6 +1,7 @@
 #include "BossBullet.h"
+#include "GameObject/BossEnemy.h"
 
-BossBullet::BossBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent, const BossAttackType& attackType) {
+BossBullet::BossBullet(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent, const BulletType& attackType) {
 	attackType_ = attackType;
 	Init(model, pos, velocity, rotation, parent);
 }
@@ -40,19 +41,19 @@ void BossBullet::Update() {
 	// ↓ 攻撃の種類によってVelocityを更新する
 	// ---------------------------------------------
 	switch (attackType_) {
-	case Normal_Attack:
+	case BulletType::Normal_Bullet:
 		break;
-	case Homing_Attack:
+	case BulletType::Homing_Bullet:
 		if (--homigAttackTime_ > 0) {
 			Vector3 direction = player_->GetTranslation() - worldTransform_.translation_;
 			velocity_ = Normalize(direction) * kBulletSpeed_;
 		} else {
-			attackType_ = BossAttackType::Normal_Attack;
+			attackType_ = BulletType::Normal_Bullet;
 		}
 		break;
-	case TripleHoming_Attack:
+	case BulletType::TripleHoming_Bullet:
 		if (--waitTime_ <= 0) {
-			attackType_ = BossAttackType::Homing_Attack;
+			attackType_ = BulletType::Homing_Bullet;
 		}
 		break;
 	}
