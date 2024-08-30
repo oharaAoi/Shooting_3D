@@ -12,13 +12,12 @@
 #include "DebugCamera.h"
 #include "Camera/FollowCamera.h"
 #include "Camera/RailCamera.h"
-// GameObject
-#include "WorldObject/Skydome.h"
 // Loader
 #include "Loader/modelLoader.h"
 // WorldObject
 #include "WorldObject/Skydome.h"
 #include "WorldObject/Trajectory.h"
+#include "WorldObject/Ground.h"
 // Adjustment
 #include "Adjustment/AdjustmentItem.h"
 // GameObject
@@ -156,6 +155,7 @@ private: // メンバ変数
 	// ------------ WorldEnvironment ------------ // 
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	std::unique_ptr<Trajectory> trajectory_ = nullptr;
+	std::unique_ptr<Ground> ground_ = nullptr;
 
 	// ------------ Collision ------------ // 
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;

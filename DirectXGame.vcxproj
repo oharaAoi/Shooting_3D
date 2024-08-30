@@ -153,6 +153,7 @@
     <ClCompile Include="Game\UI\BossUI.cpp" />
     <ClCompile Include="Game\UI\PlayerUI.cpp" />
     <ClCompile Include="Game\UI\Rader.cpp" />
+    <ClCompile Include="Game\WorldObject\Ground.cpp" />
     <ClCompile Include="Game\WorldObject\Skydome.cpp" />
     <ClCompile Include="Game\WorldObject\Trajectory.cpp" />
     <ClCompile Include="main.cpp" />
@@ -226,6 +227,7 @@
     <ClInclude Include="Game\UI\BossUI.h" />
     <ClInclude Include="Game\UI\PlayerUI.h" />
     <ClInclude Include="Game\UI\Rader.h" />
+    <ClInclude Include="Game\WorldObject\Ground.h" />
     <ClInclude Include="Game\WorldObject\Skydome.h" />
     <ClInclude Include="Game\WorldObject\Trajectory.h" />
     <ClInclude Include="input\Input.h" />

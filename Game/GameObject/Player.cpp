@@ -105,6 +105,10 @@ void Player::Update() {
 		isLockOnMode_ = !isLockOnMode_;
 	}
 
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -(kWorldSize.x / 2.0f), (kWorldSize.x / 2.0f));
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -(kWorldSize.x / 2.0f), (kWorldSize.x / 2.0f));
+	worldTransform_.translation_.z = std::clamp(worldTransform_.translation_.z, -(kWorldSize.x / 2.0f), (kWorldSize.x / 2.0f));
+
 	// 計算転送
 	BaseCharacter::Update();
 	// ImGuiの編集

@@ -9,4 +9,4 @@ static float kDeltaTime_ = (1.0f / 60.0f);
 /// <summary>
 /// World空間上の広さ
 /// </summary>
-static Vector3 kWorldSize = Vector3(300.0f, 300.0f, 300.0f);
+static Vector3 kWorldSize = Vector3(160.0f, 120.0f, 160.0f);

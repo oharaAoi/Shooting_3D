@@ -252,6 +252,9 @@
     <ClCompile Include="Game\Collision\ContactRecord.cpp">
       <Filter>Game\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="Game\WorldObject\Ground.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -478,6 +481,9 @@
     </ClInclude>
     <ClInclude Include="Game\Collision\ContactRecord.h">
       <Filter>Game\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\WorldObject\Ground.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

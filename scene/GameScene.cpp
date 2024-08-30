@@ -72,6 +72,7 @@ void GameScene::Initialize() {
 	// ---------------------------------------------
 	skydome_ = std::make_unique<Skydome>(modelLoader->GetModel("skydome"));
 	trajectory_ = std::make_unique<Trajectory>();
+	ground_ = std::make_unique<Ground>(modelLoader->GetModel("ground"));
 
 	// ---------------------------------------------
 	// ↓ Managerの初期化
@@ -130,11 +131,11 @@ void GameScene::Update() {
 	// ---------------------------------------------
 	skydome_->Update();
 	trajectory_->Update();
+	ground_->Update();
 
 	// ---------------------------------------------
 	// ↓ 当たり判定の処理
 	// ---------------------------------------------
-
 	CheckAllCollision();
 
 	// ---------------------------------------------
@@ -202,6 +203,7 @@ void GameScene::Draw() {
 	// ↓ WorldObjectの描画
 	// ---------------------------------------------
 	skydome_->Draw(viewProjection_);
+	ground_->Draw(viewProjection_);
 
 	// ---------------------------------------------
 	// ↓ GameObjectの描画
