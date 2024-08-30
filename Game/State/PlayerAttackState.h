@@ -31,6 +31,11 @@ public:
 	/// </summary>
 	void Shot();
 
+	/// <summary>
+	/// 走りに入る処理
+	/// </summary>
+	void Dash();
+
 private:
 
 	WorkAttack workAttack_;

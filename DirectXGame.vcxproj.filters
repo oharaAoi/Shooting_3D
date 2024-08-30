@@ -253,7 +253,7 @@
       <Filter>Game\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Game\WorldObject\Ground.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\WorldObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -483,7 +483,7 @@
       <Filter>Game\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Game\WorldObject\Ground.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\WorldObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

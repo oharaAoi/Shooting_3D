@@ -31,6 +31,9 @@ void PlayerAttackState::Update() {
 
 	// 弾を撃つ
 	Shot();
+
+	// 走る
+	Dash();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,5 +74,15 @@ void PlayerAttackState::Shot() {
 		player_->AddBulletList(velocity);
 		// coolTimeを設定する
 		workAttack_.coolTime_ = 15;
+	}
+}
+
+void PlayerAttackState::Dash() {
+	XINPUT_STATE joyState;
+	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
+
+	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_X) {
+		// 状態の変更
+		player_->SetBehaviorRequest(PlayerBehavior::kDash);
 	}
 }

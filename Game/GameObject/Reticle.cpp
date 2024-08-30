@@ -96,7 +96,7 @@ void Reticle::Draw2DReticle() {
 	if (target_) {
 		lockOnReticle_->Draw();
 	} else {
-		unLockReticle_->Draw();
+		//unLockReticle_->Draw();
 	}
 }
 

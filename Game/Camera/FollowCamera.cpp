@@ -48,12 +48,12 @@ void FollowCamera::Rotate() {
 	XINPUT_STATE joyState;
 
 	if ((reticle_ != nullptr) && (target_ != nullptr)) {
-		// カメラを敵の方向に向ける
-		// カメラと敵のベクトルをとる
 		Vector3 diff = reticle_->GetTargetWorldPos() - target_->translation_;
 		diff = Normalize(diff);
-
+		float xzLenght = Length({ diff.x, 0,  diff.z });
+		float targetAngleX = std::atan2f(-diff.y, xzLenght);
 		viewProjection_.rotation_.y = std::atan2f(diff.x, diff.z);
+		viewProjection_.rotation_.x = targetAngleX;
 	
 	} else if (Input::GetInstance()->GetJoystickState(0, joyState)) {
 		const float speed = 0.05f;
@@ -110,4 +110,11 @@ Vector3 FollowCamera::CalculationOffset() {
 	offset = TransformNormal(offset, matRotate);
 
 	return offset;
+}
+
+// ------------------- ImGuiの編集 ------------------- //
+
+void FollowCamera::LockOnMove(const Vector3& rotation) {
+	Vector3 sub = rotation - viewProjection_.translation_;
+	viewProjection_.rotation_.y = std::atan2f(sub.y, sub.z);
 }

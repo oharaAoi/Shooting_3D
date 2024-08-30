@@ -116,11 +116,12 @@ void GameScene::Update() {
 
 	if (reticle_->GetIsLockOn()) {
 		player_->SetIsLockOnMode(true);
+		player_->LockOnCameraMove(reticle_->GetTargetTransform());
 	} else {
 		player_->SetIsLockOnMode(false);
+		player_->SetRotationX(followCamera_->GetCameraRotation().x);
 	}
 
-	player_->SetRotationX(followCamera_->GetCameraRotation().x);
 	player_->Update();
 
 	// bullet
@@ -278,13 +279,11 @@ void GameScene::UpdateViewProjection() {
 		AxisIndicator::GetInstance()->SetVisible(true);
 	} else {
 		// 苦肉の策 -----------------------------------
-		player_->SetParent(nullptr);
-		enemyManager_->SetParent(nullptr);
-		reticle_->SetParent(nullptr);
 		player_->SetViewProjection(&followCamera_->GetViewProjection());
 
 		if (player_->GetIsLockOnMode()) {
 			followCamera_->SetReticle(player_->GetReticle());
+			followCamera_->LockOnMove(reticle_->GetTargetTransform());
 		} else {
 			followCamera_->SetReticle(nullptr);
 		}

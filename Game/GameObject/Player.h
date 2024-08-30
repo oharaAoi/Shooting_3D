@@ -71,6 +71,11 @@ public:
 	void Move();
 
 	/// <summary>
+	/// LockOn時の回転
+	/// </summary>
+	void LockOnCameraMove(const Vector3& targetPos);
+
+	/// <summary>
 	/// 弾の更新を行う
 	/// </summary>
 	void BulletsUpdate();

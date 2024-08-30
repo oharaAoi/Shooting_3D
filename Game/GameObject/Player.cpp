@@ -86,10 +86,8 @@ void Player::Update() {
 	color_.SetColor({ 1,1,1,1 });
 	// 状態のリクエストをチェックする
 	CheckBehaviorRequest();
-
 	// 現在の状態を更新する
 	behaviorState_->Update();
-
 	// 弾の更新を行う
 	BulletsUpdate();
 
@@ -101,13 +99,9 @@ void Player::Update() {
 	// ---------------------------------------------
 	// ↓ 基本となる処理を行う
 	// ---------------------------------------------
-	if (Input::GetInstance()->TriggerKey(DIK_Q)) {
-		isLockOnMode_ = !isLockOnMode_;
-	}
-
 	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -(kWorldSize.x / 2.0f), (kWorldSize.x / 2.0f));
-	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -(kWorldSize.x / 2.0f), (kWorldSize.x / 2.0f));
-	worldTransform_.translation_.z = std::clamp(worldTransform_.translation_.z, -(kWorldSize.x / 2.0f), (kWorldSize.x / 2.0f));
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -(kWorldSize.y / 2.0f), (kWorldSize.y / 2.0f));
+	worldTransform_.translation_.z = std::clamp(worldTransform_.translation_.z, -(kWorldSize.z / 2.0f), (kWorldSize.z / 2.0f));
 
 	// 計算転送
 	BaseCharacter::Update();
@@ -177,12 +171,28 @@ void Player::Move() {
 		// --------------------------------------
 		// 回転させる
 		// y軸まわり(z軸方向とy軸方向のベクトルで求まる)
-		if (isMoving) {
-			worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngle, 0.05f);
-		} else {
-			worldTransform_.rotation_.y = std::atan2f(direction_.x, direction_.z);
+		if (!isLockOnMode_) {
+			if (isMoving) {
+				worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngle, 0.05f);
+			} else {
+				worldTransform_.rotation_.y = std::atan2f(direction_.x, direction_.z);
+			}
 		}
 	}
+}
+
+// ------------------- 弾の更新を行う ------------------- //
+
+void Player::LockOnCameraMove(const Vector3& targetPos) {
+	Vector3 targetAngleVector = targetPos - worldTransform_.translation_;
+	// Y軸周りで回転させる角度を求める
+	float targetAngleY = std::atan2f(targetAngleVector.x, targetAngleVector.z);
+	// X軸周りで回転させる角度を求める
+	float xzLenght = Length({ targetAngleVector.x, 0, targetAngleVector.z });
+	float targetAngleX = std::atan2f(-targetAngleVector.y, xzLenght);
+	// 振り向かせる
+	worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngleY, 0.03f);
+	worldTransform_.rotation_.x = LerpShortAngle(worldTransform_.rotation_.x, targetAngleX, 0.03f);
 }
 
 // ------------------- 弾の更新を行う ------------------- //
@@ -248,6 +258,8 @@ void Player::CheckBehaviorRequest() {
 		behaviorRequest_ = std::nullopt;
 	}
 }
+
+// ------------------- 衝突時に呼ぶ関数 ------------------- //
 
 void Player::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
@@ -315,9 +327,7 @@ void Player::EditImGui() {
 	ImGui::DragFloat3("rightArm", &worldTransforms_[PlayerParts::Parts_RightArm].translation_.x, 0.1f);
 	ImGui::DragFloat3("leftEye", &worldTransforms_[PlayerParts::Parts_LEye].translation_.x, 0.1f);
 	ImGui::DragFloat3("rightEye", &worldTransforms_[PlayerParts::Parts_REye].translation_.x, 0.1f);
-
 	ImGui::Separator();
-
 	ImGui::DragScalar("hp", ImGuiDataType_U32, &hp_);
 
 	ImGui::End();
@@ -329,7 +339,6 @@ void Player::EditImGui() {
 void Player::ApplyAdjustItems() {
 	AdjustmentItem* adjustItem = AdjustmentItem::GetInstance();
 	const char* groupName = "Player";
-
 	worldTransforms_[PlayerParts::Parts_LeftArm].translation_ = adjustItem->GetValue<Vector3>(groupName, "L_Arm_Translation");
 	worldTransforms_[PlayerParts::Parts_RightArm].translation_ = adjustItem->GetValue<Vector3>(groupName, "R_Arm_Translation");
 	worldTransforms_[PlayerParts::Parts_LEye].translation_ = adjustItem->GetValue<Vector3>(groupName, "L_Eye_Translation");
