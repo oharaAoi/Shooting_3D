@@ -26,7 +26,11 @@ void MobEnemy::Init(std::vector<Model*> models) {
 	ChangeBehavior(std::make_unique<MobRootState>(this));
 
 	hp_ = 1;
-	radius_ = 2.0f;
+	radius_ = 3.0f;
+
+	floating_.parameter = 0;
+	floating_.period = 120;
+	floating_.amplitude = 0.05f;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,8 +66,12 @@ void MobEnemy::Draw(const ViewProjection& viewProjection) const {
 // ------------------- 移動させる関数 ------------------- //
 
 void MobEnemy::Move() {
+	TurnAoundVelocity();
+	FloatingGimmick();
 	const float speed = 0.05f;
-	velocity_ = playerPosition_ - worldTransform_.translation_;
+	if (isDiscovery_) {
+		velocity_ = playerPosition_ - worldTransform_.translation_;
+	}
 	worldTransform_.translation_ += Normalize(velocity_) * speed;
 }
 
@@ -79,6 +87,34 @@ void MobEnemy::Shot() {
 	gameScene_->AddEnemyBullet(std::move(std::make_unique<EnemyBullet>(
 		bulletModel_, worldTransform_.translation_, playerPosition_, worldTransform_.rotation_, worldTransform_.parent_, false
 	)));
+}
+
+// ------------------- 進行方向に回転する ------------------- //
+
+void MobEnemy::TurnAoundVelocity() {
+	// Y軸周りで回転させる角度を求める
+	float targetAngleY = std::atan2f(velocity_.x, velocity_.z);
+	// X軸周りで回転させる角度を求める
+	float xzLenght = Length({ velocity_.x, 0, velocity_.z });
+	float targetAngleX = std::atan2f(-velocity_.y, xzLenght);
+	// 振り向かせる
+	worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngleY, 0.03f);
+	worldTransform_.rotation_.x = LerpShortAngle(worldTransform_.rotation_.x, targetAngleX, 0.03f);
+}
+
+// ------------------- 浮遊する関数 ------------------- //
+
+void MobEnemy::FloatingGimmick() {
+	// 1フレームでのパラメータ加算値
+	const float step = (2.0f * std::numbers::pi_v<float>) / static_cast<float>(floating_.period);
+	// パラメータを1ステップ分加算
+	floating_.parameter += step;
+	// 2πを超えたら0に戻す
+	floating_.parameter = std::fmod(floating_.parameter, 2.0f * std::numbers::pi_v<float>);
+	// 座標に反映
+	Vector3 translate = worldTransform_.translation_;
+	translate.y += std::sin(floating_.parameter) * floating_.amplitude;
+	worldTransform_.translation_ = translate;
 }
 
 // ------------------- 状態遷移のリクエストがあるかを確認する ------------------- //

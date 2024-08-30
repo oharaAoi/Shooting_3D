@@ -18,6 +18,15 @@ class GameScene;
 
 class MobEnemy :
     public BaseEnemy {
+
+public:
+
+	struct Floating {
+		float parameter;
+		float amplitude;
+		uint32_t period;
+	};
+
 public:
 
     MobEnemy(std::vector<Model*> models, const Vector3& pos, const Vector3& velocity);
@@ -58,6 +67,16 @@ public:
 	void Shot();
 
 	/// <summary>
+	/// 進行方向に回転をする
+	/// </summary>
+	void TurnAoundVelocity();
+
+	/// <summary>
+	/// 浮遊する
+	/// </summary>
+	void FloatingGimmick();
+
+	/// <summary>
 	/// 状態を変化させるリクエストがあるかを確認する
 	/// </summary>
 	void CheckBehaviorRequest();
@@ -90,5 +109,7 @@ private:
 
 	// ------------  ------------ // 
 	uint32_t enemyId_;
+
+	Floating floating_;
 };
 

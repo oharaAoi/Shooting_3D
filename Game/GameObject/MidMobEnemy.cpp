@@ -19,6 +19,23 @@ void MidMobEnemy::Init(std::vector<Model*> models) {
 	BaseEnemy::Init(models);
 	enemyType_ = EnemyType::Type_MidEnemy;
 	worldTransforms_[MidEnemyParts::MidMob_Body].parent_ = &worldTransform_;
+	worldTransforms_[MidEnemyParts::MidMob_LEye].parent_ = &worldTransform_;
+	worldTransforms_[MidEnemyParts::MidMob_REye].parent_ = &worldTransform_;
+
+	// ---------------------------------------------
+	// ↓ 調整項目
+	// ---------------------------------------------
+	AdjustmentItem* adjustItem = AdjustmentItem::GetInstance();
+	const char* groupName = "MidEnemy";
+	// グループを追加
+	adjustItem->CreateGroup(groupName);
+	adjustItem->AddItem(groupName, "body_Translation", worldTransforms_[MidEnemyParts::MidMob_Body].translation_);
+	adjustItem->AddItem(groupName, "L_Eye_Translation", worldTransforms_[MidEnemyParts::MidMob_LEye].translation_);
+	adjustItem->AddItem(groupName, "R_Eye_Translation", worldTransforms_[MidEnemyParts::MidMob_REye].translation_);
+
+	worldTransforms_[MidEnemyParts::MidMob_Body].translation_ = adjustItem->GetValue<Vector3>(groupName, "body_Translation");
+	worldTransforms_[MidEnemyParts::MidMob_LEye].translation_ = adjustItem->GetValue<Vector3>(groupName, "L_Eye_Translation");
+	worldTransforms_[MidEnemyParts::MidMob_REye].translation_ = adjustItem->GetValue<Vector3>(groupName, "R_Eye_Translation");
 
 	behaviorRequest_ = EnemyBehavior::kRoot;
 	ChangeBehavior(std::make_unique<MidEnemyRootState>(this));
@@ -43,7 +60,7 @@ void MidMobEnemy::Update() {
 	// 状態の変更のリクエストがあるかを確認する
 	CheckBehaviorRequest();
 	// 現在の状態を更新する
-	behaviorState_->Update();
+	//behaviorState_->Update();
 
 	BaseEnemy::Update();
 
@@ -84,6 +101,7 @@ void MidMobEnemy::AnimationGimmick() {
 // ------------------- 移動を行う関数 ------------------- //
 
 void MidMobEnemy::Move() {
+	TurnAoundVelocity();
 	AnimationGimmick();
 	const float speed = 0.05f;
 	velocity_ = playerPosition_ - worldTransform_.translation_;
@@ -102,6 +120,19 @@ void MidMobEnemy::Shot() {
 	gameScene_->AddEnemyBullet(std::move(std::make_unique<EnemyBullet>(
 		bulletModel_, worldTransform_.translation_, playerPosition_, worldTransform_.rotation_, worldTransform_.parent_, true
 	)));
+}
+
+// ------------------- 進行方向に回転する ------------------- //
+
+void MidMobEnemy::TurnAoundVelocity() {
+	// Y軸周りで回転させる角度を求める
+	float targetAngleY = std::atan2f(velocity_.x, velocity_.z);
+	// X軸周りで回転させる角度を求める
+	float xzLenght = Length({ velocity_.x, 0, velocity_.z });
+	float targetAngleX = std::atan2f(-velocity_.y, xzLenght);
+	// 振り向かせる
+	worldTransform_.rotation_.y = LerpShortAngle(worldTransform_.rotation_.y, targetAngleY, 0.03f);
+	worldTransform_.rotation_.x = LerpShortAngle(worldTransform_.rotation_.x, targetAngleX, 0.03f);
 }
 
 // ------------------- 状態遷移のリクエストがあるかを確認する ------------------- //
@@ -138,6 +169,11 @@ void MidMobEnemy::OnCollision(Collider* other) {
 // ------------------- ImGuiを編集する ------------------- //
 
 void MidMobEnemy::EditImGui() {
+	ImGui::Begin("midEnemy");
+	//ImGui::DragFloat3("body", &worldTransforms_[MidEnemyParts::MidMob_Body].translation_.x, 0.1f);
+	ImGui::DragFloat3("leftEye", &worldTransforms_[MidEnemyParts::MidMob_LEye].translation_.x, 0.1f);
+	ImGui::DragFloat3("rightEye", &worldTransforms_[MidEnemyParts::MidMob_REye].translation_.x, 0.1f);
+	ImGui::End();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

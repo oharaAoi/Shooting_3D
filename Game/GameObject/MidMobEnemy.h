@@ -6,6 +6,8 @@
 
 enum MidEnemyParts {
 	MidMob_Body = 0,
+	MidMob_LEye,
+	MidMob_REye,
 };
 
 class GameScene;
@@ -63,6 +65,11 @@ public:
 	/// 弾をリストに追加する関数
 	/// </summary>
 	void Shot();
+
+	/// <summary>
+	/// 進行方向に回転をする
+	/// </summary>
+	void TurnAoundVelocity();
 
 	/// <summary>
 	/// 状態を変化させるリクエストがあるかを確認する

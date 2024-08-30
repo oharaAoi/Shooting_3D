@@ -27,6 +27,7 @@ void ModelLoader::Init() {
 	// enemy
 	Load("mobEnemy", true);
 	Load("midEnemy", true);
+	Load("midEnemyEye", true);
 	Load("bossEnemy", true);
 	Load("bossEnemyLEye", true);
 	Load("bossEnemyREye", true);

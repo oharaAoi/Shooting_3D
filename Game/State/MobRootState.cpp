@@ -26,7 +26,7 @@ void MobRootState::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void MobRootState::Update() {
-	FloatingGimmick();
+	enemy_->Move();
 	// フレームをカウントし、一定時間過ぎたら攻撃フェーズに移動する
 	work_.moveTime++;
 	if (work_.moveTime > work_.attackTime) {
@@ -39,19 +39,4 @@ void MobRootState::Update() {
 // メンバ関数
 ///////////////////////////////////////////////////////////
 
-void MobRootState::FloatingGimmick() {
-	//----------------------------------------------------------
-	// bodyのアニメーション
-	//----------------------------------------------------------
-	// 1フレームでのパラメータ加算値
-	const float step = (2.0f * std::numbers::pi_v<float>) / static_cast<float>(floating_.period);
-	// パラメータを1ステップ分加算
-	floating_.parameter += step;
-	// 2πを超えたら0に戻す
-	floating_.parameter = std::fmod(floating_.parameter, 2.0f * std::numbers::pi_v<float>);
-	// 座標に反映
-	Vector3 translate = enemy_->GetWorldTransform().translation_;
-	translate.y += std::sin(floating_.parameter) * floating_.amplitude;
-	enemy_->SetTranslation(translate);
-}
 

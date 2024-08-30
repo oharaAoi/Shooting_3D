@@ -37,11 +37,7 @@ public:
 // メンバ関数
 ///////////////////////////////////////////////////////////
 
-	/// <summary>
-	/// 浮遊の更新
-	/// </summary>
-	void FloatingGimmick();
-
+	
 private:
 
 	WorkRoot work_;
