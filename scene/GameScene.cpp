@@ -225,6 +225,7 @@ void GameScene::Draw() {
 	DrawGrid();
 
 	player_->DrawCollision();
+	player_->GetAimCollider()->Draw();
 
 	enemyManager_->DrawCollisions();
 
@@ -344,7 +345,9 @@ void GameScene::CheckAllCollision() {
 	}
 
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemyManager_->GetEnemysList()) {
-		collisionManager_->AddCollider(enemy.get());
+		if (enemy->GetEnemyType() != EnemyType::Type_Boss) {
+			collisionManager_->AddCollider(enemy.get());
+		}
 	}
 
 	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBulletList_) {
@@ -361,6 +364,17 @@ void GameScene::CheckAllCollision() {
 	collisionManager_->CheckAllCollision();
 
 	// ---------------------------------------------
+	// ↓ ボスとplayerとplayerの弾の当たり判定はOBBの判定で行う
+	// ---------------------------------------------
+	// bossとplayer
+	collisionManager_->IsOBBCollision(player_.get(), enemyManager_->GetBossEnemy());
+
+	// bossとplayerBullet
+	for (const std::unique_ptr<PlayerBullet>& bullet : player_->GetPlayerBulletList()) {
+		collisionManager_->IsOBBCollision(bullet.get(), enemyManager_->GetBossEnemy());
+	}
+
+	// ---------------------------------------------
 	// ↓ playerの前にいる敵の数を数える
 	// ---------------------------------------------
 	playerAimCount_ = 0;
@@ -370,7 +384,7 @@ void GameScene::CheckAllCollision() {
 		Vector3 distance = Normalize(enemy->GetWorldTransform().translation_ - player_->GetWorldTransform().translation_);
 		float dot = Dot(playerForward, distance);
 		if (dot > 0.8f) {
-			playerAimCount_ += collisionManager_->CountEnemiesPlayerRange(player_.get(), enemy.get());
+			playerAimCount_ += collisionManager_->CountEnemiesPlayerRange(player_->GetAimCollider(), enemy.get());
 		}
 	}
 

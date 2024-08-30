@@ -125,6 +125,7 @@
     <ClCompile Include="Game\GameObject\MidMobEnemy.cpp" />
     <ClCompile Include="Game\GameObject\MobEnemy.cpp" />
     <ClCompile Include="Game\GameObject\Player.cpp" />
+    <ClCompile Include="Game\GameObject\PlayerAimCollider.cpp" />
     <ClCompile Include="Game\GameObject\PlayerBullet.cpp" />
     <ClCompile Include="Game\GameObject\Reticle.cpp" />
     <ClCompile Include="Game\Loader\ModelLoader.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="Game\GameObject\MidMobEnemy.h" />
     <ClInclude Include="Game\GameObject\MobEnemy.h" />
     <ClInclude Include="Game\GameObject\Player.h" />
+    <ClInclude Include="Game\GameObject\PlayerAimCollider.h" />
     <ClInclude Include="Game\GameObject\PlayerBullet.h" />
     <ClInclude Include="Game\GameObject\Reticle.h" />
     <ClInclude Include="Game\Loader\ModelLoader.h" />

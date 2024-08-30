@@ -32,7 +32,8 @@ void Player::Init(std::vector<Model*> models) {
 
 	isLockOnMode_ = false;
 
-	obb_.size = { 1,1,50 };
+	aimCollider_ = std::make_unique<PlayerAimCollider>(Vector3(1,1,40));
+	obb_.size = { 1,1,1 };
 
 	// ---------------------------------------------
 	// ↓ 調整項目
@@ -91,9 +92,9 @@ void Player::Update() {
 	BulletsUpdate();
 
 	// ---------------------------------------------
-	// ↓ Playerの向きを調整する
+	// ↓ AimColliderの更新
 	// ---------------------------------------------
-
+	aimCollider_->Update(worldTransform_.translation_, worldTransform_.rotation_);
 
 	// ---------------------------------------------
 	// ↓ 基本となる処理を行う
@@ -201,6 +202,7 @@ void Player::AddBulletList(const Vector3& velocity) {
 	playerBulletList_.push_back(
 		std::make_unique<PlayerBullet>(bullerModel_, worldTransform_.translation_, velocity, worldTransform_.rotation_, worldTransform_.parent_, 5
 		));
+	AudioManager::GetInstacne()->AddPlayList("Audio/playerShot.wav", false, 0.5f);
 }
 
 void Player::AddCanLockOnList(BaseEnemy* baseEnemy) {
@@ -245,19 +247,25 @@ void Player::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
 	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kEnemy)) {
 		hp_--;
-		KnockBack(other->GetWorldPosition());
+		KnockBack(other->GetWorldPosition(), 0.5f);
+	} else if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kEnemyBullet)) {
+		hp_--;
+		KnockBack(other->GetWorldPosition(), 0.3f);
 	} else if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kBossBullet)) {
 		hp_--;
-		KnockBack(other->GetWorldPosition());
+		KnockBack(other->GetWorldPosition(),0.5f);
+	} else if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kBoss)) {
+		hp_--;
+		KnockBack(other->GetWorldPosition(), 5.0f);
 	}
 
 }
 
 // ------------------- 当たった時の処理 ------------------- //
 
-void Player::KnockBack(const Vector3& collisionObjectPos) {
+void Player::KnockBack(const Vector3& collisionObjectPos, const float& strength) {
 	Vector3 knockBackDire = Normalize(GetWorldPosition() - collisionObjectPos);
-	worldTransform_.translation_ -= knockBackDire * -0.2f;
+	worldTransform_.translation_ -= knockBackDire * (strength * -1.0f);
 	AudioManager::GetInstacne()->AddPlayList("Audio/hited.wav", false, 0.5f);
 	color_.SetColor({ 1,0,0,1 });
 	color_.TransferMatrix();

@@ -6,6 +6,7 @@
 #include "GameObject/PlayerBullet.h"
 #include "GameObject/Reticle.h"
 #include "GameObject/BaseEnemy.h"
+#include "GameObject/PlayerAimCollider.h"
 // Adjustment
 #include "Adjustment/AdjustmentItem.h"
 // State
@@ -104,7 +105,7 @@ public:
 	/// <summary>
 	/// ノックバックする関数
 	/// </summary>
-	void KnockBack(const Vector3& collisionObjectPos);
+	void KnockBack(const Vector3& collisionObjectPos, const float& strength);
 
 	/// <summary>
 	/// ImGui
@@ -178,6 +179,9 @@ public:
 	// ------------ gameScene ------------ // 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
+	// ------------ collider ------------ // 
+	PlayerAimCollider* GetAimCollider() { return aimCollider_.get(); }
+
 private:
 
 	// ------------ 所有権のないポインタ ------------ // 
@@ -213,5 +217,7 @@ private:
 
 	uint32_t hp_;
 	uint32_t firstHp_;
+
+	std::unique_ptr<PlayerAimCollider> aimCollider_ = nullptr;
 
 };

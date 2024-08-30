@@ -101,6 +101,11 @@ public:
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
 	/// <summary>
+	/// 攻撃を食らった時の演出
+	/// </summary>
+	void HitedEffect() override;
+
+	/// <summary>
 	/// 浮遊の更新
 	/// </summary>
 	void FloatingGimmick();

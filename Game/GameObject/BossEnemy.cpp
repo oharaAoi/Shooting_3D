@@ -31,10 +31,12 @@ void BossEnemy::Init(std::vector<Model*> models) {
 	adjustItem->AddItem(groupName, "body_Translation", worldTransforms_[BossParts::Boss_Body].translation_);
 	adjustItem->AddItem(groupName, "L_Eye_Translation", worldTransforms_[BossParts::Boss_LEye].translation_);
 	adjustItem->AddItem(groupName, "R_Eye_Translation", worldTransforms_[BossParts::Boss_REye].translation_);
+	adjustItem->AddItem(groupName, "OBB_Size", obb_.size);
 
 	worldTransforms_[BossParts::Boss_Body].translation_ = adjustItem->GetValue<Vector3>(groupName, "body_Translation");
 	worldTransforms_[BossParts::Boss_LEye].translation_ = adjustItem->GetValue<Vector3>(groupName, "L_Eye_Translation");
 	worldTransforms_[BossParts::Boss_REye].translation_ = adjustItem->GetValue<Vector3>(groupName, "R_Eye_Translation");
+	obb_.size = adjustItem->GetValue<Vector3>(groupName, "OBB_Size");
 
 	bulletModel_ = ModelLoader::GetInstacne()->GetModel("bossBullet");
 	
@@ -63,8 +65,6 @@ void BossEnemy::Init(std::vector<Model*> models) {
 	stiffnessTime_ = 0;
 
 	firstHp_ = hp_;
-
-	obb_.size = { radius_,radius_,radius_ };
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,6 +239,12 @@ void BossEnemy::OnCollision(Collider* other) {
 	}
 }
 
+// ------------------- 攻撃を食らった時の演出 ------------------- //
+
+void BossEnemy::HitedEffect() {
+	BaseEnemy::HitedEffect();
+}
+
 // ------------------- 浮遊する ------------------- //
 
 void BossEnemy::FloatingGimmick() {
@@ -274,7 +280,7 @@ void BossEnemy::TurnAroundPlayer() {
 // ------------------- 攻撃の種類を選ぶ ------------------- //
 
 void BossEnemy::ChangeAttackType() {
-	uint32_t attackNumber = static_cast<uint32_t>(RandomFloat(0, 3));
+	uint32_t attackNumber = static_cast<uint32_t>(RandomFloat(0, 4));
 	attackType_ = static_cast<BossAttackType>(attackNumber);
 }
 
@@ -291,6 +297,8 @@ void BossEnemy::EditImGui() {
 	ImGui::DragFloat3("leftEye", &worldTransforms_[BossParts::Boss_LEye].translation_.x, 0.1f);
 	ImGui::DragFloat3("rightEye", &worldTransforms_[BossParts::Boss_REye].translation_.x, 0.1f);
 	ImGui::Text("attackType: %d", attackType_);
+	ImGui::DragFloat("radius", &radius_, 0.1f);
+	ImGui::DragFloat3("obb_Size", &obb_.size.x, 0.1f);
 
 	ImGui::End();
 #endif // _DEBUG

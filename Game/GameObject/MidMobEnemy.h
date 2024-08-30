@@ -82,6 +82,11 @@ public:
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
 	/// <summary>
+	/// 攻撃を食らった時の演出
+	/// </summary>
+	void HitedEffect() override;
+
+	/// <summary>
 	/// ImGuiの編集
 	/// </summary>
 	void EditImGui() override;

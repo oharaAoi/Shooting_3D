@@ -56,6 +56,9 @@ public:
 	// ------------ OBB ------------ // 
 	OBB GetOBB() { return obb_; }
 
+	void SetOBBSize(const Vector3& size) { obb_.size = size; }
+	void SetOBBCneter(const Vector3& center) { obb_.center = center; }
+
 protected:
 
 	// 半径

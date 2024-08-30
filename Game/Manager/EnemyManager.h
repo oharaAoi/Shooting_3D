@@ -100,6 +100,9 @@ public:
 	// ------------ bossHp ------------ // 
 	const float GetBossHp() const { return bossEnemy_->GetHpRaito(); }
 
+	// ------------ boss ------------ // 
+	BaseEnemy* GetBossEnemy() { return bossEnemy_; }
+
 private:
 
 	const WorldTransform* parentWorldTransform_;
@@ -141,6 +144,6 @@ private:
 	Vector3 playerPosition_;
 
 	// ------------ bossに関する変数 ------------ // 
-	const BaseEnemy* bossEnemy_ = nullptr;
+	BaseEnemy* bossEnemy_ = nullptr;
 };
 

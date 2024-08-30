@@ -83,6 +83,15 @@ bool CollisionManager::IsDiscoveryEnemy(Collider* colliderA, Collider* colliderB
 	return false;
 }
 
+// ------------------- OBBで衝突判定を行う ------------------- //
+
+void CollisionManager::IsOBBCollision(Collider* colliderA, Collider* colliderB) {
+	if (IsCollision(colliderA->GetOBB(), colliderB->GetOBB())) {
+		colliderA->OnCollision(colliderB);
+		colliderB->OnCollision(colliderA);
+	}
+}
+
 bool CollisionManager::IsCollision(const OBB& obb1, const OBB& obb2) {
 	// 分離軸の組み合わせを取得
 	std::vector<Vector3> crossSeparatingAxises;

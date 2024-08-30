@@ -22,6 +22,8 @@ void MidMobEnemy::Init(std::vector<Model*> models) {
 	worldTransforms_[MidEnemyParts::MidMob_LEye].parent_ = &worldTransform_;
 	worldTransforms_[MidEnemyParts::MidMob_REye].parent_ = &worldTransform_;
 
+	bulletModel_ = ModelLoader::GetInstacne()->GetModel("bossBullet");
+
 	// ---------------------------------------------
 	// ↓ 調整項目
 	// ---------------------------------------------
@@ -37,9 +39,15 @@ void MidMobEnemy::Init(std::vector<Model*> models) {
 	worldTransforms_[MidEnemyParts::MidMob_LEye].translation_ = adjustItem->GetValue<Vector3>(groupName, "L_Eye_Translation");
 	worldTransforms_[MidEnemyParts::MidMob_REye].translation_ = adjustItem->GetValue<Vector3>(groupName, "R_Eye_Translation");
 
-	behaviorRequest_ = EnemyBehavior::kRoot;
+	// ---------------------------------------------
+	// ↓ ステート
+	// ---------------------------------------------
+	behaviorRequest_ = EnemyBehavior::kAttack;
 	ChangeBehavior(std::make_unique<MidEnemyRootState>(this));
 
+	// ---------------------------------------------
+	// ↓ パラメータ
+	// ---------------------------------------------
 	hp_ = 10;
 	radius_ = 2.0f;
 	isDead_ = false;
@@ -60,7 +68,7 @@ void MidMobEnemy::Update() {
 	// 状態の変更のリクエストがあるかを確認する
 	CheckBehaviorRequest();
 	// 現在の状態を更新する
-	//behaviorState_->Update();
+	behaviorState_->Update();
 
 	BaseEnemy::Update();
 
@@ -155,6 +163,12 @@ void MidMobEnemy::CheckBehaviorRequest() {
 		// ふるまいリクエストをリセット
 		behaviorRequest_ = std::nullopt;
 	}
+}
+
+// ------------------- 攻撃を食らった時の演出 ------------------- //
+
+void MidMobEnemy::HitedEffect() {
+	BaseEnemy::HitedEffect();
 }
 
 // ------------------- 衝突時に行う関数 ------------------- //

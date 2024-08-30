@@ -67,6 +67,11 @@ public:
 	/// <param name="behavior"></param>
 	void ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior);
 
+	/// <summary>
+	/// 攻撃を食らった時の演出
+	/// </summary>
+	virtual void HitedEffect();
+
 	void ImGuiSetTranslation();
 
 ///////////////////////////////////////////////////////////

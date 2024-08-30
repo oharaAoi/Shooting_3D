@@ -7,6 +7,13 @@ class MidEnemyAttackState :
     public BaseEnemyState {
 public:
 
+	struct Work {
+		uint32_t attackTime;
+		uint32_t attackCoolTime;
+	};
+
+public:
+
     MidEnemyAttackState(MidMobEnemy* baseEnemy);
     ~MidEnemyAttackState();
 
@@ -26,6 +33,7 @@ public:
 
 private:
 
+	Work work_;
 
 };
 

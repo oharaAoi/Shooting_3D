@@ -15,6 +15,7 @@ void BaseEnemy::Init(std::vector<Model*> models) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void BaseEnemy::Update() {
+	color_.SetColor({ 1,1,1,1 });
 	if (hp_ <= 0) {
 		isDead_ = true;
 	}
@@ -65,6 +66,11 @@ void BaseEnemy::SetParent(const WorldTransform* parent) {
 
 void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior) {
 	behaviorState_ = std::move(behavior);
+}
+
+void BaseEnemy::HitedEffect() {
+	color_.SetColor({ 1,0,0,1 });
+	color_.TransferMatrix();
 }
 
 void BaseEnemy::ImGuiSetTranslation() {

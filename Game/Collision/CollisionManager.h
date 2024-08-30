@@ -54,6 +54,8 @@ public:
 	/// <returns></returns>
 	bool IsDiscoveryEnemy(Collider* colliderA, Collider* colliderB);
 
+	void IsOBBCollision(Collider* colliderA, Collider* colliderB);
+
 	/// <summary>
 	/// コライダーの追加
 	/// </summary>
