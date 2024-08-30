@@ -31,11 +31,13 @@ void FollowCamera::Update() {
 	viewProjection_.matView = Inverse(worldTransform_.matWorld_);
 	viewProjection_.UpdateMatrix();
 
+#ifdef _DEBUG
 	ImGui::Begin("Camera");
 	ImGui::DragFloat3("view.rotate", &viewProjection_.rotation_.x, 0.01f);
 	ImGui::DragFloat("destinationAngleY", &destinationAngleY_, 0.01f);
 	ImGui::DragFloat("destinationAngleX", &destinationAngleX_, 0.01f);
 	ImGui::End();
+#endif // _DEBUG
 
 }
 

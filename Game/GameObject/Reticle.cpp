@@ -74,12 +74,14 @@ void Reticle::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, con
 
 	worldTransform3D_.UpdateMatrix();
 
+#ifdef _DEBUG
 	ImGui::Begin("Reticle");
 	ImGui::SliderFloat("cameraTo3DReticle", &cameraToReticle_, 0, 1000);
 	ImGui::DragFloat3("worldTransform3D.translation", &worldTransform3D_.translation_.x);
 	Vector3 pos = Get3DReticleWorldPos();
 	ImGui::DragFloat3("3DReticleWorldPos", &pos.x);
 	ImGui::End();
+#endif // _DEBUG
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

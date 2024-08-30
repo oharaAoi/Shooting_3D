@@ -10,6 +10,7 @@ void AdjustmentItem::Init() {
 }
 
 void AdjustmentItem::Update() {
+#ifdef _DEBUG
 	if (!ImGui::Begin("AdjustValue", nullptr, ImGuiWindowFlags_MenuBar)) {
 		ImGui::End();
 		return;
@@ -96,6 +97,7 @@ void AdjustmentItem::Update() {
 
 	ImGui::EndMenuBar();
 	ImGui::End();
+#endif // _DEBUG
 }
 
 void AdjustmentItem::CreateGroup(const std::string& groupName) {
@@ -181,7 +183,6 @@ void AdjustmentItem::SaveFile(const std::string& groupName) {
 	// ファイルオープンが出来ているか
 	if (ofs.fail()) {
 		std::string message = "Faild open data file for write";
-		MessageBoxA(nullptr, message.c_str(), "Adjustment", 0);
 		assert(0);
 		return;
 	}
@@ -233,7 +234,6 @@ void AdjustmentItem::LoadFile(const std::string& groupName) {
 
 	if (ifs.fail()) {
 		std::string message = "not Exist " + groupName + ".json";
-		MessageBoxA(nullptr, message.c_str(), "Adjustment", 0);
 		assert(0);
 		return;
 	}

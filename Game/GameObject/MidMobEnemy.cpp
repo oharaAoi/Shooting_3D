@@ -183,11 +183,13 @@ void MidMobEnemy::OnCollision(Collider* other) {
 // ------------------- ImGuiを編集する ------------------- //
 
 void MidMobEnemy::EditImGui() {
+#ifdef _DEBUG
 	ImGui::Begin("midEnemy");
 	//ImGui::DragFloat3("body", &worldTransforms_[MidEnemyParts::MidMob_Body].translation_.x, 0.1f);
 	ImGui::DragFloat3("leftEye", &worldTransforms_[MidEnemyParts::MidMob_LEye].translation_.x, 0.1f);
 	ImGui::DragFloat3("rightEye", &worldTransforms_[MidEnemyParts::MidMob_REye].translation_.x, 0.1f);
 	ImGui::End();
+#endif // _DEBUG
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

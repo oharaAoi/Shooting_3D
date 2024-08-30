@@ -74,5 +74,7 @@ void BaseEnemy::HitedEffect() {
 }
 
 void BaseEnemy::ImGuiSetTranslation() {
+#ifdef _DEBUG
 	ImGui::DragFloat3("Enemy", &worldTransform_.translation_.x, 0.01f);
+#endif // _DEBUG
 }

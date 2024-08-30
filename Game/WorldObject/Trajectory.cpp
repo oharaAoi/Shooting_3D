@@ -84,6 +84,7 @@ void Trajectory::Draw() const {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Trajectory::ImGuiDraw() {
+#ifdef _DEBUG
 	ImGui::Begin("Trajectory");
 	
 	// ---------------------------------------------
@@ -118,5 +119,6 @@ void Trajectory::ImGuiDraw() {
 		ImGui::EndMenu();
 	}
 	ImGui::End();
+#endif // _DEBUG
 }
 
