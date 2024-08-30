@@ -14,6 +14,7 @@ PlayerBullet::~PlayerBullet() {}
 void PlayerBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity, const Vector3& rotation, const WorldTransform* parent) {
 	BaseBullet::Init(model, pos, velocity, rotation, parent);
 	collisionCount_ = 0;
+	obb_.size = { 1,1,1 };
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,6 +24,8 @@ void PlayerBullet::Init(Model* model, const Vector3& pos, const Vector3& velocit
 void PlayerBullet::Update() {
 	float scaleUp = 1.0f + (0.1f * collisionCount_);
 	worldTransform_.scale_ = { scaleUp, scaleUp , scaleUp };
+	obb_.center = worldTransform_.translation_;
+	obb_.MakeOBBAxis(worldTransform_.rotation_);
 	BaseBullet::Update();
 }
 

@@ -6,7 +6,6 @@
 
 void BaseCharacter::Init(std::vector<Model*> models) {
 	models_ = models;
-
 	worldTransform_.Initialize();
 
 	// モデルのコンテナからキーを取得しそれに応じたtransformを作成

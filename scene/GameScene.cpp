@@ -50,10 +50,11 @@ void GameScene::Initialize() {
 
 	// player ---------------------------------------------------------
 	// 使用するモデルを配列に格納
-	playerPartsModels_.emplace_back(modelLoader->GetModel("player_body"));
-	playerPartsModels_.emplace_back(modelLoader->GetModel("player_face"));
+	playerPartsModels_.emplace_back(modelLoader->GetModel("player"));
 	playerPartsModels_.emplace_back(modelLoader->GetModel("player_leftArm"));
 	playerPartsModels_.emplace_back(modelLoader->GetModel("player_rightArm"));
+	playerPartsModels_.emplace_back(modelLoader->GetModel("player_LEye"));
+	playerPartsModels_.emplace_back(modelLoader->GetModel("player_REye"));
 
 	// インスタンス生成と初期化
 	player_ = std::make_unique<Player>(playerPartsModels_);

@@ -13,7 +13,11 @@ const uint32_t kCollisionAttributeEnemy = 0b1 << 1;
 class Collider {
 public:
 
-	Collider() {};
+	Collider() {
+		serialNumber_ = nextSerialNumber;
+		// 次の番号を加算
+		++nextSerialNumber;
+	};
 	~Collider() {};
 
 public:
@@ -53,6 +57,9 @@ public:
 	uint32_t GetTypeID() const { return typeID_; }
 	void SetTypeID(const uint32_t& typeID) { typeID_ = typeID; }
 
+	// シリアルナンバーのゲッタ
+	uint32_t GetSerialNumber() const { return serialNumber_; }
+
 	// ------------ OBB ------------ // 
 	OBB GetOBB() { return obb_; }
 
@@ -73,5 +80,10 @@ protected:
 	uint32_t collisionCount_;
 
 	OBB obb_;
+
+	// シリアルナンバー
+	uint32_t serialNumber_ = 0;
+	// 次のシリアルナンバー
+	static uint32_t nextSerialNumber;
 };
 

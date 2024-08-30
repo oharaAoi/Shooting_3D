@@ -1,7 +1,7 @@
 # Blender 4.2.1 LTS MTL File: 'player.blend'
 # www.blender.org
 
-newmtl マテリアル.005
+newmtl マテリアル.006
 Ns 250.000000
 Ka 1.000000 1.000000 1.000000
 Ks 0.500000 0.500000 0.500000
@@ -9,4 +9,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
-map_Kd C:/Users/81801/source/repos/LC2/AL3/3dShooting/DirectXGame/Resources/player_leftArm/player_arm.png
+map_Kd C:/Users/81801/source/repos/LC2/AL3/3dShooting/DirectXGame/Resources/bossEnemyREye/eye.png

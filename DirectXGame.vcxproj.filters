@@ -244,10 +244,13 @@
       <Filter>Game\Math</Filter>
     </ClCompile>
     <ClCompile Include="Game\Manager\AudioManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\Manager</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameObject\PlayerAimCollider.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Collision\ContactRecord.cpp">
+      <Filter>Game\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -468,10 +471,13 @@
       <Filter>Game\Math</Filter>
     </ClInclude>
     <ClInclude Include="Game\Manager\AudioManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameObject\PlayerAimCollider.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Collision\ContactRecord.h">
+      <Filter>Game\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

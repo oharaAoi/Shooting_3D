@@ -22,9 +22,10 @@
 /// </summary>
 enum PlayerParts {
 	Parts_Body = 0,
-	Parts_Face,
 	Parts_LeftArm,
-	Parts_RightArm
+	Parts_RightArm,
+	Parts_LEye,
+	Parts_REye,
 };
 
 enum class PlayerBehavior {
@@ -218,6 +219,9 @@ private:
 	uint32_t hp_;
 	uint32_t firstHp_;
 
+	// ------------ Collision系 ------------ // 
+
 	std::unique_ptr<PlayerAimCollider> aimCollider_ = nullptr;
+	ContactRecord contactRecord_;
 
 };

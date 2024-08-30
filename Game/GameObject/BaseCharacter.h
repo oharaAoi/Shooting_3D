@@ -13,6 +13,7 @@
 // collision
 #include "Collision/Collider.h"
 #include "Collision/CollisionTypeIdDef.h"
+#include "Collision/ContactRecord.h"
 // Manager
 #include "Manager/AudioManager.h"
 

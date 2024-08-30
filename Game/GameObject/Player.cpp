@@ -18,9 +18,10 @@ void Player::Init(std::vector<Model*> models) {
 	
 	// partsの親の設定
 	worldTransforms_[PlayerParts::Parts_Body].parent_ = &worldTransform_;
-	worldTransforms_[PlayerParts::Parts_Face].parent_ = &worldTransforms_[PlayerParts::Parts_Body];
 	worldTransforms_[PlayerParts::Parts_LeftArm].parent_ = &worldTransforms_[PlayerParts::Parts_Body];
 	worldTransforms_[PlayerParts::Parts_RightArm].parent_ = &worldTransforms_[PlayerParts::Parts_Body];
+	worldTransforms_[PlayerParts::Parts_LEye].parent_ = &worldTransforms_[PlayerParts::Parts_Body];
+	worldTransforms_[PlayerParts::Parts_REye].parent_ = &worldTransforms_[PlayerParts::Parts_Body];
 
 	worldTransform_.translation_.z = -20;
 
@@ -43,9 +44,10 @@ void Player::Init(std::vector<Model*> models) {
 	// グループを追加
 	adjustItem->CreateGroup(groupName);
 	// 項目の追加
-	adjustItem->AddItem(groupName, "face_Translation", worldTransforms_[PlayerParts::Parts_Face].translation_);
 	adjustItem->AddItem(groupName, "L_Arm_Translation", worldTransforms_[PlayerParts::Parts_LeftArm].translation_);
 	adjustItem->AddItem(groupName, "R_Arm_Translation", worldTransforms_[PlayerParts::Parts_RightArm].translation_);
+	adjustItem->AddItem(groupName, "L_Eye_Translation", worldTransforms_[PlayerParts::Parts_LEye].translation_);
+	adjustItem->AddItem(groupName, "R_Eye_Translation", worldTransforms_[PlayerParts::Parts_REye].translation_);
 	adjustItem->AddItem(groupName, "Hp", hp_);
 
 	ApplyAdjustItems();
@@ -257,8 +259,14 @@ void Player::OnCollision(Collider* other) {
 	} else if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kBoss)) {
 		hp_--;
 		KnockBack(other->GetWorldPosition(), 5.0f);
-	}
 
+		uint32_t serialNumber = other->GetSerialNumber();
+		if (contactRecord_.CheckRecord(serialNumber)) {
+			return;
+		}
+		// 履歴に追加
+		contactRecord_.AddRecord(serialNumber);
+	}
 }
 
 // ------------------- 当たった時の処理 ------------------- //
@@ -299,9 +307,10 @@ void Player::EditImGui() {
 	ImGui::DragFloat3("worldPos", &worldPos.x, 0.1f);
 	ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.1f);
 	ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.1f);
-	ImGui::DragFloat3("head", &worldTransforms_[PlayerParts::Parts_Face].translation_.x, 0.1f);
 	ImGui::DragFloat3("leftArm", &worldTransforms_[PlayerParts::Parts_LeftArm].translation_.x, 0.1f);
 	ImGui::DragFloat3("rightArm", &worldTransforms_[PlayerParts::Parts_RightArm].translation_.x, 0.1f);
+	ImGui::DragFloat3("leftEye", &worldTransforms_[PlayerParts::Parts_LEye].translation_.x, 0.1f);
+	ImGui::DragFloat3("rightEye", &worldTransforms_[PlayerParts::Parts_REye].translation_.x, 0.1f);
 
 	ImGui::Separator();
 
@@ -317,9 +326,10 @@ void Player::ApplyAdjustItems() {
 	AdjustmentItem* adjustItem = AdjustmentItem::GetInstance();
 	const char* groupName = "Player";
 
-	worldTransforms_[PlayerParts::Parts_Face].translation_ = adjustItem->GetValue<Vector3>(groupName, "face_Translation");
 	worldTransforms_[PlayerParts::Parts_LeftArm].translation_ = adjustItem->GetValue<Vector3>(groupName, "L_Arm_Translation");
 	worldTransforms_[PlayerParts::Parts_RightArm].translation_ = adjustItem->GetValue<Vector3>(groupName, "R_Arm_Translation");
+	worldTransforms_[PlayerParts::Parts_LEye].translation_ = adjustItem->GetValue<Vector3>(groupName, "L_Eye_Translation");
+	worldTransforms_[PlayerParts::Parts_REye].translation_ = adjustItem->GetValue<Vector3>(groupName, "R_Eye_Translation");
 	hp_ = adjustItem->GetValue<uint32_t>(groupName, "Hp");
 }
 
