@@ -57,6 +57,8 @@ public:
 	/// <returns></returns>
 	virtual Vector3 GetWorldPosition() const override { return Vector3(); };
 
+	const Vector3 GetTranslation() const  override { return worldTransform_.translation_; };
+
 ///////////////////////////////////////////////////////////
 // accessor
 ///////////////////////////////////////////////////////////

@@ -66,6 +66,8 @@ public:
 	/// <returns>worldPosition</returns>
 	virtual Vector3 GetWorldPosition() const override;
 
+	const Vector3 GetTranslation() const  override { return worldTransform_.translation_; };
+
 protected:
 	// モデルデータ配列
 	std::vector<Model*> models_;

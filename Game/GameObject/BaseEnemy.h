@@ -91,6 +91,8 @@ public:
 	Vector3 GetScreenPosition(const ViewProjection& viewProjection) const ;
 	Vector3 GetScreenPosition(const Vector3& posWorld, const ViewProjection& viewProjection) const;
 
+	Vector3 GetFirstPos() const { return firstPos_; }
+
 	// ------------ hp ------------ //
 	float GetHpRaito() const { return static_cast<float>(hp_) / static_cast<float>(firstHp_); }
 	uint32_t GetHp() const { return hp_; }
@@ -131,6 +133,9 @@ protected:
 
 	GameScene* gameScene_ = nullptr;
 
+	Model* triangleModel_ = nullptr;
+	WorldTransform triangleTransform_;
+
 	// ------------ キャラクターの情報に関する変数 ------------ // 
 	uint32_t hp_ = 0;
 	uint32_t firstHp_ = 0;
@@ -141,6 +146,7 @@ protected:
 	bool isPreDiscovery_;
 
 	Vector3 velocity_;
+	Vector3 firstPos_;
 
 	// ------------ Bulletに必要な変数 ------------ // 
 	Vector3 playerPosition_;

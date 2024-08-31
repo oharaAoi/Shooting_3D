@@ -34,10 +34,13 @@ void ModelLoader::Init() {
 	Load("bossEnemy", true);
 	Load("bossEnemyLEye", true);
 	Load("bossEnemyREye", true);
+	Load("enemyTriangle", true);
 	// bullet
 	Load("cube", true);
 	Load("playerBullet", true);
 	Load("bossBullet", true);
+	// effect
+	Load("particle", true);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

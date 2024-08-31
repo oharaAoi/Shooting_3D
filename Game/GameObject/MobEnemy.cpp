@@ -6,7 +6,7 @@ MobEnemy::MobEnemy(std::vector<Model*> models, const Vector3& pos, const Vector3
 	mobEnemyNum++;
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kEnemy));
 	worldTransform_.translation_ = pos;
-	velocity_ = velocity;
+	velocity_ = Normalize(velocity);
 	Init(models);
 }
 MobEnemy::~MobEnemy() {}

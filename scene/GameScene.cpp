@@ -90,6 +90,11 @@ void GameScene::Initialize() {
 	controlUI_ = std::unique_ptr<Sprite>(control);
 
 	// ---------------------------------------------
+	// ↓ Effect
+	// ---------------------------------------------
+	emissionEffect_ = std::make_unique<EmissionEffect>();
+
+	// ---------------------------------------------
 	// ↓ 初期化時に設定しておく処理をしておく
 	// ---------------------------------------------
 
@@ -187,6 +192,8 @@ void GameScene::Update() {
 	// ---------------------------------------------
 	CheckAllCollision();
 
+	emissionEffect_->Update();
+
 	// ---------------------------------------------
 	// ↓ UIの更新
 	// ---------------------------------------------
@@ -271,12 +278,12 @@ void GameScene::Draw() {
 		bullet->Draw(viewProjection_);
 	}
 
+	emissionEffect_->Draw(viewProjection_);
+
 	// ---------------------------------------------
 	// ↓ 線の描画
 	// ---------------------------------------------
 	trajectory_->Draw();
-
-	DrawGrid();
 
 	player_->DrawCollision();
 	player_->GetAimCollider()->Draw();
@@ -387,7 +394,7 @@ void GameScene::UpdateBullet() {
 			return true;
 		}
 		return false;
-							  });
+	});
 }
 
 // ------------------- すべての当たり判定を実行する ------------------- //
@@ -524,6 +531,14 @@ void GameScene::GameOverUpdate() {
 
 void GameScene::GameClearUpdate() {
 }
+
+// ------------------- ゲームクリア時に行う処理 ------------------- //
+
+void GameScene::AddEmissionEffect(const Vector3& origine, const uint32_t& lifeTime, const uint32_t& count) {
+	emissionEffect_->AddParticleList(origine, lifeTime, count);
+}
+
+// ------------------- ゲームクリア時に行う処理 ------------------- //
 
 void GameScene::DrawGrid() {
 	const uint32_t kSubdivision_ = 10;

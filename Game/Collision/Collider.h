@@ -37,6 +37,8 @@ public:
 	/// <returns>worldPosition</returns>
 	virtual Vector3 GetWorldPosition() const { return Vector3(); };
 
+	virtual const Vector3 GetTranslation() const { return Vector3(); };
+
 ///////////////////////////////////////////////////////////
 // accessor
 ///////////////////////////////////////////////////////////

@@ -35,6 +35,8 @@
 #include "UI/Rader.h"
 #include "UI/BossUI.h"
 #include "UI/GameOverUI.h"
+// Effect
+#include "Effect/EmissionEffect.h"
 
 /// <summary>
 /// ゲームシーン
@@ -124,6 +126,14 @@ public: // メンバ関数
 	/// </summary>
 	void GameClearUpdate();
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="origine"></param>
+	/// <param name="lifeTime"></param>
+	/// <param name="count"></param>
+	void AddEmissionEffect(const Vector3& origine, const uint32_t& lifeTime, const uint32_t& count);
+
 	void DrawGrid();
 
 ///////////////////////////////////////////////////////////
@@ -186,6 +196,9 @@ private: // メンバ変数
 
 	uint32_t controlUIHandle_;
 	Vector2 controlUIPos_;
+
+	// ------------ Particle ------------ // 
+	std::unique_ptr<EmissionEffect> emissionEffect_ = nullptr;
 
 	// ------------ メンバ変数 ------------ // 
 	uint32_t playerAimCount_;

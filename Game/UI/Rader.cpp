@@ -57,6 +57,14 @@ void Rader::Update(const uint32_t& playerNearEnemyCount, const uint32_t& playerA
 	// -------------------------------------------------
 	// ↓ 敵の位置を計算する
 	// -------------------------------------------------
+	for (std::map<BaseEnemy*, SpriteData>::iterator it = enemiesMap_.begin(); it != enemiesMap_.end();) {
+		if (it->first->GetIsDead()) {
+			it = enemiesMap_.erase(it); 
+		} else {
+			++it;
+		}
+	}
+	
 	CalculationEnemiesPos(enemyList);
 
 	base_.sprite->SetPosition(base_.pos);

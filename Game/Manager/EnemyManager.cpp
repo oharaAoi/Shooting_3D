@@ -170,9 +170,9 @@ void EnemyManager::SaveEnemyPos() {
 	uint32_t createListIndex = 0;
 	for (const std::unique_ptr<BaseEnemy>& enemy : createEnemysList_) {
 		std::string enemyNum = "Enemy" + std::to_string(createListIndex);
-		Vector3 enemyPos = enemy->GetWorldTransform().translation_;
+		Vector3 enemyPos = enemy->GetFirstPos();
 		uint32_t enemyType = enemy->GetEnemyType();
-		Vector3 enemyVelocity = enemy->GetVelocity();
+		Vector3 enemyVelocity = Normalize(enemy->GetVelocity());
 
 		data[enemyNum]["pos"] = { enemyPos.x, enemyPos.y, enemyPos.z };
 		data[enemyNum]["type"] = { enemyType };
@@ -181,6 +181,7 @@ void EnemyManager::SaveEnemyPos() {
 		createListIndex++;
 	}
 
+	fileNum_ = static_cast<uint32_t>(filePathArray_.size());
 	// パス
 	std::string filePath = kDirectorPath_ + "EnemyPos" + std::to_string(fileNum_) + ".json";
 	// 書き込み用のファイルストリーム

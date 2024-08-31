@@ -8,6 +8,12 @@
 void BaseEnemy::Init(std::vector<Model*> models) {
 	BaseCharacter::Init(models);
 	isDead_ = false;
+	firstPos_ = worldTransform_.translation_;
+
+	triangleModel_ = ModelLoader::GetInstacne()->GetModel("enemyTriangle");
+	triangleTransform_.Initialize();
+	triangleTransform_.parent_ = &worldTransform_;
+	triangleTransform_.translation_ = { 0,2,0 };
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,6 +27,7 @@ void BaseEnemy::Update() {
 	}
 	isPreDiscovery_ = isDiscovery_;
 	BaseCharacter::Update();
+	triangleTransform_.UpdateMatrix();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,6 +36,10 @@ void BaseEnemy::Update() {
 
 void BaseEnemy::Draw(const ViewProjection& viewProjection) const {
 	BaseCharacter::Draw(viewProjection);
+
+	if (isDiscovery_) {
+		triangleModel_->Draw(triangleTransform_, viewProjection);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

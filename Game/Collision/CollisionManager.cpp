@@ -77,7 +77,7 @@ bool CollisionManager::IsDiscoveryEnemy(Collider* colliderA, Collider* colliderB
 	Vector3 subtract = posB - posA;
 	// 座標AとBの距離を求める
 	float distance = Length(subtract);
-	if (10.0f > distance) {
+	if (20.0f > distance) {
 		return true;
 	}
 	return false;
