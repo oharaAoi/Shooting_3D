@@ -167,6 +167,9 @@ private: // メンバ変数
 	std::unique_ptr<PlayerUI> playerUI_ = nullptr;
 	std::unique_ptr<Rader> rader_ = nullptr;
 	std::unique_ptr<BossUI> bossUI_ = nullptr;
+	std::unique_ptr<Sprite> controlUI_ = nullptr;
+	uint32_t controlUIHandle_;
+	Vector2 controlUIPos_;
 
 	// ------------ メンバ変数 ------------ // 
 	uint32_t playerAimCount_;

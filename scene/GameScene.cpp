@@ -27,8 +27,6 @@ void GameScene::Initialize() {
 	// ↓ Loaderの初期化
 	// ---------------------------------------------
 	ModelLoader* modelLoader = ModelLoader::GetInstacne();
-	modelLoader->Init();
-
 	AdjustmentItem::GetInstance()->Init();
 
 	// ---------------------------------------------
@@ -86,6 +84,10 @@ void GameScene::Initialize() {
 	playerUI_ = std::make_unique<PlayerUI>();
 	rader_ = std::make_unique<Rader>();
 	bossUI_ = std::make_unique<BossUI>();
+	controlUIPos_ = { 100, 470, };
+	controlUIHandle_ = TextureManager::Load("./Resources/UI/State/controlUI.png");
+	Sprite* control = Sprite::Create(controlUIHandle_, controlUIPos_, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f });
+	controlUI_ = std::unique_ptr<Sprite>(control);
 
 	// ---------------------------------------------
 	// ↓ 初期化時に設定しておく処理をしておく
@@ -95,6 +97,9 @@ void GameScene::Initialize() {
 	player_->SetGameScene(this);
 	player_->SetReticle(reticle_.get());
 	enemyManager_->SetGameScene(this);
+
+	AudioManager::GetInstacne()->ClearPlayerList();
+	AudioManager::GetInstacne()->AddPlayList("Audio/game.wav", true, 0.5f);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,6 +152,8 @@ void GameScene::Update() {
 	rader_->SetPlayerPosition(player_->GetTranslation());
 	rader_->SetPlayerRotation(player_->GetForward());
 	rader_->Update(0, playerAimCount_, enemyManager_->GetEnemysList());
+
+	controlUI_->SetPosition(controlUIPos_);
 
 	// ---------------------------------------------
 	// ↓ 次フレームの前に行っておきたい処理
@@ -251,6 +258,7 @@ void GameScene::Draw() {
 	playerUI_->Draw();
 	rader_->Draw();
 	bossUI_->Draw();
+	controlUI_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -430,6 +438,7 @@ void GameScene::EditImGui() {
 #ifdef _DEBUG
 	ImGui::Begin("GameScene");
 	ImGui::Text("playerAimCoun: %d", playerAimCount_);
+	ImGui::SliderFloat2("controlUI: %d", &controlUIPos_.x, 0, 1280);
 	ImGui::End();
 #endif // _DEBUG
 }

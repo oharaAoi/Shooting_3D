@@ -135,6 +135,7 @@ void Reticle::LockOn(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, con
 		} else {
 			target_ = nullptr;
 			isLockOn_ = false;
+			AudioManager::GetInstacne()->AddPlayList("Audio/lockOnCancel.wav", false, 0.5f);
 		}
 	}
 }
@@ -199,6 +200,8 @@ void Reticle::Search(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const
 		// ソートの結果一番近い敵をロックオン対象とする
 		target_ = targets.front().second;
 		isLockOn_ = true;
+
+		AudioManager::GetInstacne()->AddPlayList("Audio/lockOn.wav", false, 0.5f);
 	}
 
 

@@ -16,12 +16,20 @@ void AudioManager::Init() {
 
 	Load("Audio/hited.wav");
 	Load("Audio/playerShot.wav");
-	Load("Audio/playerDash.wav");
+
+	// System
+	Load("Audio/pushButton.wav");
+	Load("Audio/lockOn.wav");
+	Load("Audio/lockOnCancel.wav");
+
+	// BGM
+	Load("Audio/title.wav");
+	Load("Audio/game.wav");
 }
 
 void AudioManager::Update() {
 	for (std::list<AudioData>::iterator it = playList_.begin(); it != playList_.end();) {
-		if (!audio_->IsPlaying(it->handle)) {
+		if (!(audio_->IsPlaying(it->handle))) {
 			it = playList_.erase(it);
 		} else {
 			it++;
@@ -31,8 +39,11 @@ void AudioManager::Update() {
 
 void AudioManager::IsPlay() {
 	for (std::list<AudioData>::iterator it = playList_.begin(); it != playList_.end(); it++) {
-		if (!audio_->IsPlaying(it->handle)) {
-			audio_->PlayWave(it->handle, it->isLoop, it->volume);
+		if (!(audio_->IsPlaying(it->handle))) {
+			if (!it->isPlay) {
+				it->handle = audio_->PlayWave(it->handle, it->isLoop, it->volume);
+				it->isPlay = true;
+			}
 		}
 	}
 }
@@ -47,6 +58,16 @@ void AudioManager::AddPlayList(const std::string& soundPath, const bool& isLoop,
 	data.handle = audioMap_[soundPath];
 	data.isLoop = isLoop;
 	data.volume = volume;
+	data.audioName = soundPath;
+	data.isPlay = false;
 	
-	playList_.push_back(data);
+	playList_.push_back(std::move(data));
+}
+
+void AudioManager::StopAudioPlayerList(const std::string& soundPath) {
+	for (std::list<AudioData>::iterator it = playList_.begin(); it != playList_.end(); it++) {
+		if (it->audioName == soundPath) {
+			audio_->StopWave(it->handle);
+		}
+	}
 }

@@ -18,6 +18,20 @@ void TitleScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+
+	viewProjection_.Initialize();
+
+	ModelLoader* modelLoader = ModelLoader::GetInstacne();
+
+	skydome_ = std::make_unique<Skydome>(modelLoader->GetModel("skydome"));
+	ground_ = std::make_unique<Ground>(modelLoader->GetModel("ground"));
+
+	startUIPos_ = { 640, 555 };
+	startButtonUIHandle_ = TextureManager::Load("UI/Title/startButtonUI.png");
+	Sprite* statUI = Sprite::Create(startButtonUIHandle_, startUIPos_, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f });
+	startButtonUI_ = std::unique_ptr<Sprite>(statUI);
+
+	isPlayAudio_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +45,27 @@ void TitleScene::Update() {
 	Input::GetInstance()->GetJoystickStatePrevious(0, joyStatePre);
 	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A && !(joyStatePre.Gamepad.wButtons & XINPUT_GAMEPAD_A)) {
 		isFinish_ = true;
+		AudioManager::GetInstacne()->StopAudioPlayerList("Audio/title.wav");
+		AudioManager::GetInstacne()->AddPlayList("Audio/pushButton.wav", false, 0.7f);
 	}
+
+	skydome_->Update();
+	ground_->Update();
+
+	startButtonUI_->SetPosition(startUIPos_);
+
+	viewProjection_.TransferMatrix();
+
+	if (!isPlayAudio_) {
+		AudioManager::GetInstacne()->AddPlayList("Audio/title.wav", true, 0.5f);
+		isPlayAudio_ = true;
+	}
+
+#ifdef _DEBUG
+	ImGui::Begin("Title");
+	ImGui::SliderFloat2("startUIPos", &startUIPos_.x, 0, 1280);
+	ImGui::End();
+#endif // _DEBUG
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +98,8 @@ void TitleScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-
+	skydome_->Draw(viewProjection_);
+	ground_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -78,6 +113,8 @@ void TitleScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+	
+	startButtonUI_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

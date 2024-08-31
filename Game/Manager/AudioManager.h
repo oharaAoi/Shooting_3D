@@ -1,14 +1,17 @@
 #pragma once
 #include <map>
+#include <memory>
 #include "Audio.h"
 
 class AudioManager {
 public:
 
 	struct AudioData {
+		std::string audioName;
 		uint32_t handle;
 		bool isLoop;
 		float volume;
+		bool isPlay;
 	};
 
 public:
@@ -41,7 +44,24 @@ public:
 	/// <param name="modelPath">objのパス</param>
 	void Load(const std::string& soundPath);
 
+	/// <summary>
+	/// 鳴らすリストに指定のwavを追加する
+	/// </summary>
+	/// <param name="soundPath"></param>
+	/// <param name="isLoop"></param>
+	/// <param name="volume"></param>
 	void AddPlayList(const std::string& soundPath, const bool& isLoop, const float& volume);
+
+	/// <summary>
+	/// playListにある音声を止める
+	/// </summary>
+	/// <param name="soundPath"></param>
+	void StopAudioPlayerList(const std::string& soundPath);
+
+	/// <summary>
+	/// playListを削除する
+	/// </summary>
+	void ClearPlayerList() { playList_.clear(); }
 
 private:
 
@@ -51,6 +71,5 @@ private:
 	std::map<std::string, uint32_t> audioMap_;
 	// 鳴らすリスト
 	std::list<AudioData> playList_;
-
 };
 

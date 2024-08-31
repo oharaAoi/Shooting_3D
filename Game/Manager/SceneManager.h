@@ -6,6 +6,8 @@
 #include "Scene/TitleScene.h"
 // Managet
 #include "Manager/AudioManager.h"
+// Loader
+#include "Loader/ModelLoader.h"
 
 enum class Scene {
 	kTitle,
@@ -16,7 +18,7 @@ class SceneManager {
 public:
 
 	// 現在のシーン
-	Scene nowScene_ = Scene::kGame;
+	Scene nowScene_ = Scene::kTitle;
 
 public:
 

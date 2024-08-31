@@ -20,6 +20,7 @@ ModelLoader::~ModelLoader() {
 void ModelLoader::Init() {
 	Load("skydome", true);
 	Load("ground", true);
+	Load("plane", true);
 	// player
 	Load("player", true);
 	Load("player_leftArm", true);

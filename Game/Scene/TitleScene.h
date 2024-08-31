@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 // KamataEngine
 #include "Audio.h"
 #include "DirectXCommon.h"
@@ -9,6 +10,13 @@
 #include "WorldTransform.h"
 // Scene
 #include "Scene/BaseScene.h"
+// WorldObject
+#include "WorldObject/Skydome.h"
+#include "WorldObject/Ground.h"
+// Loader
+#include "Loader/ModelLoader.h"
+// Managet
+#include "Manager/AudioManager.h"
 
 class TitleScene
 : public BaseScene {
@@ -38,5 +46,16 @@ private:
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
+	// ------------ View ------------ // 
+	ViewProjection viewProjection_;
+
+	std::unique_ptr<Skydome> skydome_;
+	std::unique_ptr<Ground> ground_;
+
+	std::unique_ptr<Sprite> startButtonUI_;
+	uint32_t startButtonUIHandle_;
+	Vector2 startUIPos_;
+
+	bool isPlayAudio_ = false;
 };
 
