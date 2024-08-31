@@ -256,6 +256,21 @@
       <Filter>Game\WorldObject</Filter>
     </ClCompile>
     <ClCompile Include="Game\WorldObject\BackGround.cpp">
+      <Filter>Game\WorldObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameClearScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameOverScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\GameOverUI.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\FadeScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\GameClearUI.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -489,6 +504,21 @@
       <Filter>Game\WorldObject</Filter>
     </ClInclude>
     <ClInclude Include="Game\WorldObject\BackGround.h">
+      <Filter>Game\WorldObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameClearScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameOverScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\GameOverUI.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\FadeScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\GameClearUI.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

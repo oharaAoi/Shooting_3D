@@ -1,20 +1,16 @@
-#include "TitleScene.h"
-#include "TextureManager.h"
-#include <cassert>
-#include "AxisIndicator.h"
-#include "ImGuiManager.h"
-#include "PrimitiveDrawer.h"
+#include "GameClearScene.h"
 
-TitleScene::TitleScene() {}
+GameClearScene::GameClearScene() {
+}
 
-TitleScene::~TitleScene() {
+GameClearScene::~GameClearScene() {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　初期化関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TitleScene::Initialize() {
+void GameClearScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
@@ -26,54 +22,49 @@ void TitleScene::Initialize() {
 	skydome_ = std::make_unique<Skydome>(modelLoader->GetModel("skydome"));
 	ground_ = std::make_unique<Ground>(modelLoader->GetModel("ground"));
 
-	startUIPos_ = { 640, 555 };
-	startButtonUIHandle_ = TextureManager::Load("UI/Title/startButtonUI.png");
-	Sprite* statUI = Sprite::Create(startButtonUIHandle_, startUIPos_, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f });
-	startButtonUI_ = std::unique_ptr<Sprite>(statUI);
+	fadeScene_ = std::make_unique<FadeScene>(FadeOut_Type);
+	fadeScene_->SetIsFade(true);
+	fadeScene_->SetFadeType(WhiteInOut_Fade);
 
-	isPlayAudio_ = false;
+	gameClearUI_ = std::make_unique<GameClearUI>();
+
+	AudioManager::GetInstacne()->AddPlayList("Audio/gameClear.wav", false, 0.5f);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　更新関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TitleScene::Update() {
+void GameClearScene::Update() {
+	skydome_->Update();
+	ground_->Update();
+
 	XINPUT_STATE joyState;
 	XINPUT_STATE joyStatePre;
 	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
 	Input::GetInstance()->GetJoystickStatePrevious(0, joyStatePre);
 	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A && !(joyStatePre.Gamepad.wButtons & XINPUT_GAMEPAD_A)) {
 		isFinish_ = true;
-		nextScene_ = Scene::kGame;
-		AudioManager::GetInstacne()->StopAudioPlayerList("Audio/title.wav");
+		nextScene_ = Scene::kTitle;
 		AudioManager::GetInstacne()->AddPlayList("Audio/pushButton.wav", false, 0.7f);
 	}
 
-	skydome_->Update();
-	ground_->Update();
-
-	startButtonUI_->SetPosition(startUIPos_);
-
-	viewProjection_.TransferMatrix();
-
-	if (!isPlayAudio_) {
-		AudioManager::GetInstacne()->AddPlayList("Audio/title.wav", true, 0.5f);
-		isPlayAudio_ = true;
+	if (!fadeScene_->GetIsFadeFinish()) {
+		if (fadeScene_->GetIsFade()) {
+			fadeScene_->Update();
+		}
 	}
 
-#ifdef _DEBUG
-	ImGui::Begin("Title");
-	ImGui::SliderFloat2("startUIPos", &startUIPos_.x, 0, 1280);
-	ImGui::End();
-#endif // _DEBUG
+	gameClearUI_->Update();
+
+	viewProjection_.TransferMatrix();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　描画関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TitleScene::Draw() {
+void GameClearScene::Draw() {
 
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
@@ -115,7 +106,9 @@ void TitleScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 	
-	startButtonUI_->Draw();
+	gameClearUI_->Draw();
+
+	fadeScene_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

@@ -85,7 +85,7 @@ void BossEnemy::Update() {
 		RushAttack();
 	} else {
 		// 現在の状態を更新する
-		//behaviorState_->Update();
+		behaviorState_->Update();
 	}
 
 	BaseEnemy::Update();

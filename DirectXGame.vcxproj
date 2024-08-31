@@ -137,6 +137,9 @@
     <ClCompile Include="Game\Math\MyMatrix4x4.cpp" />
     <ClCompile Include="Game\Math\MyRandom.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
+    <ClCompile Include="Game\Scene\FadeScene.cpp" />
+    <ClCompile Include="Game\Scene\GameClearScene.cpp" />
+    <ClCompile Include="Game\Scene\GameOverScene.cpp" />
     <ClCompile Include="Game\Scene\TitleScene.cpp" />
     <ClCompile Include="Game\State\BaseCharacterState.cpp" />
     <ClCompile Include="Game\State\BaseEnemyState.cpp" />
@@ -151,6 +154,8 @@
     <ClCompile Include="Game\State\PlayerDashState.cpp" />
     <ClCompile Include="Game\State\PlayerRootState.cpp" />
     <ClCompile Include="Game\UI\BossUI.cpp" />
+    <ClCompile Include="Game\UI\GameClearUI.cpp" />
+    <ClCompile Include="Game\UI\GameOverUI.cpp" />
     <ClCompile Include="Game\UI\PlayerUI.cpp" />
     <ClCompile Include="Game\UI\Rader.cpp" />
     <ClCompile Include="Game\WorldObject\BackGround.cpp" />
@@ -212,6 +217,9 @@
     <ClInclude Include="Game\Math\MyMatrix4x4.h" />
     <ClInclude Include="Game\Math\MyRandom.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
+    <ClInclude Include="Game\Scene\FadeScene.h" />
+    <ClInclude Include="Game\Scene\GameClearScene.h" />
+    <ClInclude Include="Game\Scene\GameOverScene.h" />
     <ClInclude Include="Game\Scene\TitleScene.h" />
     <ClInclude Include="Game\State\BaseCharacterState.h" />
     <ClInclude Include="Game\State\BaseEnemyState.h" />
@@ -226,6 +234,8 @@
     <ClInclude Include="Game\State\PlayerDashState.h" />
     <ClInclude Include="Game\State\PlayerRootState.h" />
     <ClInclude Include="Game\UI\BossUI.h" />
+    <ClInclude Include="Game\UI\GameClearUI.h" />
+    <ClInclude Include="Game\UI\GameOverUI.h" />
     <ClInclude Include="Game\UI\PlayerUI.h" />
     <ClInclude Include="Game\UI\Rader.h" />
     <ClInclude Include="Game\WorldObject\BackGround.h" />

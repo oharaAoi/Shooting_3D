@@ -8,6 +8,7 @@
 #include "WorldTransform.h"
 // Scene
 #include "Scene/BaseScene.h"
+#include "Scene/FadeScene.h"
 // Camera
 #include "DebugCamera.h"
 #include "Camera/FollowCamera.h"
@@ -33,6 +34,7 @@
 #include "UI/PlayerUI.h"
 #include "UI/Rader.h"
 #include "UI/BossUI.h"
+#include "UI/GameOverUI.h"
 
 /// <summary>
 /// ゲームシーン
@@ -112,6 +114,16 @@ public: // メンバ関数
 	/// </summary>
 	void EditImGui();
 
+	/// <summary>
+	/// ゲームオーバー時に行う処理
+	/// </summary>
+	void GameOverUpdate();
+
+	/// <summary>
+	/// ゲームクリア時に行う処理
+	/// </summary>
+	void GameClearUpdate();
+
 	void DrawGrid();
 
 ///////////////////////////////////////////////////////////
@@ -127,6 +139,8 @@ private: // メンバ変数
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
+	
+	std::unique_ptr<FadeScene> fadeScene_ = nullptr;
 	
 	// ------------ View ------------ // 
 	ViewProjection viewProjection_;
@@ -168,6 +182,8 @@ private: // メンバ変数
 	std::unique_ptr<Rader> rader_ = nullptr;
 	std::unique_ptr<BossUI> bossUI_ = nullptr;
 	std::unique_ptr<Sprite> controlUI_ = nullptr;
+	std::unique_ptr<GameOverUI> gameOverUI_ = nullptr;
+
 	uint32_t controlUIHandle_;
 	Vector2 controlUIPos_;
 

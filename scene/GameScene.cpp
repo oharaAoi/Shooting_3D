@@ -23,6 +23,8 @@ void GameScene::Initialize() {
 
 	viewProjection_.Initialize();
 
+	fadeScene_ = std::make_unique<FadeScene>(FadeIn_Type);
+
 	// ---------------------------------------------
 	// ↓ Loaderの初期化
 	// ---------------------------------------------
@@ -62,9 +64,6 @@ void GameScene::Initialize() {
 
 	reticle_ = std::make_unique<Reticle>();
 
-	// enemy ---------------------------------------------------------
-
-
 	// ---------------------------------------------
 	// ↓ WorldObjectの初期化
 	// ---------------------------------------------
@@ -84,6 +83,7 @@ void GameScene::Initialize() {
 	playerUI_ = std::make_unique<PlayerUI>();
 	rader_ = std::make_unique<Rader>();
 	bossUI_ = std::make_unique<BossUI>();
+
 	controlUIPos_ = { 100, 470, };
 	controlUIHandle_ = TextureManager::Load("./Resources/UI/State/controlUI.png");
 	Sprite* control = Sprite::Create(controlUIHandle_, controlUIPos_, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f });
@@ -109,6 +109,49 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 	UpdateViewProjection();
+
+	// ---------------------------------------------
+		// ↓ GameOver時に行う処理
+		// ---------------------------------------------
+	if (player_->GetHp() <= 0) {
+		fadeScene_->SetIsFade(true);
+		fadeScene_->SetFadeType(BlackInOut_Fade);
+
+		if (fadeScene_->GetIsFade()) {
+			// ブラックアウトをする
+			fadeScene_->Update();
+			if (!fadeScene_->GetIsFadeFinish()) {
+				return;
+			}
+
+			GameOverUpdate();
+
+			return;
+		}
+
+	}
+
+	// ---------------------------------------------
+	// ↓ GameClear時に行う処理
+	// ---------------------------------------------
+	if (enemyManager_->GetBossEnemy()->GetHp() <= 0) {
+		AudioManager::GetInstacne()->StopAudioPlayerList("Audio/game.wav");
+		fadeScene_->SetIsFade(true);
+		fadeScene_->SetFadeType(WhiteInOut_Fade);
+
+		if (fadeScene_->GetIsFade()) {
+			// whiteOutする
+			if (fadeScene_->GetIsFade()) {
+				fadeScene_->Update();
+				if (!fadeScene_->GetIsFadeFinish()) {
+					return;
+				}
+
+				isFinish_ = true;
+				nextScene_ = Scene::kClear;
+			}
+		}
+	}
 
 	// ---------------------------------------------
 	// ↓ GameObjectの処理
@@ -260,6 +303,14 @@ void GameScene::Draw() {
 	bossUI_->Draw();
 	controlUI_->Draw();
 
+	fadeScene_->Draw();
+
+	if (nextScene_ != Scene::kClear) {
+		if (fadeScene_->GetIsFadeFinish()) {
+			gameOverUI_->Draw();
+		}
+	}
+
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
@@ -323,7 +374,7 @@ void GameScene::UpdateBullet() {
 			return true;
 		}
 		return false;
-	});
+							   });
 
 	// Bossの弾
 	for (const std::unique_ptr<BossBullet>& bullet : bossBulletList_) {
@@ -336,7 +387,7 @@ void GameScene::UpdateBullet() {
 			return true;
 		}
 		return false;
-	});
+							  });
 }
 
 // ------------------- すべての当たり判定を実行する ------------------- //
@@ -418,6 +469,8 @@ void GameScene::AddBossBullet(std::unique_ptr<BossBullet> bossBullet) {
 	bossBulletList_.push_back(std::move(bossBullet));
 }
 
+// ------------------- LockOnできるEnemyを探索する ------------------- //
+
 void GameScene::CheckCanLockOnEnemy() {
 	const float canLockOnDistance = 30;
 
@@ -441,6 +494,35 @@ void GameScene::EditImGui() {
 	ImGui::SliderFloat2("controlUI: %d", &controlUIPos_.x, 0, 1280);
 	ImGui::End();
 #endif // _DEBUG
+}
+
+// ------------------- ゲームオーバー時に行う処理 ------------------- //
+
+void GameScene::GameOverUpdate() {
+	// GameOverが生成されていなかったら
+	if (gameOverUI_ == nullptr) {
+		gameOverUI_ = std::make_unique<GameOverUI>();
+		AudioManager::GetInstacne()->StopAudioPlayerList("Audio/game.wav");
+		AudioManager::GetInstacne()->AddPlayList("Audio/gameOver.wav", false, 0.5f);
+
+		// 生成された後の処理
+	} else {
+		XINPUT_STATE joyState;
+		XINPUT_STATE joyStatePre;
+		if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
+		Input::GetInstance()->GetJoystickStatePrevious(0, joyStatePre);
+		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A && !(joyStatePre.Gamepad.wButtons & XINPUT_GAMEPAD_A)) {
+			isFinish_ = true;
+			nextScene_ = Scene::kTitle;
+			AudioManager::GetInstacne()->StopAudioPlayerList("Audio/gameOver.wav");
+			AudioManager::GetInstacne()->AddPlayList("Audio/pushButton.wav", false, 0.7f);
+		}
+	}
+}
+
+// ------------------- ゲームクリア時に行う処理 ------------------- //
+
+void GameScene::GameClearUpdate() {
 }
 
 void GameScene::DrawGrid() {

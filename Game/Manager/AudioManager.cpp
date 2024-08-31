@@ -21,6 +21,8 @@ void AudioManager::Init() {
 	Load("Audio/pushButton.wav");
 	Load("Audio/lockOn.wav");
 	Load("Audio/lockOnCancel.wav");
+	Load("Audio/gameOver.wav");
+	Load("Audio/gameClear.wav");
 
 	// BGM
 	Load("Audio/title.wav");

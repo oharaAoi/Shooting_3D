@@ -4,15 +4,11 @@
 // Scene
 #include "GameScene.h"
 #include "Scene/TitleScene.h"
+#include "Scene/GameClearScene.h"
 // Managet
 #include "Manager/AudioManager.h"
 // Loader
 #include "Loader/ModelLoader.h"
-
-enum class Scene {
-	kTitle,
-	kGame
-};
 
 class SceneManager {
 public:
@@ -41,6 +37,12 @@ public:
 	/// 描画関数
 	/// </summary>
 	void Draw();
+
+	/// <summary>
+	/// シーンを切り返る
+	/// </summary>
+	/// <param name="nextScene"></param>
+	void ChangeScene(const Scene& nextScene);
 
 private:
 

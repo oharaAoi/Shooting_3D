@@ -93,6 +93,7 @@ public:
 
 	// ------------ hp ------------ //
 	float GetHpRaito() const { return static_cast<float>(hp_) / static_cast<float>(firstHp_); }
+	uint32_t GetHp() const { return hp_; }
 
 	// ------------ worldTransform ------------ // 
 	void SetParent(const WorldTransform* parent);

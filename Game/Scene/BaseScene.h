@@ -1,5 +1,11 @@
 #pragma once
 
+enum class Scene {
+	kTitle,
+	kGame,
+	kClear
+};
+
 class BaseScene {
 public:
 
@@ -14,8 +20,12 @@ public:
 
 	bool GetIsFinish() const { return isFinish_; }
 
+	Scene GetNextScene() const { return nextScene_; }
+
 protected:
 	// sceneを終了するか
 	bool isFinish_ = false;
+
+	Scene nextScene_;
 };
 
