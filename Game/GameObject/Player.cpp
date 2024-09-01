@@ -129,8 +129,10 @@ void Player::Draw(const ViewProjection& viewProjection) const {
 
 void Player::RecoverStamina() {
 	if (dashStamina_ < 90.0f) {
-		dashStamina_ += 1.0f / 20.0f;
+		dashStamina_ += 1.0f / 10.0f;
 	}
+
+	dashStamina_ = std::clamp(dashStamina_, 0.0f, 90.0f);
 }
 
 void Player::Move() {

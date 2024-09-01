@@ -1,5 +1,11 @@
 #include "MyRandom.h"
 
+int RandomInt(const int& min, const int& max) {
+    std::uniform_int_distribution<int> distribution(min, max);
+    int result = distribution(randomEngine);
+    return result;
+}
+
 float RandomFloat(const float& min, const float& max) {
     std::uniform_real_distribution<float> distribution(min, max);
     float result = distribution(randomEngine);

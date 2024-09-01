@@ -277,24 +277,56 @@ void EnemyManager::EditEnemyPos() {
 
 // ------------------- 敵を出現させる ------------------- //
 
-void EnemyManager::EnemyPop() {
-	popTime_++;
-	if (popTime_ > popTimeLimit_) {
-		createEnemyType_ = 0;
-		switch (createEnemyType_) {
+void EnemyManager::EnemyPop(const uint32_t& loadFineNum) {
+	// --------------------------------------
+	// ファイルの読み込みを行う
+	// --------------------------------------
+	// 読み込むjsonファイルのフルパスを合成する
+	std::string filePath = kDirectorPath_ + "enemyPos" + std::to_string(loadFineNum) + ".json";
+	// 読み込み用ファイルストリーム
+	std::ifstream ifs;
+	// ファイルを読み込みように開く
+	ifs.open(filePath);
+	// json文字列からjsonのデータ構造に展開
+	json root;
+	ifs >> root;
+	// ファイルを閉じる
+	ifs.close();
+
+	// --------------------------------------
+	// 読み込んだデータからEnemyを生成する
+	// --------------------------------------
+	for (auto& element : root.items()) {
+		std::string enemyName = element.key();
+		json enemyData = element.value();;
+
+		// 位置データを取得
+		Vector3 pos = { enemyData["pos"].at(0), enemyData["pos"].at(1),enemyData["pos"].at(2), };
+		// タイプデータを取得
+		int type = enemyData["type"][0];
+		// 速さ
+		Vector3 velocity = { enemyData["velocity"].at(0), enemyData["velocity"].at(1),enemyData["velocity"].at(2), };
+
+		switch (type) {
 		case EnemyType::Type_Mob:
-			enemysList_.push_back(std::make_unique<MobEnemy>(mobEnemyPartsModels_, createEnemyPos_, createEnemyVelocity_));
+			enemysList_.push_back(std::make_unique<MobEnemy>(mobEnemyPartsModels_, pos, velocity));
 			break;
 
 		case EnemyType::Type_MidEnemy:
-			enemysList_.push_back(std::make_unique<MidMobEnemy>(midEnemyPartsModels_, createEnemyPos_, createEnemyVelocity_));
+			enemysList_.push_back(std::make_unique<MidMobEnemy>(midEnemyPartsModels_, pos, velocity));
 			break;
 
 		case EnemyType::Type_Boss:
-			enemysList_.push_back(std::make_unique<BossEnemy>(bossEnemyPartsModels_, createEnemyPos_, createEnemyVelocity_));
+			enemysList_.push_back(std::make_unique<BossEnemy>(bossEnemyPartsModels_, pos, velocity));
 			break;
 		}
-		popTime_ = 0;
+	}
+
+	// --------------------------------------
+	// 親を登録する
+	// --------------------------------------
+	for (const std::unique_ptr<BaseEnemy>& enemy : enemysList_) {
+		enemy->SetParent(parentWorldTransform_);
 	}
 }
 

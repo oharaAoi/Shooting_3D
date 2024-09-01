@@ -56,6 +56,9 @@ private:
 	uint32_t startButtonUIHandle_;
 	Vector2 startUIPos_;
 
+	std::unique_ptr<Sprite> titleUI_;
+	uint32_t titleUITextureHandle_;
+
 	bool isPlayAudio_ = false;
 };
 

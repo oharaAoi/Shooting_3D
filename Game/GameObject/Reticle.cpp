@@ -63,7 +63,13 @@ void Reticle::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, con
 
 		// 3Dレティクルの位置も調整する
 		worldTransform3D_.translation_ = target_->GetWorldTransform().translation_;
-	}
+
+		if (IsOutOfRange(target_, viewProjection)) {
+			target_ = nullptr;
+			isLockOn_ = false;
+			AudioManager::GetInstacne()->AddPlayList("Audio/lockOnCancel.wav", false, 0.5f);
+		}
+	} 
 
 	// unLockOn用の座標の設定しておく
 	unLockReticle_->SetPosition(lockOnReticle_->GetPosition());

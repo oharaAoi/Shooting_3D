@@ -31,6 +31,10 @@ void TitleScene::Initialize() {
 	Sprite* statUI = Sprite::Create(startButtonUIHandle_, startUIPos_, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f });
 	startButtonUI_ = std::unique_ptr<Sprite>(statUI);
 
+	titleUITextureHandle_ = TextureManager::Load("UI/Title/title.png");
+	Sprite* titleUI = Sprite::Create(titleUITextureHandle_, { 640, 360 }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f });
+	titleUI_ = std::unique_ptr<Sprite>(titleUI);
+
 	isPlayAudio_ = false;
 }
 
@@ -116,6 +120,7 @@ void TitleScene::Draw() {
 	/// </summary>
 	
 	startButtonUI_->Draw();
+	titleUI_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

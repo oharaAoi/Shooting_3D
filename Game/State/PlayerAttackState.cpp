@@ -33,8 +33,10 @@ void PlayerAttackState::Update() {
 	// 弾を撃つ
 	Shot();
 
-	// 走る
-	Dash();
+	if (player_->GetIsLockOnMode()) {
+		// 走る
+		Dash();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,11 +81,21 @@ void PlayerAttackState::Shot() {
 }
 
 void PlayerAttackState::Dash() {
+	if (player_->GetDashStamina() < 30) {
+		return;
+	}
+
 	XINPUT_STATE joyState;
 	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
 
 	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_X) {
 		// 状態の変更
 		player_->SetBehaviorRequest(PlayerBehavior::kDash);
+		// 角度から方向にする
+		Vector3 velocity = TransformNormal({ 0,0,0.7f }, player_->GetWorldTransform().matWorld_);
+		float stamina = player_->GetDashStamina();
+		player_->SetDashStamina(stamina - 30);
+
+		AudioManager::GetInstacne()->AddPlayList("Audio/playerDash.wav", false, 0.9f);
 	}
 }

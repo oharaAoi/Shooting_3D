@@ -44,6 +44,8 @@ void PlayerRootState::Dash() {
 		Vector3 velocity = TransformNormal({ 0,0,0.7f }, player_->GetWorldTransform().matWorld_);
 		float stamina = player_->GetDashStamina();
 		player_->SetDashStamina(stamina - 30);
+
+		AudioManager::GetInstacne()->AddPlayList("Audio/playerDash.wav", false, 0.9f);
 	}
 }
 

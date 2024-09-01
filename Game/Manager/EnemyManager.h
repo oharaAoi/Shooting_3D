@@ -74,7 +74,7 @@ public:
 	/// <summary>
 	/// 敵を出現させる
 	/// </summary>
-	void EnemyPop();
+	void EnemyPop(const uint32_t& loadFineNum);
 
 	/// <summary>
 	/// ImGuiを編集する

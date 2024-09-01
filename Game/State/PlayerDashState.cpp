@@ -22,14 +22,14 @@ void PlayerDashState::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerDashState::Update() {
-	Vector3 velocity(0, 0, 1.0f);
+	Vector3 velocity(0, 0, 1.5f);
 	velocity = TransformNormal(velocity, player_->GetWorldTransform().matWorld_);
 
 	Vector3 translate = player_->GetTranslation();
 	translate += velocity;
 
 	// ダッシュ時間
-	const uint32_t behaviorDashTime = 20;
+	const uint32_t behaviorDashTime = 30;
 
 	// 既定時間で通常に戻る
 	if (++workDash_.dashParameter_ > behaviorDashTime) {

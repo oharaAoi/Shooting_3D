@@ -16,6 +16,7 @@ void AudioManager::Init() {
 
 	Load("Audio/hited.wav");
 	Load("Audio/playerShot.wav");
+	Load("Audio/playerDash.wav");
 
 	// System
 	Load("Audio/pushButton.wav");
@@ -41,12 +42,12 @@ void AudioManager::Update() {
 
 void AudioManager::IsPlay() {
 	for (std::list<AudioData>::iterator it = playList_.begin(); it != playList_.end(); it++) {
-		if (!(audio_->IsPlaying(it->handle))) {
+		
 			if (!it->isPlay) {
 				it->handle = audio_->PlayWave(it->handle, it->isLoop, it->volume);
 				it->isPlay = true;
 			}
-		}
+		
 	}
 }
 

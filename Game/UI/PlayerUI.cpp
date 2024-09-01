@@ -53,7 +53,6 @@ void PlayerUI::Update(const float& playerHpRaito, const float& playerStamina, co
 	hp_bar_->SetSize(playerHp);
 
 	stamina_bar_->SetTextureRect({ 0,stamina.y }, staminaBarSize_);
-	//stamina_bar_->SetSize(stamina);
 	
 	Vector2 staminaUIPos = { playerScreenPos.x + 80.0f, playerScreenPos.y - 20.0f };
 	hp_outside_->SetPosition(uiPosition_);

@@ -47,6 +47,9 @@ void FadeScene::Init(const FadeInOutType& inOut) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void FadeScene::Update() {
+	if (isFadeFinish_) {
+		return;
+	}
 	switch (fadeType_) {
 	case None_Fade:
 
