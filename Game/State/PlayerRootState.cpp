@@ -28,9 +28,9 @@ void PlayerRootState::Update() {
 // ------------------- Playerを走らせる状態に変更させる ------------------- //
 
 void PlayerRootState::Dash() {
-	// クールタイムならダッシュ出来なようにする
-	if (dashCoolTime_ != 0) {
-		dashCoolTime_--;
+	player_->RecoverStamina();
+
+	if (player_->GetDashStamina() < 30) {
 		return;
 	}
 
@@ -42,8 +42,8 @@ void PlayerRootState::Dash() {
 		player_->SetBehaviorRequest(PlayerBehavior::kDash);
 		// 角度から方向にする
 		Vector3 velocity = TransformNormal({ 0,0,0.7f }, player_->GetWorldTransform().matWorld_);
-		dashCoolTime_ = 40;
-		//AudioManager::GetInstacne()->AddPlayList("Audio/playerDash.wav", false, 0.5f);
+		float stamina = player_->GetDashStamina();
+		player_->SetDashStamina(stamina - 30);
 	}
 }
 

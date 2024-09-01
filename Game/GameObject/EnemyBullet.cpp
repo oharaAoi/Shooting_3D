@@ -20,6 +20,8 @@ void EnemyBullet::Init(Model* model, const Vector3& pos, const Vector3& velocity
 	// velocityにplayerの座標が入っているため,playerの方向へのVelocityに変更する
 	Vector3 direction = velocity_ - worldTransform_.translation_;
 	velocity_ = Normalize(direction) * kBulletSpeed_;
+
+	homingTime_ = 80;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,12 +33,13 @@ void EnemyBullet::Update() {
 	// ↓ 弾を進める
 	// ---------------------------------------------
 	if (isHomig_) {
-		Vector3 toPlayer = player_->GetWorldTransform().translation_ - worldTransform_.translation_;
-		toPlayer = Normalize(toPlayer);
-		velocity_ = Normalize(velocity_);
+		if (--homingTime_ > 0) {
+			Vector3 toPlayer = player_->GetWorldTransform().translation_ - worldTransform_.translation_;
+			toPlayer = Normalize(toPlayer);
+			velocity_ = Normalize(velocity_);
 
-		velocity_ = Slerp(velocity_, toPlayer, 0.5f) * kBulletSpeed_;
-
+			velocity_ = Slerp(velocity_, toPlayer, 0.5f) * kBulletSpeed_;
+		}
 	} else {
 
 	}

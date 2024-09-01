@@ -25,7 +25,7 @@ public:
 	/// <summary>
 	/// 更新関数
 	/// </summary>
-	void Update(const float& playerHpRaito);
+	void Update(const float& playerHpRaito, const float& playerStamina, const Vector2& playerScreenPos);
 
 	/// <summary>
 	/// 描画関数
@@ -40,7 +40,7 @@ public:
 
 private:
 
-
+	// ------------ Hp ------------ // 
 	std::unique_ptr<Sprite> hp_outside_;
 	std::unique_ptr<Sprite> hp_bar_;
 
@@ -50,5 +50,15 @@ private:
 	Vector2 uiPosition_;
 	Vector2 barSize_;
 	float raito_ = 1;
+
+	// ------------ Stamina ------------ // 
+	std::unique_ptr<Sprite> stamina_outside_;
+	std::unique_ptr<Sprite> stamina_bar_;
+
+	uint32_t stamina_outsideTextureHandle_;
+	uint32_t stamina_barTextureHandle_;
+
+	Vector2 uiStaminaPosition_;
+	Vector2 staminaBarSize_;
 };
 

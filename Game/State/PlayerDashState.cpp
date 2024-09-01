@@ -14,7 +14,7 @@ PlayerDashState::~PlayerDashState() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerDashState::Init() {
-	workDash_.dashParameter_ = 15;
+	workDash_.dashParameter_ = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@ void PlayerDashState::Update() {
 	translate += velocity;
 
 	// ダッシュ時間
-	const uint32_t behaviorDashTime = 30;
+	const uint32_t behaviorDashTime = 20;
 
 	// 既定時間で通常に戻る
 	if (++workDash_.dashParameter_ > behaviorDashTime) {

@@ -53,6 +53,7 @@ void Player::Init(std::vector<Model*> models) {
 	ApplyAdjustItems();
 
 	firstHp_ = hp_;
+	dashStamina_ = 90.0f;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,6 +126,12 @@ void Player::Draw(const ViewProjection& viewProjection) const {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　Playerの行動関連
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Player::RecoverStamina() {
+	if (dashStamina_ < 90.0f) {
+		dashStamina_ += 1.0f / 20.0f;
+	}
+}
 
 void Player::Move() {
 	XINPUT_STATE joyState;
@@ -310,6 +317,18 @@ Vector3 Player::GetWorldPosition() const {
 	return worldPos;
 }
 
+Vector2 Player::GetScreenPos(const ViewProjection& viewProjection) {
+	Vector3 positionReticle = GetWorldPosition();
+	// ビューポート行列
+	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
+	// ビュー行列とプロジェクション行列、ビューポート行列を合成する
+	Matrix4x4 matViewProjectionViewport = viewProjection.matView * viewProjection.matProjection * matViewport;
+	// ワールドからスクリーン
+	positionReticle = Transform(positionReticle, matViewProjectionViewport);
+	// 座標の設定
+	return { positionReticle.x, positionReticle.y };
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　調整項目関連
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -329,6 +348,7 @@ void Player::EditImGui() {
 	ImGui::DragFloat3("rightEye", &worldTransforms_[PlayerParts::Parts_REye].translation_.x, 0.1f);
 	ImGui::Separator();
 	ImGui::DragScalar("hp", ImGuiDataType_U32, &hp_);
+	ImGui::DragFloat("stamina", &dashStamina_,1);
 
 	ImGui::End();
 #endif // _DEBUG

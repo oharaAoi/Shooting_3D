@@ -42,13 +42,13 @@ void MidMobEnemy::Init(std::vector<Model*> models) {
 	// ---------------------------------------------
 	// ↓ ステート
 	// ---------------------------------------------
-	behaviorRequest_ = EnemyBehavior::kAttack;
+	behaviorRequest_ = EnemyBehavior::kRoot;
 	ChangeBehavior(std::make_unique<MidEnemyRootState>(this));
 
 	// ---------------------------------------------
 	// ↓ パラメータ
 	// ---------------------------------------------
-	hp_ = 10;
+	hp_ = 5;
 	radius_ = 2.0f;
 	isDead_ = false;
 
@@ -64,7 +64,10 @@ void MidMobEnemy::Init(std::vector<Model*> models) {
 void MidMobEnemy::Update() {
 	if (!isPreDiscovery_ && isDiscovery_) {
 		behaviorRequest_ = EnemyBehavior::kAttack;
+	} else if(!isDiscovery_) {
+		behaviorRequest_ = EnemyBehavior::kRoot;
 	}
+
 	// 状態の変更のリクエストがあるかを確認する
 	CheckBehaviorRequest();
 	// 現在の状態を更新する
@@ -112,7 +115,9 @@ void MidMobEnemy::Move() {
 	TurnAoundVelocity();
 	AnimationGimmick();
 	const float speed = 0.05f;
-	velocity_ = playerPosition_ - worldTransform_.translation_;
+	if (isDiscovery_) {
+		velocity_ = playerPosition_ - worldTransform_.translation_;
+	}
 	worldTransform_.translation_ += Normalize(velocity_) * speed;
 }
 

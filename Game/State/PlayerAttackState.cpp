@@ -22,6 +22,7 @@ void PlayerAttackState::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void PlayerAttackState::Update() {
 	player_->Move();
+	player_->RecoverStamina();
 
 	// 弾を撃つクールタイム
 	if (workAttack_.coolTime_ > 0) {

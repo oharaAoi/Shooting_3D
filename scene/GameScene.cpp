@@ -197,7 +197,7 @@ void GameScene::Update() {
 	// ---------------------------------------------
 	// ↓ UIの更新
 	// ---------------------------------------------
-	playerUI_->Update(player_->GetHpRaito());
+	playerUI_->Update(player_->GetHpRaito(), player_->GetDashStamina(), player_->GetScreenPos(viewProjection_));
 	bossUI_->Update(enemyManager_->GetBossHp());
 	rader_->SetPlayerPosition(player_->GetTranslation());
 	rader_->SetPlayerRotation(player_->GetForward());

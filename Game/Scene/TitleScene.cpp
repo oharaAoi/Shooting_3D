@@ -39,17 +39,6 @@ void TitleScene::Initialize() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void TitleScene::Update() {
-	XINPUT_STATE joyState;
-	XINPUT_STATE joyStatePre;
-	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
-	Input::GetInstance()->GetJoystickStatePrevious(0, joyStatePre);
-	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A && !(joyStatePre.Gamepad.wButtons & XINPUT_GAMEPAD_A)) {
-		isFinish_ = true;
-		nextScene_ = Scene::kGame;
-		AudioManager::GetInstacne()->StopAudioPlayerList("Audio/title.wav");
-		AudioManager::GetInstacne()->AddPlayList("Audio/pushButton.wav", false, 0.7f);
-	}
-
 	skydome_->Update();
 	ground_->Update();
 
@@ -60,6 +49,17 @@ void TitleScene::Update() {
 	if (!isPlayAudio_) {
 		AudioManager::GetInstacne()->AddPlayList("Audio/title.wav", true, 0.5f);
 		isPlayAudio_ = true;
+	}
+
+	XINPUT_STATE joyState;
+	XINPUT_STATE joyStatePre;
+	if (!Input::GetInstance()->GetJoystickState(0, joyState)) { return; }
+	Input::GetInstance()->GetJoystickStatePrevious(0, joyStatePre);
+	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A && !(joyStatePre.Gamepad.wButtons & XINPUT_GAMEPAD_A)) {
+		isFinish_ = true;
+		nextScene_ = Scene::kGame;
+		AudioManager::GetInstacne()->StopAudioPlayerList("Audio/title.wav");
+		AudioManager::GetInstacne()->AddPlayList("Audio/pushButton.wav", false, 0.7f);
 	}
 
 #ifdef _DEBUG

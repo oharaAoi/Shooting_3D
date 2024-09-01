@@ -65,6 +65,8 @@ public:
 // メンバ関数
 ///////////////////////////////////////////////////////////
 
+	void RecoverStamina();
+
 	/// <summary>
 	/// Playerを動かす
 	/// </summary>
@@ -133,6 +135,8 @@ public:
 	/// <returns></returns>
 	Vector3 GetWorldPosition() const override;
 
+	Vector2 GetScreenPos(const ViewProjection& viewProjection);
+
 	/// <summary>
 	/// ViewProjectionのポインタを設定する
 	/// </summary>
@@ -188,6 +192,10 @@ public:
 	// ------------ collider ------------ // 
 	PlayerAimCollider* GetAimCollider() { return aimCollider_.get(); }
 
+	// ------------ スタミナ ------------ // 
+	void SetDashStamina(const float& stamina) { dashStamina_ = stamina; }
+	const float GetDashStamina() const { return dashStamina_; }
+
 private:
 
 	// ------------ 所有権のないポインタ ------------ // 
@@ -199,6 +207,8 @@ private:
 	Vector3 direction_;
 	// 速度
 	Vector3 velocity_;
+
+	float dashStamina_;
 
 	// ------------ Playerの状態に関する変数 ------------ // 
 	PlayerBehavior behavior_ = PlayerBehavior::kRoot;

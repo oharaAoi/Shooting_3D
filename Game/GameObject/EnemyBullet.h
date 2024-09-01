@@ -61,5 +61,7 @@ private:
 
 	bool isHomig_ = false;
 
+	uint32_t homingTime_;
+
 };
 

@@ -150,15 +150,18 @@ void EnemyManager::LoadFile() {
 
 void EnemyManager::AllLoadFilesName() {
 	filePathArray_.clear();
+	bool notFind_ = false;
+	fileNum_ = 0;
 
-	for (const auto& entry : std::filesystem::directory_iterator(kDirectorPath_)) {
-		// 拡張子が .json のファイルを探す
-		if (entry.is_regular_file() && entry.path().extension() == ".json") {
-			// ファイル名を vector に追加
-			filePathArray_.push_back(entry.path().filename().string());
+	while (!notFind_) {
+		std::string filePath = kDirectorPath_ + "EnemyPos" + std::to_string(fileNum_) + ".json";
+		if (std::filesystem::exists(filePath)) {
+			std::string path = "EnemyPos" + std::to_string(fileNum_) + ".json";
+			filePathArray_.push_back(path);
+			fileNum_++;
+		} else {
+			notFind_ = true;
 		}
-
-		fileNum_++;
 	}
 }
 

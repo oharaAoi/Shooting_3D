@@ -40,6 +40,8 @@ void MobEnemy::Init(std::vector<Model*> models) {
 void MobEnemy::Update() {
 	if (!isPreDiscovery_ && isDiscovery_) {
 		behaviorRequest_ = EnemyBehavior::kAttack;
+	} else {
+		behaviorRequest_ = EnemyBehavior::kRoot;
 	}
 	// 状態の変更のリクエストがあるかを確認する
 	CheckBehaviorRequest();
