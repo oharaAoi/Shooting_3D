@@ -42,12 +42,12 @@ void AudioManager::Update() {
 
 void AudioManager::IsPlay() {
 	for (std::list<AudioData>::iterator it = playList_.begin(); it != playList_.end(); it++) {
-		
+		if ((audio_->IsPlaying(it->handle) == false)) {
 			if (!it->isPlay) {
 				it->handle = audio_->PlayWave(it->handle, it->isLoop, it->volume);
 				it->isPlay = true;
 			}
-		
+		}
 	}
 }
 

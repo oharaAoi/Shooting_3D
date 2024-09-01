@@ -50,7 +50,7 @@ void BossEnemy::Init(std::vector<Model*> models) {
 	// --------------------------------------
 	// パラメータの初期化
 	// --------------------------------------
-	hp_ = 500;
+	hp_ = 100;
 	radius_ = 7.0f;
 	isDead_ = false;
 	forwardDot_ = 0;

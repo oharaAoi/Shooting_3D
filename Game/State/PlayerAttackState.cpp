@@ -33,7 +33,7 @@ void PlayerAttackState::Update() {
 	// 弾を撃つ
 	Shot();
 
-	if (player_->GetIsLockOnMode()) {
+	if (!player_->GetIsLockOnMode()) {
 		// 走る
 		Dash();
 	}
@@ -96,6 +96,6 @@ void PlayerAttackState::Dash() {
 		float stamina = player_->GetDashStamina();
 		player_->SetDashStamina(stamina - 30);
 
-		AudioManager::GetInstacne()->AddPlayList("Audio/playerDash.wav", false, 0.9f);
+		AudioManager::GetInstacne()->AddPlayList("Audio/playerDash.wav", false, 0.6f);
 	}
 }

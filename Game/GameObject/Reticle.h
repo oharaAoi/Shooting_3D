@@ -156,10 +156,10 @@ private:
 	WorldTransform worldTransform3D_;
 	// 2dReticle
 	std::unique_ptr<Sprite> lockOnReticle_;
-	std::unique_ptr<Sprite> unLockReticle_;
+	std::list<std::unique_ptr<Sprite>> canLockReticle_;
 	// 2dReticleResource
 	uint32_t lockOnReticleHandle_;
-	uint32_t unLockReticleHandle_;
+	uint32_t canLockReticleHandle_;
 
 	float cameraToReticle_;
 

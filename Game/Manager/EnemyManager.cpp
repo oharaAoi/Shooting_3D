@@ -38,7 +38,15 @@ void EnemyManager::Init() {
 
 void EnemyManager::Update() {
 
-	//EnemyPop();
+	if (enemysList_.size() <= 20) {
+		popTime_++;
+		
+		if (popTime_ >= popTimeLimit_) {
+			int randomNum = RandomInt(1, static_cast<int>(filePathArray_.size() - 1));
+			EnemyPop(static_cast<uint32_t>(randomNum));
+			popTime_ = 0;
+		}
+	}
 	
 	ImGuiEdit();
 

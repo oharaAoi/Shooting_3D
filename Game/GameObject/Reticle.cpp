@@ -18,13 +18,11 @@ void Reticle::Init() {
 	// 2Dのレティクル
 	// --------------------------------------
 	lockOnReticleHandle_ = TextureManager::Load("reticle.png");
-	unLockReticleHandle_ = TextureManager::Load("reticle2.png");
+	canLockReticleHandle_ = TextureManager::Load("canLockOn.png");
 	Vector2 spriteReticlePos = { 640, 320 };
 	// spriteの生成
 	Sprite* sprite = Sprite::Create(lockOnReticleHandle_, spriteReticlePos, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f });
-	Sprite* unLockSprite = Sprite::Create(unLockReticleHandle_, spriteReticlePos, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f });
 	lockOnReticle_ = std::unique_ptr<Sprite>(sprite);
-	unLockReticle_ = std::unique_ptr<Sprite>(unLockSprite);
 
 	cameraToReticle_ = 50;
 
@@ -69,10 +67,7 @@ void Reticle::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, con
 			isLockOn_ = false;
 			AudioManager::GetInstacne()->AddPlayList("Audio/lockOnCancel.wav", false, 0.5f);
 		}
-	} 
-
-	// unLockOn用の座標の設定しておく
-	unLockReticle_->SetPosition(lockOnReticle_->GetPosition());
+	}
 
 	if (worldTransform.parent_) {
 		matWorld_ = Multiply(worldTransform3D_.matWorld_, worldTransform.parent_->matWorld_);
