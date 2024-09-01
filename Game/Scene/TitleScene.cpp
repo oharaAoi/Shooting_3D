@@ -36,6 +36,7 @@ void TitleScene::Initialize() {
 	titleUI_ = std::unique_ptr<Sprite>(titleUI);
 
 	isPlayAudio_ = false;
+	AudioManager::GetInstacne()->ClearPlayerList();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

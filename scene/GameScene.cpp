@@ -161,10 +161,7 @@ void GameScene::Update() {
 	// ---------------------------------------------
 	// ↓ GameObjectの処理
 	// ---------------------------------------------
-	// enmey
-	enemyManager_->SetPlayerPosition(player_->GetTranslation());
-	enemyManager_->Update();
-
+	
 	reticle_->Update(enemyManager_->GetEnemysList(), player_->GetWorldTransform(), followCamera_->GetViewProjection());
 
 	if (reticle_->GetIsLockOn()) {
@@ -174,6 +171,10 @@ void GameScene::Update() {
 		player_->SetIsLockOnMode(false);
 		player_->SetRotationX(followCamera_->GetCameraRotation().x);
 	}
+
+	// enmey
+	enemyManager_->SetPlayerPosition(player_->GetTranslation());
+	enemyManager_->Update();
 
 	player_->Update();
 

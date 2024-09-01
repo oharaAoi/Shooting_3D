@@ -24,6 +24,8 @@ void AudioManager::Init() {
 	Load("Audio/lockOnCancel.wav");
 	Load("Audio/gameOver.wav");
 	Load("Audio/gameClear.wav");
+	Load("Audio/scaleUp.wav");
+	Load("Audio/enemyHited.wav");
 
 	// BGM
 	Load("Audio/title.wav");

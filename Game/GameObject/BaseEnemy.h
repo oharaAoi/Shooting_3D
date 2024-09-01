@@ -61,6 +61,8 @@ public:
 	/// </summary>
 	virtual void Attack() {};
 
+	bool CheckWorldRange();
+
 	/// <summary>
 	///	状態を変更する
 	/// </summary>

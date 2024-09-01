@@ -48,7 +48,7 @@ void MidMobEnemy::Init(std::vector<Model*> models) {
 	// ---------------------------------------------
 	// ↓ パラメータ
 	// ---------------------------------------------
-	hp_ = 5;
+	hp_ = 3;
 	radius_ = 2.0f;
 	isDead_ = false;
 
@@ -182,6 +182,8 @@ void MidMobEnemy::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
 	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kPlayerBullet)) {
 		hp_--;
+		hp_ -= other->GetCollisionCount();
+		gameScene_->AddEmissionEffect(other->GetTranslation(), 60, 5);
 	}
 }
 

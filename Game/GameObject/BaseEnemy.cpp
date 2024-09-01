@@ -75,6 +75,24 @@ void BaseEnemy::SetParent(const WorldTransform* parent) {
 	worldTransform_.parent_ = parent;
 }
 
+bool BaseEnemy::CheckWorldRange() {
+	Vector2 size = { kWorldSize.x + 10, kWorldSize.y + 10 };
+
+	if (worldTransform_.translation_.x < -(size.x / 2.0f) || worldTransform_.translation_.x > (size.x / 2.0f)) {
+		return true;
+	}
+
+	if (worldTransform_.translation_.y < -(size.y / 2.0f) || worldTransform_.translation_.y >(size.y / 2.0f)) {
+		return true;
+	}
+
+	if (worldTransform_.translation_.z < -(size.z / 2.0f) || worldTransform_.translation_.z >(size.z / 2.0f)) {
+		return true;
+	}
+
+	return false;
+}
+
 void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseCharacterState> behavior) {
 	behaviorState_ = std::move(behavior);
 }

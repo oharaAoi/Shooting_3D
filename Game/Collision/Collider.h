@@ -68,6 +68,8 @@ public:
 	void SetOBBSize(const Vector3& size) { obb_.size = size; }
 	void SetOBBCneter(const Vector3& center) { obb_.center = center; }
 
+	const uint32_t GetCollisionCount() const { return collisionCount_; }
+
 protected:
 
 	// 半径

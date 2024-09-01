@@ -85,8 +85,12 @@ void BossEnemy::Update() {
 		RushAttack();
 	} else {
 		// 現在の状態を更新する
-		//behaviorState_->Update();
+		behaviorState_->Update();
 	}
+
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -(kWorldSize.x / 2.0f), (kWorldSize.x / 2.0f));
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -(kWorldSize.y / 2.0f), (kWorldSize.y / 2.0f));
+	worldTransform_.translation_.z = std::clamp(worldTransform_.translation_.z, -(kWorldSize.z / 2.0f), (kWorldSize.z / 2.0f));
 
 	BaseEnemy::Update();
 	// ImGuiの編集
@@ -236,7 +240,9 @@ void BossEnemy::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
 	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kPlayerBullet)) {
 		hp_--;
+		hp_ -= other->GetCollisionCount();
 		gameScene_->AddEmissionEffect(other->GetTranslation(), 60, 5);
+		AudioManager::GetInstacne()->AddPlayList("Audio/enemyHited.wav", false, 0.04f);
 	}
 }
 

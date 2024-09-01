@@ -147,6 +147,7 @@ void MobEnemy::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
 	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kPlayerBullet)) {
 		hp_--;
+		gameScene_->AddEmissionEffect(other->GetTranslation(), 60, 5);
 	}
 }
 

@@ -34,11 +34,17 @@ void Reticle::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Reticle::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
+	
+	if (target_ != nullptr) {
+		if (target_->GetIsDead()) {
+			target_ = nullptr;
+			isLockOn_ = false;
+		}
+	}
 
 	// レティクルを移動させる
-	if (target_ == nullptr) {
-		Move();
-	}
+	Move();
+	
 
 	// LockOnを行う
 	LockOn(enemyList, viewProjection);
@@ -202,6 +208,7 @@ void Reticle::Search(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const
 		target_ = targets.front().second;
 		isLockOn_ = true;
 
+		canLockOnList_.clear();
 		AudioManager::GetInstacne()->AddPlayList("Audio/lockOn.wav", false, 0.5f);
 	}
 
