@@ -31,6 +31,8 @@ void GameScene::Initialize() {
 	ModelLoader* modelLoader = ModelLoader::GetInstacne();
 	AdjustmentItem::GetInstance()->Init();
 
+	recoverModel_ = modelLoader->GetModel("recoverItem");
+
 	// ---------------------------------------------
 	// ↓ Cameraの初期化
 	// ---------------------------------------------
@@ -140,7 +142,6 @@ void GameScene::Update() {
 	// ↓ GameClear時に行う処理
 	// ---------------------------------------------
 	if (enemyManager_->GetBossEnemy()->GetHp() <= 0) {
-		AudioManager::GetInstacne()->StopAudioPlayerList("Audio/game.wav");
 		fadeScene_->SetIsFade(true);
 		fadeScene_->SetFadeType(WhiteInOut_Fade);
 
@@ -152,6 +153,8 @@ void GameScene::Update() {
 					return;
 				}
 
+				AudioManager::GetInstacne()->StopAudioPlayerList("Audio/game.wav");
+				AudioManager::GetInstacne()->ClearPlayerList();
 				isFinish_ = true;
 				nextScene_ = Scene::kClear;
 			}
@@ -161,7 +164,11 @@ void GameScene::Update() {
 	// ---------------------------------------------
 	// ↓ GameObjectの処理
 	// ---------------------------------------------
-	
+
+	// enmey
+	enemyManager_->SetPlayerPosition(player_->GetTranslation());
+	enemyManager_->Update();
+
 	reticle_->Update(enemyManager_->GetEnemysList(), player_->GetWorldTransform(), followCamera_->GetViewProjection());
 
 	if (reticle_->GetIsLockOn()) {
@@ -172,9 +179,6 @@ void GameScene::Update() {
 		player_->SetRotationX(followCamera_->GetCameraRotation().x);
 	}
 
-	// enmey
-	enemyManager_->SetPlayerPosition(player_->GetTranslation());
-	enemyManager_->Update();
 
 	player_->Update();
 
@@ -194,6 +198,17 @@ void GameScene::Update() {
 	CheckAllCollision();
 
 	emissionEffect_->Update();
+
+	for (const std::unique_ptr<RecoverItem>& item : recoverItemList_) {
+		item->Update();
+	}
+
+	recoverItemList_.remove_if([](const std::unique_ptr<RecoverItem>& item) {
+		if (item->GetIsDead()) {
+			return true;
+		}
+		return false;
+	});
 
 	// ---------------------------------------------
 	// ↓ UIの更新
@@ -281,15 +296,15 @@ void GameScene::Draw() {
 
 	emissionEffect_->Draw(viewProjection_);
 
+	for (const std::unique_ptr<RecoverItem>& item : recoverItemList_) {
+		item->Draw(viewProjection_);
+	}
+
+
 	// ---------------------------------------------
 	// ↓ 線の描画
 	// ---------------------------------------------
-	trajectory_->Draw();
-
-	player_->DrawCollision();
-	player_->GetAimCollider()->Draw();
-
-	enemyManager_->DrawCollisions();
+	
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -382,7 +397,7 @@ void GameScene::UpdateBullet() {
 			return true;
 		}
 		return false;
-							   });
+	});
 
 	// Bossの弾
 	for (const std::unique_ptr<BossBullet>& bullet : bossBulletList_) {
@@ -425,6 +440,10 @@ void GameScene::CheckAllCollision() {
 
 	for (const std::unique_ptr<BossBullet>& bullet : bossBulletList_) {
 		collisionManager_->AddCollider(bullet.get());
+	}
+
+	for (const std::unique_ptr<RecoverItem>& item : recoverItemList_) {
+		collisionManager_->AddCollider(item.get());
 	}
 
 	// ---------------------------------------------
@@ -537,6 +556,13 @@ void GameScene::GameClearUpdate() {
 
 void GameScene::AddEmissionEffect(const Vector3& origine, const uint32_t& lifeTime, const uint32_t& count) {
 	emissionEffect_->AddParticleList(origine, lifeTime, count);
+}
+
+void GameScene::AddRecoverItem(const Vector3& pos) {
+	recoverItemList_.push_back(
+		std::move(std::make_unique<RecoverItem>(
+			recoverModel_, pos
+	)));
 }
 
 // ------------------- ゲームクリア時に行う処理 ------------------- //

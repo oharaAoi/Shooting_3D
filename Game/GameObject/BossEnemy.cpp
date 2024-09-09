@@ -50,7 +50,7 @@ void BossEnemy::Init(std::vector<Model*> models) {
 	// --------------------------------------
 	// パラメータの初期化
 	// --------------------------------------
-	hp_ = 100;
+	hp_ = 150;
 	radius_ = 7.0f;
 	isDead_ = false;
 	forwardDot_ = 0;
@@ -86,6 +86,7 @@ void BossEnemy::Update() {
 	} else {
 		// 現在の状態を更新する
 		behaviorState_->Update();
+		worldTransform_.translation_ += Normalize(playerPosition_ - worldTransform_.translation_) * 0.05f;
 	}
 
 	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -(kWorldSize.x / 2.0f), (kWorldSize.x / 2.0f));
@@ -242,7 +243,7 @@ void BossEnemy::OnCollision(Collider* other) {
 		hp_--;
 		hp_ -= other->GetCollisionCount();
 		gameScene_->AddEmissionEffect(other->GetTranslation(), 60, 5);
-		AudioManager::GetInstacne()->AddPlayList("Audio/enemyHited.wav", false, 0.04f);
+		AudioManager::GetInstacne()->AddPlayList("Audio/enemyHited.wav", false, 0.1f);
 	}
 }
 

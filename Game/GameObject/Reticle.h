@@ -42,7 +42,8 @@ public:
 	/// <summary>
 	/// 更新関数
 	/// </summary>
-	void Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, const WorldTransform& worldTransform, const ViewProjection& viewProjection);
+	void Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList,
+				const WorldTransform& worldTransform, const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 描画関数
@@ -165,6 +166,8 @@ private:
 
 	Matrix4x4 matWorld_;
 
+	Vector3 playerTranslation_;
+
 	// ------------ z注目用の変数 ------------ //
 	// ロックオン対象
 	const BaseEnemy* target_ = nullptr;
@@ -174,10 +177,10 @@ private:
 
 	// parameter
 	// 最小距離
-	float minDistance_ = 10.0f;
+	float minDistance_ = 5.0f;
 	// 最大距離
 	float maxDistance_ = 50.0f;
 	// 角度範囲
-	float angleRange_ = 15.0f * kDegreeToRadian;
+	float angleRange_ = 10.0f * kDegreeToRadian;
 };
 

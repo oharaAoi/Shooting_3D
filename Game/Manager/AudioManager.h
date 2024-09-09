@@ -38,6 +38,8 @@ public:
 	/// </summary>
 	void IsPlay();
 
+	void IsPlaySe(const std::string& path);
+
 	/// <summary>
 	/// ObjectFileを読み込む
 	/// </summary>
@@ -61,7 +63,7 @@ public:
 	/// <summary>
 	/// playListを削除する
 	/// </summary>
-	void ClearPlayerList() { playList_.clear(); }
+	void ClearPlayerList();
 
 private:
 

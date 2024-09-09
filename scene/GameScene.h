@@ -27,6 +27,7 @@
 #include "GameObject/EnemyBullet.h"
 #include "GameObject/BossBullet.h"
 #include "GameObject/Reticle.h"
+#include "GameObject/RecoverItem.h"
 // Manager
 #include "Collision/CollisionManager.h"
 #include "Manager/EnemyManager.h"
@@ -134,6 +135,8 @@ public: // メンバ関数
 	/// <param name="count"></param>
 	void AddEmissionEffect(const Vector3& origine, const uint32_t& lifeTime, const uint32_t& count);
 
+	void AddRecoverItem(const Vector3& pos);
+
 	void DrawGrid();
 
 ///////////////////////////////////////////////////////////
@@ -175,6 +178,9 @@ private: // メンバ変数
 	// enemy
 	std::list<std::unique_ptr<EnemyBullet>> enemyBulletList_;
 	std::list<std::unique_ptr<BossBullet>> bossBulletList_;
+
+	std::list<std::unique_ptr<RecoverItem>> recoverItemList_;
+	Model* recoverModel_;
 
 	// ------------ WorldEnvironment ------------ // 
 	std::unique_ptr<Skydome> skydome_ = nullptr;

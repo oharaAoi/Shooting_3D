@@ -184,6 +184,10 @@ void MidMobEnemy::OnCollision(Collider* other) {
 		hp_--;
 		hp_ -= other->GetCollisionCount();
 		gameScene_->AddEmissionEffect(other->GetTranslation(), 60, 5);
+
+		if (other->GetCollisionCount() > 2) {
+			gameScene_->AddRecoverItem(worldTransform_.translation_);
+		}
 	}
 }
 

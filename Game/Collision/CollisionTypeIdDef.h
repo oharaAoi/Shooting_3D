@@ -8,5 +8,6 @@ enum class CollisionTypeIdDef : uint32_t {
 	kEnemy,
 	kBoss,
 	kEnemyBullet,
-	kBossBullet
+	kBossBullet,
+	kRecoverItem
 };

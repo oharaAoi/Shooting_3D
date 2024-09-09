@@ -214,7 +214,6 @@ void AdjustmentItem::LoadFiles() {
 		if (extension.compare(".json") != 0) {
 			continue;
 		}
-
 		// ファイル読み込み
 		LoadFile(filePath.stem().string());
 	}

@@ -22,7 +22,8 @@ void PlayerBullet::Init(Model* model, const Vector3& pos, const Vector3& velocit
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerBullet::Update() {
-	float scaleUp = 1.0f + (0.1f * collisionCount_);
+	float scaleUp = 1.0f + (0.3f * collisionCount_);
+	radius_ = 1.0f + (0.3f * collisionCount_);
 	worldTransform_.scale_ = { scaleUp, scaleUp , scaleUp };
 	obb_.center = worldTransform_.translation_;
 	obb_.MakeOBBAxis(worldTransform_.rotation_);
@@ -48,14 +49,14 @@ void PlayerBullet::OnCollision(Collider* other) {
 	switch (typeID) {
 	case static_cast<uint32_t>(CollisionTypeIdDef::kEnemy):
 		collisionCount_++;
-		AudioManager::GetInstacne()->AddPlayList("Audio/scaleUp.wav", false, 0.1f);
+		
 		break;
 	case static_cast<uint32_t>(CollisionTypeIdDef::kBoss):
 		isDead_ = true;
 		break;
 	case static_cast<uint32_t>(CollisionTypeIdDef::kEnemyBullet):
 		collisionCount_++;
-		AudioManager::GetInstacne()->AddPlayList("Audio/scaleUp.wav", false, 0.1f);
+		
 		break;
 	}
 }

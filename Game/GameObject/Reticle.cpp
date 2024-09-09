@@ -35,6 +35,8 @@ void Reticle::Init() {
 
 void Reticle::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
 	
+	playerTranslation_ = worldTransform.translation_;
+
 	if (target_ != nullptr) {
 		if (target_->GetIsDead()) {
 			target_ = nullptr;
@@ -44,7 +46,6 @@ void Reticle::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, con
 
 	// レティクルを移動させる
 	Move();
-	
 
 	// LockOnを行う
 	LockOn(enemyList, viewProjection);
@@ -67,12 +68,6 @@ void Reticle::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemyList, con
 
 		// 3Dレティクルの位置も調整する
 		worldTransform3D_.translation_ = target_->GetWorldTransform().translation_;
-
-		if (IsOutOfRange(target_, viewProjection)) {
-			target_ = nullptr;
-			isLockOn_ = false;
-			AudioManager::GetInstacne()->AddPlayList("Audio/lockOnCancel.wav", false, 0.5f);
-		}
 	}
 
 	if (worldTransform.parent_) {
@@ -190,9 +185,12 @@ void Reticle::Search(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const
 	// すべての敵に対して順にロックオン判定
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemies) {
 		if (!IsOutOfRange(enemy.get(), viewProjection)) {
-			if (!enemy->GetIsDead()) {
-				// 条件を満たしていたらペアにしてリストに追加
-				targets.emplace_back(std::make_pair(GetViewPosition(enemy.get(), viewProjection).z, enemy.get()));
+			float lenght = Length(playerTranslation_ - enemy->GetWorldTransform().translation_);
+			if (lenght < 40) {
+				if (!enemy->GetIsDead()) {
+					// 条件を満たしていたらペアにしてリストに追加
+					targets.emplace_back(std::make_pair(GetViewPosition(enemy.get(), viewProjection).z, enemy.get()));
+				}
 			}
 		}
 	}
@@ -223,6 +221,16 @@ void Reticle::Search(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const
 bool Reticle::IsOutOfRange(const BaseEnemy* enemy, const ViewProjection& viewProjection) {
 	Vector3 positionView = GetViewPosition(enemy, viewProjection);
 
+	Vector3 screenPos = enemy->GetScreenPosition(viewProjection);
+
+	if (screenPos.x < -static_cast<float>(WinApp::kWindowWidth) || screenPos.x > static_cast<float>(WinApp::kWindowWidth)) {
+		return false;
+	}
+
+	if (screenPos.y < -static_cast<float>(WinApp::kWindowHeight) || screenPos.y > static_cast<float>(WinApp::kWindowHeight)) {
+		return false;
+	}
+
 	// 距離条件チェック
 	if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
 		// カメラ前方との角度を計算
@@ -230,7 +238,7 @@ bool Reticle::IsOutOfRange(const BaseEnemy* enemy, const ViewProjection& viewPro
 			std::sqrt(positionView.x * positionView.x + positionView.y * positionView.y),
 			positionView.z);
 
-		// 角度条件チェック
+		// 角度条件チェック87
 		if (std::abs(arcTangent) <= angleRange_) {
 			return false;
 		}

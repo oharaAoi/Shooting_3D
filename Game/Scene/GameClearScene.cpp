@@ -28,6 +28,7 @@ void GameClearScene::Initialize() {
 
 	gameClearUI_ = std::make_unique<GameClearUI>();
 
+	AudioManager::GetInstacne()->StopAudioPlayerList("Audio/game.wav");
 	AudioManager::GetInstacne()->ClearPlayerList();
 	AudioManager::GetInstacne()->AddPlayList("Audio/gameClear.wav", false, 0.5f);
 }

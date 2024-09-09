@@ -25,6 +25,15 @@ void BaseEnemy::Update() {
 	if (hp_ <= 0) {
 		isDead_ = true;
 	}
+
+	if (enemyType_ != EnemyType::Type_Boss) {
+		if (CheckWorldRange()) {
+			isDead_ = true;
+		}
+	}
+
+	hp_ = std::clamp(static_cast<int>(hp_), 0, 200);
+
 	isPreDiscovery_ = isDiscovery_;
 	BaseCharacter::Update();
 	triangleTransform_.UpdateMatrix();
@@ -76,7 +85,7 @@ void BaseEnemy::SetParent(const WorldTransform* parent) {
 }
 
 bool BaseEnemy::CheckWorldRange() {
-	Vector2 size = { kWorldSize.x + 10, kWorldSize.y + 10 };
+	Vector3 size = { kWorldSize.x + 10, kWorldSize.y + 10, kWorldSize.z + 10 };
 
 	if (worldTransform_.translation_.x < -(size.x / 2.0f) || worldTransform_.translation_.x > (size.x / 2.0f)) {
 		return true;

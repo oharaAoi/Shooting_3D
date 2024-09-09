@@ -274,13 +274,13 @@ void Player::OnCollision(Collider* other) {
 	uint32_t typeID = other->GetTypeID();
 	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kEnemy)) {
 		hp_--;
-		KnockBack(other->GetWorldPosition(), 0.5f);
+		KnockBack(other->GetWorldPosition(), 1.0f);
 	} else if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kEnemyBullet)) {
 		hp_--;
-		KnockBack(other->GetWorldPosition(), 0.3f);
+		KnockBack(other->GetWorldPosition(), 1.0f);
 	} else if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kBossBullet)) {
 		hp_--;
-		KnockBack(other->GetWorldPosition(),0.5f);
+		KnockBack(other->GetWorldPosition(),1.0f);
 	} else if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kBoss)) {
 		hp_--;
 		KnockBack(other->GetWorldPosition(), 5.0f);
@@ -291,6 +291,12 @@ void Player::OnCollision(Collider* other) {
 		}
 		// 履歴に追加
 		contactRecord_.AddRecord(serialNumber);
+	} else if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kRecoverItem)) {
+		hp_+= 3;
+
+		hp_ = std::clamp(static_cast<int>(hp_), 0, static_cast<int>(firstHp_));
+
+		AudioManager::GetInstacne()->AddPlayList("Audio/scaleUp.wav", false, 0.1f);
 	}
 }
 

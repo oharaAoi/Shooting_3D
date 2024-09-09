@@ -148,6 +148,10 @@ void MobEnemy::OnCollision(Collider* other) {
 	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kPlayerBullet)) {
 		hp_--;
 		gameScene_->AddEmissionEffect(other->GetTranslation(), 60, 5);
+
+		if (other->GetCollisionCount() > 5) {
+			gameScene_->AddRecoverItem(worldTransform_.translation_);
+		}
 	}
 }
 

@@ -45,7 +45,7 @@ void PlayerRootState::Dash() {
 		float stamina = player_->GetDashStamina();
 		player_->SetDashStamina(stamina - 30);
 
-		AudioManager::GetInstacne()->AddPlayList("Audio/playerDash.wav", false, 0.9f);
+		AudioManager::GetInstacne()->IsPlaySe("Audio/playerDash.wav");
 	}
 }
 

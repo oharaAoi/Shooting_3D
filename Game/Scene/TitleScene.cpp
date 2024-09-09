@@ -64,6 +64,7 @@ void TitleScene::Update() {
 		isFinish_ = true;
 		nextScene_ = Scene::kGame;
 		AudioManager::GetInstacne()->StopAudioPlayerList("Audio/title.wav");
+		AudioManager::GetInstacne()->ClearPlayerList();
 		AudioManager::GetInstacne()->AddPlayList("Audio/pushButton.wav", false, 0.7f);
 	}
 

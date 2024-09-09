@@ -26,6 +26,7 @@ void AudioManager::Init() {
 	Load("Audio/gameClear.wav");
 	Load("Audio/scaleUp.wav");
 	Load("Audio/enemyHited.wav");
+	Load("Audio/bulletUp.wav");
 
 	// BGM
 	Load("Audio/title.wav");
@@ -53,6 +54,10 @@ void AudioManager::IsPlay() {
 	}
 }
 
+void AudioManager::IsPlaySe(const std::string& path) {
+	audio_->PlayWave(audioMap_[path], false, 0.4f);
+}
+
 void AudioManager::Load(const std::string& soundPath) {
 	uint32_t audioData = audio_->LoadWave(soundPath);
 	audioMap_.emplace(soundPath, audioData);
@@ -75,4 +80,16 @@ void AudioManager::StopAudioPlayerList(const std::string& soundPath) {
 			audio_->StopWave(it->handle);
 		}
 	}
+}
+
+void AudioManager::ClearPlayerList() {
+	for (std::list<AudioData>::iterator it = playList_.begin(); it != playList_.end(); it++) {
+		audio_->StopWave(it->handle);
+	}
+
+	for (auto it = audioMap_.begin(); it != audioMap_.end(); ++it) {
+		audio_->StopWave(it->second);
+	}
+
+	playList_.clear();
 }
